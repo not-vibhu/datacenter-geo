@@ -1,0 +1,28 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.13,
+          41.02
+        ]
+      },
+      "properties": {
+        "site_id": "site_61254",
+        "name": "Ulanqab, Inner Mongolia CN",
+        "radius_km": 10.0,
+        "country": "\u4e2d\u56fd",
+        "admin1": "\u5185\u8499\u53e4\u81ea\u6cbb\u533a \u1826\u182a\u1826\u1837 \u182e\u1823\u1829\u182d\u1824\u182f \u1824\u1828 \u1825\u182a\u1821\u1837\u1832\u1821\u182d\u1821\u1828 \u1835\u1820\u1830\u1820\u182c\u1823 \u1823\u1837\u1823\u1828",
+        "admin2": "\u96c6\u5b81\u533a \u1835\u1822\u1828\u1822\u1829 \u1832\u1823\u182d\u1823\u1837\u1822\u182d",
+        "utility": null,
+        "market": "\u5185\u8499\u53e4\u81ea\u6cbb\u533a \u1826\u182a\u1826\u1837 \u182e\u1823\u1829\u182d\u1824\u182f \u1824\u1828 \u1825\u182a\u1821\u1837\u1832\u1821\u182d\u1821\u1828 \u1835\u1820\u1830\u1820\u182c\u1823 \u1823\u1837\u1823\u1828 provincial grid",
+        "origin": "manual",
+        "hypothesis": null,
+        "notes": null
+      }
+    }
+  ]
+}

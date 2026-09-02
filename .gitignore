@@ -2,15 +2,20 @@
 __pycache__/
 *.pyc
 .env
-data/cache/
-runs/run_*/
-runs/scan_*.json
-runs/sweep_state.json
-runs/leaderboard.json
-!runs/examples/
 .pytest_cache/
 .ruff_cache/
 *.egg-info/
 dist/
 build/
 .DS_Store
+
+# Measurement cache — large, regenerable, and machine-specific.
+data/cache/
+
+# Transient sweep bookkeeping.
+runs/sweep_state.json
+runs/scan_*.json
+
+# Analysis runs ARE tracked. They are the point: anyone cloning this repo can read
+# the evidence ledger behind every published score without re-running anything, and
+# can re-score an old ledger against a changed model to see what moved.

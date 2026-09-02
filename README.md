@@ -135,5 +135,5 @@ Paid adapters (Earth Engine, Planet, S&P Global, CoStar) have written interfaces
 Early. The architecture and factor framework are complete; adapter coverage is
 partial and marked per-factor in `dcgeo doctor`. See [ROADMAP.md](ROADMAP.md).
 
-Licensed Apache-2.0. Contributions welcome — a new factor is one YAML entry and one
+Licensed MIT. Contributions welcome — a new factor is one YAML entry and one
 adapter function; see [CONTRIBUTING.md](CONTRIBUTING.md).
