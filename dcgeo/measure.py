@@ -6,6 +6,7 @@ factor and a factor that could not be measured are different facts.
 """
 from __future__ import annotations
 
+import threading
 import traceback
 from collections.abc import Callable
 
@@ -14,6 +15,45 @@ from .adapters.base import unknown
 from .adapters.overpass import gas_pipeline_distance
 from .models import Measurement
 from .registry import load_factors
+
+# Hard ceiling per adapter. Every adapter already sets its own HTTP timeouts, but a
+# misbehaving endpoint can still stall a socket indefinitely — one such hang cost a
+# 28-minute stall on a single site during validation. This guarantees a 59-factor
+# analysis always terminates: a stalled adapter becomes an `unknown` like any other
+# failure, and the tier system records that we could not measure it.
+ADAPTER_TIMEOUT_S = 180.0
+
+
+class AdapterStalled(Exception):
+    """An adapter exceeded its ceiling and was abandoned."""
+
+
+def _run_bounded(fn: Callable, lat: float, lon: float, timeout: float) -> list[Measurement]:
+    """Run one adapter with a hard wall-clock ceiling.
+
+    Uses a daemon thread rather than ThreadPoolExecutor deliberately: the executor
+    joins its workers on shutdown, so an abandoned worker blocked on a socket would
+    still stall the run — and at interpreter exit. A daemon thread is abandoned
+    cleanly and never blocks process exit. Python cannot interrupt a blocked socket
+    read, so the thread may linger; that is the accepted cost of guaranteeing the
+    analysis terminates.
+    """
+    box: dict[str, object] = {}
+
+    def worker() -> None:
+        try:
+            box["value"] = fn(lat, lon)
+        except BaseException as exc:
+            box["error"] = exc
+
+    t = threading.Thread(target=worker, daemon=True, name=f"adapter-{getattr(fn, '__name__', 'fn')}")
+    t.start()
+    t.join(timeout)
+    if t.is_alive():
+        raise AdapterStalled(f"exceeded {timeout:.0f}s ceiling")
+    if "error" in box:
+        raise box["error"]                              # type: ignore[misc]
+    return box.get("value", [])                         # type: ignore[return-value]
 
 # domain -> [(label, callable(lat, lon) -> list[Measurement])]
 DISPATCH: dict[str, list[tuple[str, Callable]]] = {
@@ -117,13 +157,20 @@ def measure(
             if on_progress:
                 on_progress(domain, label)
             try:
-                out.extend(fn(lat, lon))
+                out.extend(_run_bounded(fn, lat, lon, ADAPTER_TIMEOUT_S))
+            except AdapterStalled:
+                out.append(unknown(
+                    f"{domain}._adapter_{label}", "dispatcher",
+                    f"adapter exceeded the {ADAPTER_TIMEOUT_S:.0f}s ceiling and was "
+                    f"abandoned; the source is unresponsive from this network",
+                ))
             except Exception as e:                      # an adapter bug, not a source failure
                 out.append(unknown(
                     f"{domain}._adapter_{label}", "dispatcher",
                     f"adapter raised {type(e).__name__}: {e}",
                 ))
-                traceback.clear_frames(e.__traceback__) if e.__traceback__ else None
+                if e.__traceback__:
+                    traceback.clear_frames(e.__traceback__)
 
     # Every factor in scope must be represented, even if only as an unknown.
     seen = {m.factor_id for m in out}
