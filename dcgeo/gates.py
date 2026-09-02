@@ -6,8 +6,9 @@ untestable. `validate_gate_coverage()` asserts the two stay in sync.
 """
 from __future__ import annotations
 
+from collections.abc import Callable
 from datetime import datetime
-from typing import Any, Callable
+from typing import Any
 
 from .models import Analysis, GateResult, Measurement, Tier
 from .registry import load_gates, load_profiles

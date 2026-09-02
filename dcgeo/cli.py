@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import re
 from datetime import datetime
+from itertools import pairwise
 from pathlib import Path
 
 import click
@@ -16,10 +17,25 @@ from . import measure as measure_mod
 from . import report as report_mod
 from .gates import evaluate_gates, validate_gate_coverage
 from .geo import bbox_around, parse_latlon, tile_region
-from .models import (Analysis, FactorScore, GateResult, Measurement, ProfileScore,
-                     Recommendation, Site)
-from .registry import (ROOT, load_factors, load_gates, load_profiles, load_sources,
-                       profile_names, resolve_source, validate)
+from .models import (
+    Analysis,
+    FactorScore,
+    GateResult,
+    Measurement,
+    ProfileScore,
+    Recommendation,
+    Site,
+)
+from .registry import (
+    ROOT,
+    load_factors,
+    load_gates,
+    load_profiles,
+    load_sources,
+    profile_names,
+    resolve_source,
+    validate,
+)
 from .scoring import apply_gates_to_scores, score_profile
 
 console = Console()
@@ -116,7 +132,6 @@ def doctor(probe: bool) -> None:
     t = Table(title="Data sources", show_lines=False)
     for c in ("source", "tier", "auth", "adapter", "status"):
         t.add_column(c)
-    implemented = {n for pairs in measure_mod.DISPATCH.values() for n, _ in pairs}
     for name, spec in sorted(load_sources().items()):
         auth = spec.get("auth", "?")
         key = spec.get("enabled_by")
@@ -181,7 +196,7 @@ def measure(at: str, domains: tuple[str, ...], as_json: bool) -> None:
     lat, lon = parse_latlon(at)
     doms = list(domains) or None
     ms = measure_mod.measure(lat, lon, doms,
-                             on_progress=lambda d, l: console.print(f"[dim]  {d}/{l}…[/dim]"))
+                             on_progress=lambda dom, step: console.print(f"[dim]  {dom}/{step}…[/dim]"))
     if as_json:
         click.echo(json.dumps([m.to_dict() for m in ms], indent=2, default=str))
         return
@@ -236,7 +251,7 @@ def analyze(at, name, radius, profiles, domains, cooling, assumes, weights) -> N
     console.print("[bold]Measuring[/bold]")
     analysis.measurements = measure_mod.measure(
         lat, lon, list(domains) or None,
-        on_progress=lambda d, l: console.print(f"[dim]  {d}/{l}…[/dim]"))
+        on_progress=lambda dom, step: console.print(f"[dim]  {dom}/{step}…[/dim]"))
     known = sum(1 for m in analysis.measurements if m.is_known)
     console.print(f"  {known}/{len(analysis.measurements)} measured")
 
@@ -360,7 +375,7 @@ def compare(runs: tuple[str, ...], profile: str) -> None:
 
     scored = [(a, ps) for a, ps, _ in rows if ps.score is not None]
     scored.sort(key=lambda x: -x[1].score)
-    for (a1, p1), (a2, p2) in zip(scored, scored[1:]):
+    for (a1, p1), (a2, p2) in pairwise(scored):
         if abs(p1.score - p2.score) < (p1.band + p2.band) / 2:
             console.print(f"[yellow]Not separable:[/yellow] {a1.site.name[:28]} "
                           f"({p1.score:.0f}±{p1.band:.0f}) and {a2.site.name[:28]} "
@@ -519,6 +534,7 @@ def validate_set(country: str | None, profile: str | None) -> None:
     scores everything 70-80 has high agreement on positives and is useless.
     """
     import yaml
+
     from .geo import haversine_km
 
     ref_path = ROOT / "data" / "reference" / "known_datacenters.yaml"

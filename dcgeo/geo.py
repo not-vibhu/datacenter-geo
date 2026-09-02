@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import math
-from typing import Iterable
+from collections.abc import Iterable
 
 EARTH_R_KM = 6371.0088
 

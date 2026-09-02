@@ -1,4 +1,3 @@
-import math
 from dcgeo.geo import bbox_around, geohash, haversine_km, parse_latlon, tile_region, wet_bulb_stull
 
 

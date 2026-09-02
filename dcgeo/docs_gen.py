@@ -6,7 +6,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from .registry import ROOT, load_factors, load_gates, load_profiles, load_source_aliases, load_sources
+from .registry import (
+    ROOT,
+    load_factors,
+    load_gates,
+    load_profiles,
+    load_source_aliases,
+    load_sources,
+)
 
 DOCS = ROOT / "docs"
 

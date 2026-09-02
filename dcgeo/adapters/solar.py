@@ -1,8 +1,7 @@
 """NASA POWER — solar irradiance and meteorology. Free, no key, global."""
 from __future__ import annotations
 
-from ..models import Measurement
-from .base import SourceUnavailable, cached, http_get, measured, unknown
+from .base import SourceUnavailable, cached, http_get
 
 API = "https://power.larc.nasa.gov/api/temporal/climatology/point"
 SOURCE = "nasa_power"

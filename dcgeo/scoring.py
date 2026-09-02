@@ -5,6 +5,7 @@ with the factor spec or the measurement, not to override the arithmetic.
 """
 from __future__ import annotations
 
+from itertools import pairwise
 from typing import Any
 
 from .models import Analysis, FactorScore, Measurement, ProfileScore, Tier
@@ -44,7 +45,7 @@ def normalize(spec: dict[str, Any], value: Any) -> float | None:
         return float(pts[0][1])
     if x >= pts[-1][0]:
         return float(pts[-1][1])
-    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+    for (x0, y0), (x1, y1) in pairwise(pts):
         if x0 <= x <= x1:
             if x1 == x0:
                 return float(y0)

@@ -1,6 +1,5 @@
 """Scoring arithmetic. The behaviors here are load-bearing design decisions, not
 implementation details — if one of these changes, the model's honesty changes."""
-import pytest
 
 from dcgeo.models import Analysis, Measurement, Site
 from dcgeo.registry import load_factors

@@ -1,7 +1,14 @@
 """Registry integrity. These run in CI and catch malformed factor specs before a
 2000-site sweep discovers them the expensive way."""
 from dcgeo.gates import validate_gate_coverage
-from dcgeo.registry import domains, load_factors, load_gates, load_profiles, resolve_source, validate
+from dcgeo.registry import (
+    domains,
+    load_factors,
+    load_gates,
+    load_profiles,
+    resolve_source,
+    validate,
+)
 
 
 def test_registry_validates_clean():

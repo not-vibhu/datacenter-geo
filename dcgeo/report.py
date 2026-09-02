@@ -30,7 +30,7 @@ def markdown(analysis: Analysis) -> str:
              + (f" · child of `{a.parent_run}`" if a.parent_run else ""))
     L.append(f"**Cooling assumption:** {a.cooling_assumption}")
     if a.assumptions:
-        L.append(f"**Assumptions applied:** " +
+        L.append("**Assumptions applied:** " +
                  ", ".join(f"`{k}={v}`" for k, v in a.assumptions.items()))
     L.append("")
 

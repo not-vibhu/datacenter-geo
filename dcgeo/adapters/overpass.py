@@ -92,14 +92,14 @@ out tags center;"""
                             f"no tagged power lines within {radius_km:.0f} km — OSM coverage "
                             f"may be incomplete here; cross-check Global Energy Monitor", "km")]
 
-        qualifying = sorted((l for l in lines if l[1] >= min_kv), key=lambda x: x[0])
+        qualifying = sorted((ln for ln in lines if ln[1] >= min_kv), key=lambda x: x[0])
         all_sorted = sorted(lines, key=lambda x: x[0])
         by_kv: dict[float, float] = {}
         for d, kv, _ in all_sorted:
             by_kv[kv] = min(by_kv.get(kv, 1e9), d)
 
         if not qualifying:
-            best_kv = max(l[1] for l in lines)
+            best_kv = max(ln[1] for ln in lines)
             return [measured(
                 fid, round(all_sorted[0][0], 2), "km", "C", SOURCE, lat=lat, lon=lon,
                 source_url=ATTRIB,

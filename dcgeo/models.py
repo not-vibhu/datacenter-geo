@@ -8,8 +8,8 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import dataclass, field, asdict
-from datetime import datetime, timezone
+from dataclasses import asdict, dataclass, field
+from datetime import UTC, datetime
 from typing import Any, Literal
 
 Tier = Literal["A", "B", "C", "D", "unknown"]
@@ -17,7 +17,7 @@ GateOutcome = Literal["PASS", "CONDITIONAL", "FAIL"]
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    return datetime.now(UTC).isoformat(timespec="seconds").replace("+00:00", "Z")
 
 
 @dataclass
@@ -221,9 +221,7 @@ class Analysis:
         best: dict[str, Measurement] = {}
         for m in self.measurements:
             cur = best.get(m.factor_id)
-            if cur is None:
-                best[m.factor_id] = m
-            elif (order[m.tier], cur.retrieved) < (order[cur.tier], m.retrieved):
+            if cur is None or (order[m.tier], cur.retrieved) < (order[cur.tier], m.retrieved):
                 best[m.factor_id] = m
         return best
 

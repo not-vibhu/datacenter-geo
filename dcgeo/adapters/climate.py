@@ -78,7 +78,8 @@ def wetbulb_hours(lat: float, lon: float, years: int = DEFAULT_YEARS) -> list[Me
         if len(temps) < 8760:
             return [unknown(fid, SOURCE, f"only {len(temps)} hourly records returned", "hours")]
 
-        wb = [wet_bulb_stull(t, r) for t, r in zip(temps, rhs)]
+        # _series() truncates both to the same length; strict makes that explicit.
+        wb = [wet_bulb_stull(t, r) for t, r in zip(temps, rhs, strict=True)]
         n_years = len(wb) / 8766.0
         above = sum(1 for w in wb if w > WETBULB_THRESHOLD_C) / n_years
         design_wb = sorted(wb)[int(len(wb) * 0.996)]      # 0.4% annual exceedance

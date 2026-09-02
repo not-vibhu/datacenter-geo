@@ -20,8 +20,11 @@ SOURCE = "fema_nfhl"
 # region scanning unusable.
 ENDPOINTS = [
     # Esri Living Atlas mirror of NFHL — globally reachable, public, no key.
-    ("https://services5.arcgis.com/7weheFjxuNkGGiZi/arcgis/rest/services/"
-     "USA_Flood_Hazard_Areas_view/FeatureServer/0/query", 60.0),
+    (
+        "https://services5.arcgis.com/7weheFjxuNkGGiZi/arcgis/rest/services/"
+        "USA_Flood_Hazard_Areas_view/FeatureServer/0/query",
+        60.0,
+    ),
     # FEMA's own gateway — authoritative, but geo-restricted on some networks.
     ("https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer/28/query", 8.0),
 ]

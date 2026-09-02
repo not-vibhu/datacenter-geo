@@ -7,7 +7,7 @@ factor and a factor that could not be measured are different facts.
 from __future__ import annotations
 
 import traceback
-from typing import Callable
+from collections.abc import Callable
 
 from .adapters import climate, context, flood, overpass, peeringdb, solar, terrain
 from .adapters.base import unknown
@@ -80,10 +80,12 @@ def onsite_generation(lat: float, lon: float) -> list[Measurement]:
 
     weights, values = [], []
     if gas_score is not None:
-        weights.append(0.65); values.append(gas_score)
+        weights.append(0.65)
+        values.append(gas_score)
     if solar_score is not None:
-        weights.append(0.35); values.append(solar_score)
-    index = sum(w * v for w, v in zip(weights, values)) / sum(weights)
+        weights.append(0.35)
+        values.append(solar_score)
+    index = sum(w * v for w, v in zip(weights, values, strict=True)) / sum(weights)
 
     tier = "B" if gas_score is not None else "C"
     return [Measurement(

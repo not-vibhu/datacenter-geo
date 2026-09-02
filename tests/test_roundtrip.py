@@ -4,7 +4,6 @@ Regression test: `add-measurement` previously loaded an analysis without its
 profiles and gates, then saved it — silently destroying the scoring results of
 any run it touched.
 """
-import json
 
 from dcgeo.cli import _load, _save
 from dcgeo.gates import evaluate_gates
