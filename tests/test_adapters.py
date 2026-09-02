@@ -39,3 +39,12 @@ def test_coastal_adapter_returns_unknown_rather_than_guessing():
 def test_every_dispatch_domain_is_a_real_domain():
     domains = {s["domain"] for s in load_factors().values()}
     assert set(DISPATCH) <= domains
+
+
+def test_terrain_declares_a_dataset_preference_order():
+    """The public OpenTopoData instance does not serve Copernicus GLO-30. Assuming a
+    dataset name that isn't hosted silently zeroed out lnd.slope on every run."""
+    from dcgeo.adapters import terrain
+    assert "copernicus30m" not in terrain.DATASETS
+    assert terrain.DATASETS[0] == "mapzen"
+    assert len(terrain.DATASETS) >= 2, "need a fallback for regions one DEM misses"

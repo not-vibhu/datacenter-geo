@@ -58,15 +58,26 @@ sources:
 # ─────────────────────────────────────────────────────────────────────────────
 
   opentopography:
-    name: OpenTopography (Copernicus GLO-30, SRTM, ALOS)
+    name: OpenTopoData / OpenTopography DEM
     tier: A
-    auth: free_key
-    base_url: https://portal.opentopography.org/API/globaldem
-    coverage: global (GLO-30 to 85°N/S)
+    auth: none
+    base_url: https://api.opentopodata.org/v1
+    alternate_url: https://portal.opentopography.org/API/globaldem
+    coverage: global
     ttl_days: 365
-    license: varies by dataset; Copernicus DEM free for any use
+    rate_limit: public instance 1 call/sec, 1000 calls/day, 100 locations/call
+    license: varies by dataset
     serves: [lnd.slope, clm.flood_coastal, lnd.contiguous_area]
-    notes: Copernicus GLO-30 is the best free global DEM. SRTM has voids above 60°N.
+    notes: >
+      IMPORTANT: the public api.opentopodata.org instance does NOT serve Copernicus
+      GLO-30 — that requires a self-hosted instance or the OpenTopography portal API
+      with a key. The adapter tries `mapzen` (global blended terrain: SRTM, ArcticDEM,
+      EU-DEM and others — best global coverage), then `srtm30m` (clear provenance but
+      voids above 60 deg latitude), then `aster30m`. The dataset actually used is
+      recorded in the measurement's `raw.dem_dataset`, because slope derived from
+      different DEMs is not strictly comparable.
+      For bulk scanning, self-host: the public rate limit of 1000 calls/day caps a
+      sweep at 1000 tiles.
 
   esa_worldcover:
     name: ESA WorldCover 10m land cover

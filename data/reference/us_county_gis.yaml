@@ -1,0 +1,113 @@
+# US county GIS endpoint map.
+#
+# There is no unified national index of county parcel and zoning GIS services. Most
+# counties run ArcGIS REST or Socrata; schemas, field names and layer numbers differ
+# everywhere. This file is the per-county map the zoning and land-price adapters
+# consult.
+#
+# CONTRACT: a county that is not in this file returns `unknown` — never a guess.
+# Adding a county here is one of the highest-value small contributions to this repo,
+# because it moves lnd.zoning_status from Tier C (agent web research) to Tier B
+# (parsed structured artifact) for every site in that county.
+#
+# `verified` means someone actually called the endpoint and confirmed the layer and
+# field names. Entries marked false are leads, and adapters must treat them as
+# unverified: attempt, and fall back to `unknown` on any mismatch rather than
+# assuming a field means what its name suggests.
+version: 1
+last_reviewed: 2026-09-02
+
+schema:
+  fips: 5-digit county FIPS code
+  portal: human-facing GIS portal URL
+  zoning_service: ArcGIS REST layer URL for zoning polygons
+  zoning_field: attribute holding the zone code
+  parcel_service: ArcGIS REST layer URL for parcels
+  parcel_value_field: attribute holding assessed value
+  dc_by_right: whether data centers are a by-right use in the primary industrial zone
+  verified: whether the endpoint and field names were actually confirmed
+  notes: anything an analyst needs to know about this jurisdiction
+
+counties:
+
+  - fips: "51107"
+    name: Loudoun County, Virginia
+    portal: https://logis.loudoun.gov/
+    zoning_service: null
+    zoning_field: null
+    parcel_service: null
+    verified: false
+    dc_by_right: partial
+    notes: >
+      "Data Center Alley". Data centers are permitted by right in certain districts
+      (including PD-OP) and require special exception in others — the district matters
+      more than the county here, so always resolve to the specific parcel's district
+      rather than answering at county level. Loudoun has repeatedly amended its
+      zoning ordinance regarding data centers; read the current text, not a summary.
+
+  - fips: "51085"
+    name: Hanover County, Virginia
+    portal: https://www.hanovercounty.gov/
+    zoning_service: null
+    verified: false
+    dc_by_right: false
+    notes: >
+      Rejected the Tract Mountain Road Technology Park 4-3 in May 2026 after approving
+      a larger Tract campus near Ashland in 2024. Both are in the validation set as a
+      paired control. Discretionary approval is required and the board has demonstrated
+      it will refuse — treat lnd.zoning_status as rezoning_contested absent
+      site-specific evidence.
+
+  - fips: "48441"
+    name: Taylor County, Texas
+    portal: https://www.taylorcountytexas.org/
+    zoning_service: null
+    verified: false
+    notes: >
+      Texas counties have no general zoning authority outside municipal ETJs, which is
+      a significant structural advantage for entitlement speed. Confirm whether the
+      site falls inside a city's extraterritorial jurisdiction — that is usually the
+      only entitlement question that matters here.
+
+  - fips: "39089"
+    name: Licking County, Ohio
+    portal: https://www.lcounty.com/
+    zoning_service: null
+    verified: false
+    notes: >
+      New Albany area. Township-level zoning applies; the relevant authority is often
+      the township or the City of New Albany rather than the county. AEP Ohio's
+      large-load tariff proceeding at the PUCO is the live regulatory issue here.
+
+  - fips: "13097"
+    name: Douglas County, Georgia
+    portal: https://www.celebratedouglascounty.com/
+    zoning_service: null
+    verified: false
+    dc_by_right: false
+    notes: >
+      Rejected a ~4.4M sq ft data center rezoning 4-1. Negative control in the
+      validation set. Georgia Power territory, non-ISO — no public interconnection
+      queue exists, so power evidence here is Tier C from utility IRP documents.
+
+  - fips: "13207"
+    name: Monroe County, Georgia
+    portal: https://www.monroecountyga.gov/
+    zoning_service: null
+    verified: false
+    dc_by_right: false
+    notes: >
+      Unanimously denied a 900+ acre rezoning near Bolingbroke. A unanimous denial is
+      a stronger signal than a split vote — it indicates no political constituency for
+      the project at all.
+
+# ── How to add a county ──────────────────────────────────────────────────────
+# 1. Find the county GIS portal. Most expose ArcGIS REST at a /arcgis/rest/services
+#    path; open it with ?f=json to enumerate services and layers.
+# 2. Locate the zoning polygon layer and note its exact layer number and the field
+#    holding the zone code. Layer numbers change when counties republish — that is why
+#    `verified` carries a review date.
+# 3. Confirm with a point query against a parcel whose zoning you already know.
+# 4. Record dc_by_right by reading the current zoning ordinance text. Several
+#    jurisdictions removed data centers from by-right industrial use after 2024, so a
+#    secondary summary is not sufficient evidence.

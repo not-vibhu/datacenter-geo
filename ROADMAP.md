@@ -44,6 +44,12 @@ NEX-GDDP-CMIP6 is on S3 and free. This should be Tier A.
 The public endpoints rate-limit bulk use, which caps sweeps at a few hundred tiles.
 This is the binding constraint on scanning at scale.
 
+Observed in practice: a single site analysis in a sparse-OSM region (Inner Mongolia)
+took roughly 45 minutes against the public mirrors, almost entirely in query timeouts
+that then returned very little. Client timeouts are now capped at 70 s per mirror so
+these fail fast to `unknown` rather than stalling a run — but the real fix is a local
+Overpass instance. Budget for this before attempting band 2 or 3 of the global sweep.
+
 ### 6. Cost model calibration
 `data/reference/cost_models.yaml` carries industry-typical ranges assembled for
 screening. Replacing any entry with a sourced, dated figure is the highest-value small

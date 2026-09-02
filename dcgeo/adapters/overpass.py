@@ -25,12 +25,19 @@ SOURCE = "osm_overpass"
 ATTRIB = "https://www.openstreetmap.org/copyright"
 
 
+# Per-mirror client timeout. Deliberately shorter than it could be: in regions with
+# sparse OSM coverage a wide-radius query can take minutes and then return almost
+# nothing, and two mirrors x a long timeout per factor makes a single site analysis
+# take the better part of an hour. Failing fast to `unknown` is the better trade —
+# the tier system already records that we could not measure it.
+QUERY_TIMEOUT_S = 70.0
+
 def query(ql: str) -> dict[str, Any]:
     """Run Overpass QL against the mirror pool. Raises SourceUnavailable if all fail."""
     last: Exception | None = None
     for url in ENDPOINTS:
         try:
-            return http_post(url, data={"data": ql}, timeout=120.0)
+            return http_post(url, data={"data": ql}, timeout=QUERY_TIMEOUT_S)
         except SourceUnavailable as e:
             last = e
     raise SourceUnavailable(f"all Overpass mirrors failed: {last}")
@@ -66,7 +73,7 @@ def nearest_transmission(
     try:
         if hit is None:
             r = int(radius_km * 1000)
-            ql = f"""[out:json][timeout:90];
+            ql = f"""[out:json][timeout:55];
 (way["power"="line"](around:{r},{lat},{lon});
  way["power"="cable"](around:{r},{lat},{lon}););
 out tags center;"""
@@ -130,7 +137,7 @@ def substations(lat: float, lon: float, radius_km: float = 40.0) -> list[Measure
     try:
         if hit is None:
             r = int(radius_km * 1000)
-            ql = f"""[out:json][timeout:90];
+            ql = f"""[out:json][timeout:55];
 (node["power"="substation"](around:{r},{lat},{lon});
  way["power"="substation"](around:{r},{lat},{lon});
  relation["power"="substation"](around:{r},{lat},{lon}););
@@ -175,7 +182,7 @@ out tags center;"""
 def gas_pipeline_distance(lat: float, lon: float, radius_km: float = 50.0) -> float | None:
     """Component of pwr.onsite_generation_potential. Returns km or None."""
     r = int(radius_km * 1000)
-    ql = f"""[out:json][timeout:90];
+    ql = f"""[out:json][timeout:55];
 (way["man_made"="pipeline"]["substance"~"^(gas|natural_gas)$"](around:{r},{lat},{lon});
  way["man_made"="pipeline"]["type"="gas"](around:{r},{lat},{lon}););
 out tags center;"""
@@ -201,7 +208,7 @@ def developable_area(lat: float, lon: float, radius_km: float = 5.0) -> list[Mea
     try:
         if hit is None:
             r = int(radius_km * 1000)
-            ql = f"""[out:json][timeout:120];
+            ql = f"""[out:json][timeout:55];
 (way["landuse"~"^(residential|commercial|retail|military|cemetery|quarry)$"](around:{r},{lat},{lon});
  way["natural"~"^(water|wetland|wood)$"](around:{r},{lat},{lon});
  way["building"](around:{r},{lat},{lon});
@@ -266,7 +273,7 @@ def dwellings_within(lat: float, lon: float, radius_km: float = 1.0) -> list[Mea
     try:
         if hit is None:
             r = int(radius_km * 1000)
-            ql = f"""[out:json][timeout:90];
+            ql = f"""[out:json][timeout:55];
 (way["building"~"^(residential|house|apartments|detached|semidetached_house|terrace|dormitory)$"](around:{r},{lat},{lon});
  node["building"~"^(residential|house|apartments|detached)$"](around:{r},{lat},{lon}););
 out tags center;"""
@@ -310,7 +317,7 @@ def brownfield_signals(lat: float, lon: float, radius_km: float = 8.0) -> list[M
     try:
         if hit is None:
             r = int(radius_km * 1000)
-            ql = f"""[out:json][timeout:90];
+            ql = f"""[out:json][timeout:55];
 (way["landuse"="brownfield"](around:{r},{lat},{lon});
  way["landuse"="industrial"](around:{r},{lat},{lon});
  way["power"="plant"](around:{r},{lat},{lon});
@@ -367,7 +374,7 @@ def port_rail_access(lat: float, lon: float, radius_km: float = 150.0) -> list[M
     try:
         if hit is None:
             r = int(radius_km * 1000)
-            ql = f"""[out:json][timeout:120];
+            ql = f"""[out:json][timeout:55];
 (way["industrial"="port"](around:{r},{lat},{lon});
  node["harbour"="yes"](around:{r},{lat},{lon});
  way["landuse"="port"](around:{r},{lat},{lon});
@@ -414,7 +421,7 @@ def wwtp_distance(lat: float, lon: float, radius_km: float = 40.0) -> list[Measu
     try:
         if hit is None:
             r = int(radius_km * 1000)
-            ql = f"""[out:json][timeout:90];
+            ql = f"""[out:json][timeout:55];
 (way["man_made"="wastewater_plant"](around:{r},{lat},{lon});
  node["man_made"="wastewater_plant"](around:{r},{lat},{lon});
  way["man_made"="water_works"](around:{r},{lat},{lon}););
@@ -456,7 +463,7 @@ def fiber_proximity(lat: float, lon: float, radius_km: float = 30.0) -> list[Mea
     try:
         if hit is None:
             r = int(radius_km * 1000)
-            ql = f"""[out:json][timeout:90];
+            ql = f"""[out:json][timeout:55];
 (way["telecom"="line"](around:{r},{lat},{lon});
  way["communication"="line"](around:{r},{lat},{lon});
  way["man_made"="cable"](around:{r},{lat},{lon});
