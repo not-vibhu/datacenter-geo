@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/datacenter-geo/schemas/site_analysis.schema.json",
+  "title": "Site Analysis",
+  "description": "One scoring run over one site. Append-only; re-runs create children with parent_run set. This is the interchange format — a hosted site or a third-party scoring model consumes this, not the CLI.",
+  "type": "object",
+  "required": ["run_id", "created", "site", "measurements", "gates", "profiles"],
+  "properties": {
+    "run_id": {"type": "string", "pattern": "^run_[0-9]{4,}$"},
+    "created": {"type": "string", "format": "date-time"},
+    "parent_run": {"type": ["string", "null"], "description": "Set when this is a re-run"},
+    "cooling_assumption": {
+      "type": "string",
+      "enum": ["hybrid_adiabatic", "air_cooled", "evaporative", "closed_loop"],
+      "description": "Water demand varies by two orders of magnitude across these. Any water figure is meaningless without it."
+    },
+    "assumptions": {
+      "type": "object",
+      "description": "User-supplied values injected as synthetic Tier-D measurements. Their presence means part of this analysis is hypothetical.",
+      "additionalProperties": true
+    },
+    "weight_overrides": {"type": "object", "additionalProperties": {"type": "number"}},
+    "site": {"$ref": "#/$defs/site"},
+    "measurements": {"type": "array", "items": {"$ref": "#/$defs/measurement"}},
+    "claims": {"type": "array", "items": {"$ref": "#/$defs/claim"}},
+    "gates": {"type": "array", "items": {"$ref": "#/$defs/gateResult"}},
+    "profiles": {"type": "object", "additionalProperties": {"$ref": "#/$defs/profileScore"}},
+    "red_team": {"type": "array", "items": {"type": "string"}},
+    "recommendations": {"type": "array", "items": {"$ref": "#/$defs/recommendation"}}
+  },
+  "$defs": {
+    "tier": {
+      "type": "string",
+      "enum": ["A", "B", "C", "D", "unknown"],
+      "description": "A=machine API, B=parsed bulk/structured artifact, C=web research with citations, D=modeled or assumed, unknown=not measured"
+    },
+    "site": {
+      "type": "object",
+      "required": ["site_id", "name", "centroid"],
+      "properties": {
+        "site_id": {"type": "string"},
+        "name": {"type": "string"},
+        "centroid": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2,
+                     "description": "[lat, lon]"},
+        "radius_km": {"type": "number", "exclusiveMinimum": 0},
+        "geometry": {"type": ["object", "null"], "description": "GeoJSON geometry when a polygon was supplied"},
+        "country": {"type": ["string", "null"]},
+        "admin1": {"type": ["string", "null"]},
+        "admin2": {"type": ["string", "null"]},
+        "utility": {"type": ["string", "null"]},
+        "market": {"type": ["string", "null"], "description": "ISO/RTO, DISCOM+SERC, or provincial grid"},
+        "origin": {"type": "string", "enum": ["manual", "prospector", "reference"]},
+        "hypothesis": {"type": ["string", "null"], "description": "The falsifiable claim, when prospector-generated"}
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "required": ["factor_id", "value", "unit", "tier", "source", "retrieved"],
+      "properties": {
+        "id": {"type": "string"},
+        "factor_id": {"type": "string"},
+        "value": {"type": ["number", "string", "null"],
+                  "description": "null means UNKNOWN — a recorded fact, not a missing field"},
+        "unit": {"type": "string"},
+        "tier": {"$ref": "#/$defs/tier"},
+        "source": {"type": "string"},
+        "source_url": {"type": ["string", "null"]},
+        "retrieved": {"type": "string", "format": "date-time"},
+        "geometry_ref": {"type": ["string", "null"]},
+        "raw": {"type": ["object", "null"]},
+        "unknown_reason": {"type": ["string", "null"],
+                           "description": "Required when value is null"},
+        "notes": {"type": ["string", "null"]}
+      },
+      "allOf": [{
+        "if": {"properties": {"value": {"const": null}}},
+        "then": {"required": ["unknown_reason"],
+                 "properties": {"tier": {"const": "unknown"}}}
+      }]
+    },
+    "claim": {
+      "type": "object",
+      "required": ["claim_id", "statement", "agent", "tier"],
+      "properties": {
+        "claim_id": {"type": "string"},
+        "factor_id": {"type": ["string", "null"]},
+        "statement": {"type": "string"},
+        "agent": {"type": "string"},
+        "tier": {"$ref": "#/$defs/tier"},
+        "based_on": {"type": "array", "items": {"type": "string"},
+                     "description": "Measurement ids, so a claim invalidates when its basis changes"},
+        "citations": {"type": "array", "items": {"type": "string", "format": "uri"}},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "gateResult": {
+      "type": "object",
+      "required": ["gate_id", "name", "outcome", "reason"],
+      "properties": {
+        "gate_id": {"type": "string"},
+        "name": {"type": "string"},
+        "outcome": {"type": "string", "enum": ["PASS", "CONDITIONAL", "FAIL"]},
+        "reason": {"type": "string"},
+        "evidence_tier": {"$ref": "#/$defs/tier"},
+        "low_confidence": {"type": "boolean",
+                           "description": "true when a FAIL rests on Tier C/D evidence — verdict becomes NO-GO (unverified)"},
+        "capped_score": {"type": ["number", "null"]},
+        "remediation_hint": {"type": ["string", "null"]}
+      }
+    },
+    "profileScore": {
+      "type": "object",
+      "required": ["profile", "score", "band", "confidence", "verdict"],
+      "properties": {
+        "profile": {"type": "string"},
+        "score": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+        "band": {"type": "number", "minimum": 0,
+                 "description": "Plus/minus. Scores whose bands overlap are not rankable."},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "measured_fraction": {"type": "number", "minimum": 0, "maximum": 1},
+        "publishable": {"type": "boolean",
+                        "description": "false when measured_fraction is below the configured floor — the score must not be presented as a finding"},
+        "verdict": {"type": "string",
+                    "enum": ["strong-candidate", "viable", "conditional", "weak", "poor",
+                             "insufficient-data", "NO-GO", "NO-GO (unverified)"]},
+        "capped_by": {"type": ["string", "null"], "description": "Gate id that capped or failed this profile"},
+        "domain_scores": {"type": "object", "additionalProperties": {"type": ["number", "null"]}},
+        "factor_scores": {"type": "array", "items": {"$ref": "#/$defs/factorScore"}}
+      }
+    },
+    "factorScore": {
+      "type": "object",
+      "required": ["factor_id", "domain", "normalized", "weight", "tier"],
+      "properties": {
+        "factor_id": {"type": "string"},
+        "domain": {"type": "string"},
+        "raw_value": {"type": ["number", "string", "null"]},
+        "unit": {"type": "string"},
+        "normalized": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+        "weight": {"type": "number"},
+        "tier": {"$ref": "#/$defs/tier"},
+        "tier_weight": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "recommendation": {
+      "type": "object",
+      "required": ["factor_id", "gap", "intervention", "cost_basis", "actor"],
+      "properties": {
+        "factor_id": {"type": "string"},
+        "gap": {"type": "string"},
+        "intervention": {"type": "string"},
+        "cost_low_usd": {"type": ["number", "null"]},
+        "cost_high_usd": {"type": ["number", "null"],
+                          "description": "Costs are ALWAYS ranges. A point estimate for a transmission build is a fiction."},
+        "cost_basis": {"type": "string", "description": "Model entry or external citation, with basis year"},
+        "timeline_months": {"type": ["array", "null"], "items": {"type": "integer"}, "minItems": 2, "maxItems": 2},
+        "score_gain": {"type": ["number", "null"], "description": "Computed by re-running with the intervention assumed, not estimated"},
+        "leverage_pts_per_10m": {"type": ["number", "null"]},
+        "actor": {"type": "string", "enum": ["developer", "utility", "county", "state", "community",
+                                             "developer + utility", "developer + municipality",
+                                             "developer + carrier", "developer + midstream",
+                                             "developer + state DOT", "developer + community",
+                                             "utility + developer"]},
+        "confidence": {"$ref": "#/$defs/tier"}
+      }
+    }
+  }
+}

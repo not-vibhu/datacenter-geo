@@ -1,0 +1,188 @@
+# Land & site domain — 8 factors
+# The domain with the worst global data availability. Cadastral data is open in
+# maybe a dozen countries. Be honest about tier here; land is where fabrication
+# is most tempting and most damaging.
+domain: land
+domain_weight: {hyperscale_training: 7, inference_edge: 6, retrofit_colo: 5}
+description: >
+  Is there a parcel here that is big enough, flat enough, buildable, acquirable, and
+  zonable — and what does it cost? Outside the US, EU, and a handful of other
+  jurisdictions, expect Tier C/D and say so.
+
+factors:
+
+  - id: lnd.contiguous_area
+    name: Contiguous developable area
+    question: Largest contiguous buildable area available at the site.
+    unit: hectares
+    direction: higher_is_better
+    best_tier: B
+    scale:
+      type: piecewise
+      points: [[0, 0], [4, 12], [10, 28], [40, 55], [100, 78], [250, 92], [600, 100]]
+    profile_minimums:
+      hyperscale_training: 80      # ha; ~200 acres for a 300MW+ campus with setbacks
+      inference_edge: 1.5
+      retrofit_colo: 4
+    sources: [esa_worldcover, copernicus_clc, osm_landuse, srtm_slope, county_parcel_gis]
+    adapter: dcgeo.adapters.land:contiguous_developable
+    weights: {hyperscale_training: 9, inference_edge: 6, retrofit_colo: 5}
+    gate: gate.land_sufficient
+    notes: >
+      Computed by masking out slope above threshold, water bodies, protected areas,
+      built-up land, and known infrastructure, then finding the largest connected
+      component. This yields *physically* developable area, which is an upper bound on
+      *acquirable* area — parcel fragmentation and unwilling sellers routinely cut it
+      by half or more. Always report both the computed figure and the caveat. In
+      India in particular, land aggregation across many small holdings is often the
+      binding constraint and is why state industrial corporation land (MIDC, SIPCOT,
+      TSIIC, GIDC) commands a large premium in practice.
+
+  - id: lnd.slope
+    name: Terrain slope
+    question: Mean and 90th-percentile slope across the developable area.
+    unit: percent_slope
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 100], [1, 98], [2, 94], [4, 84], [7, 65], [12, 38], [20, 12], [30, 0]]
+    sources: [srtm_30m, copernicus_dem_30m, alos_world3d]
+    adapter: dcgeo.adapters.terrain:slope_stats
+    weights: {hyperscale_training: 6, inference_edge: 4, retrofit_colo: 3}
+    notes: >
+      Below 2% is essentially free. Each additional percent adds earthwork cost
+      roughly quadratically for a large flat-pad campus. Report cut/fill volume
+      estimate rather than slope alone where the DEM resolution supports it — that is
+      the number an EPC will price. Copernicus 30 m DEM is the best free global
+      option; SRTM has known voids above 60° latitude.
+
+  - id: lnd.price
+    name: Land acquisition cost
+    question: Expected all-in acquisition cost per hectare.
+    unit: USD_per_hectare
+    direction: lower_is_better
+    best_tier: D
+    scale:
+      type: piecewise
+      points: [[1000, 100], [10000, 90], [50000, 74], [150000, 55], [400000, 34], [1000000, 14], [3000000, 0]]
+    sources: [county_assessor, costar_paid, reonomy_paid, state_industrial_corp, regional_comparables]
+    adapter: dcgeo.adapters.land_price:estimate
+    weights: {hyperscale_training: 5, inference_edge: 6, retrofit_colo: 4}
+    notes: >
+      Almost always Tier D outside US counties that publish assessor data. Report as a
+      range with an explicit basis (assessed value, listed comparables, or state
+      industrial allotment rate) and never as a point estimate. Land is usually 2-6%
+      of total project cost for a hyperscale campus, so precision here matters far
+      less than precision on power — resist the temptation to over-invest in it.
+      Note that a data center rumor measurably moves local land prices, so
+      pre-announcement comparables systematically understate acquisition cost.
+
+  - id: lnd.zoning_status
+    name: Zoning and entitlement status
+    question: Is the current zoning compatible, and if not, how hard is the path?
+    unit: category
+    direction: categorical
+    best_tier: B
+    categories:
+      by_right_industrial: 100      # permitted use, no discretionary approval needed
+      industrial_with_sup: 80       # special use permit, administrative
+      rezoning_routine: 55
+      rezoning_contested: 28
+      incompatible: 5               # residential/agricultural with no rezoning path
+      unknown: null
+    sources: [county_zoning_gis, municipal_code, state_industrial_corp, provincial_land_use_cn]
+    adapter: dcgeo.adapters.zoning:status
+    weights: {hyperscale_training: 8, inference_edge: 7, retrofit_colo: 6}
+    gate: gate.entitlement_path_exists
+    notes: >
+      By-right industrial zoning is worth an enormous amount and is the reason
+      developers pay large premiums for pre-entitled land. A discretionary rezoning
+      converts a technical problem into a political one, which is where
+      com.opposition_risk becomes decisive. In several US jurisdictions since 2024,
+      data centers have been removed from by-right industrial use — check the current
+      code text, not a secondary summary.
+
+  - id: lnd.protected_overlap
+    name: Protected area and habitat overlap
+    question: Does the site intersect protected areas, wetlands, or critical habitat?
+    unit: percent_overlap
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 100], [1, 80], [5, 50], [15, 22], [30, 6], [50, 0]]
+    sources: [wdpa_protected_planet, ramsar, nwi_wetlands, key_biodiversity_areas, forest_clearance_india]
+    adapter: dcgeo.adapters.protected:overlap_fraction
+    weights: {hyperscale_training: 6, inference_edge: 5, retrofit_colo: 4}
+    gate: gate.protected_exclusion
+    notes: >
+      Also check buffer zones, which frequently extend regulatory reach well beyond
+      the mapped boundary. In India, any forest land — including degraded land
+      classified as forest — triggers Forest (Conservation) Act clearance, which adds
+      years and is a common and underappreciated cause of project failure. Wetland
+      delineation in the US (Clean Water Act jurisdiction) has shifted with case law
+      and should be verified against current agency guidance rather than assumed.
+
+  - id: lnd.brownfield_opportunity
+    name: Brownfield and retired-asset opportunity
+    question: Is this a retired industrial or generation site with reusable infrastructure?
+    unit: category
+    direction: categorical
+    best_tier: B
+    categories:
+      retired_power_plant: 100       # interconnection rights, water rights, transmission in place
+      heavy_industrial_reuse: 82
+      light_industrial_reuse: 60
+      greenfield_clean: 45
+      contaminated_remediation_needed: 18
+      unknown: null
+    sources: [gem_retired_plants, epa_brownfields, eia_860_retirements, osm_industrial]
+    adapter: dcgeo.adapters.brownfield:classify
+    weights: {hyperscale_training: 6, inference_edge: 3, retrofit_colo: 5}
+    notes: >
+      Retired and retiring coal plants are the single most valuable category of data
+      center site in the current market, because they carry existing interconnection
+      rights and transmission capacity — which converts a 5-7 year power problem into
+      a 2-3 year one. This factor exists mainly to make the Prospector actively hunt
+      for them. Offset against remediation cost and, at coal sites, coal ash
+      management liability, which can be substantial.
+
+  - id: lnd.geotechnical
+    name: Geotechnical suitability
+    question: Soil bearing capacity, karst, subsidence and shallow bedrock risk.
+    unit: index_0_100
+    direction: higher_is_better
+    best_tier: C
+    scale:
+      type: piecewise
+      points: [[0, 0], [25, 25], [50, 50], [75, 75], [100, 100]]
+    sources: [soilgrids_isric, usgs_karst, insar_subsidence, national_geological_survey]
+    adapter: dcgeo.adapters.geotech:suitability_index
+    weights: {hyperscale_training: 4, inference_edge: 3, retrofit_colo: 3}
+    notes: >
+      Screening-level only. No global dataset substitutes for a geotechnical
+      investigation, and this factor must never be presented as if it did. Its purpose
+      is to flag karst terrain, high-plasticity clays, mining subsidence, and shallow
+      groundwater early enough to affect site ranking. Karst is the most consequential
+      flag — it can add tens of millions in foundation cost or make a site unbuildable.
+
+  - id: lnd.heavy_haul_access
+    name: Heavy haul road access
+    question: Can 100+ tonne transformers physically reach the site?
+    unit: km_to_qualified_route
+    direction: lower_is_better
+    best_tier: C
+    scale:
+      type: piecewise
+      points: [[0, 100], [2, 94], [5, 85], [15, 65], [30, 42], [60, 18], [120, 0]]
+    sources: [osm_highways, state_dot_permits, bridge_inventory_nbi]
+    adapter: dcgeo.adapters.transport:heavy_haul_access
+    weights: {hyperscale_training: 5, inference_edge: 2, retrofit_colo: 3}
+    notes: >
+      A main generator step-up transformer can exceed 300 tonnes. Bridge weight
+      limits, overhead clearances, and turning radii on the final approach are real
+      constraints that have forced route rebuilds costing millions. Rail siding
+      proximity is a strong mitigator and should be captured in the notes. This is a
+      classic late-discovery problem: it is cheap to check early and expensive to
+      discover after land acquisition.

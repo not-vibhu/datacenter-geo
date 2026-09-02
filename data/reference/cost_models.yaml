@@ -1,0 +1,272 @@
+# Parametric cost models for the Recommender.
+#
+# RULES, enforced by the recommender agent:
+#   - Every cost is a RANGE. A point estimate for a transmission build is a fiction.
+#   - Every entry states a basis year and a calibration region.
+#   - Extrapolating outside the calibration region requires widening the range and
+#     saying so.
+#
+# CALIBRATION STATUS: these are industry-typical ranges assembled for screening. They
+# are NOT a substitute for a contractor estimate, and entries marked
+# `calibration: low` should be treated as order-of-magnitude only. Contributions that
+# replace a range with a sourced, dated figure are the single most valuable PR anyone
+# can make to this repo.
+version: 1
+basis_year: 2025
+currency: USD
+
+power:
+  transmission_line_230kv:
+    unit: per_mile
+    low: 1_500_000
+    high: 3_500_000
+    calibration: medium
+    region: US
+    timeline_months: [24, 60]
+    actor: utility
+    notes: >
+      Wide range driven by terrain, land acquisition, and river/road crossings. Urban
+      and mountainous routes reach the top of the range or exceed it. Excludes the
+      interconnection study process, which is usually the longer pole.
+
+  transmission_line_345kv:
+    unit: per_mile
+    low: 2_500_000
+    high: 5_000_000
+    calibration: medium
+    region: US
+    timeline_months: [30, 72]
+    actor: utility
+
+  substation_new_100mva:
+    unit: each
+    low: 15_000_000
+    high: 40_000_000
+    calibration: medium
+    region: US
+    timeline_months: [24, 48]
+    actor: utility
+    notes: Transformer lead time (2-4 yr) usually dominates the schedule, not construction.
+
+  substation_upgrade:
+    unit: each
+    low: 5_000_000
+    high: 25_000_000
+    calibration: low
+    region: US
+    timeline_months: [18, 36]
+    actor: utility
+    notes: Highly site-specific. Cost-sharing arrangements with the utility are common.
+
+  onsite_gas_recip_engines:
+    unit: per_kW
+    low: 800
+    high: 1_400
+    calibration: medium
+    region: global
+    timeline_months: [18, 30]
+    actor: developer
+    notes: >
+      The main route around interconnection queues. Deployable far faster than a grid
+      connection. Excludes the gas lateral and the air permit, which must be costed
+      separately and may be the binding constraint in a non-attainment area.
+
+  onsite_gas_combined_cycle:
+    unit: per_kW
+    low: 1_000
+    high: 1_800
+    calibration: medium
+    region: global
+    timeline_months: [36, 54]
+    actor: developer
+
+  gas_pipeline_lateral:
+    unit: per_mile
+    low: 2_000_000
+    high: 5_000_000
+    calibration: low
+    region: US
+    timeline_months: [18, 36]
+    actor: developer + midstream
+
+  bess_storage:
+    unit: per_kWh
+    low: 200
+    high: 400
+    calibration: medium
+    region: global
+    timeline_months: [12, 24]
+    actor: developer
+    notes: Bridges ride-through and peak shaving. Cannot substitute for firm capacity.
+
+water:
+  reclaimed_water_pipeline:
+    unit: per_mile
+    low: 1_200_000
+    high: 3_000_000
+    calibration: medium
+    region: US
+    timeline_months: [14, 30]
+    actor: developer + municipality
+    notes: >
+      Diameter-dependent; assumes 12-24 inch. Frequently the highest score-per-dollar
+      intervention in the entire system, because it addresses water availability and
+      community opposition simultaneously.
+
+  onsite_water_storage:
+    unit: per_m3
+    low: 400
+    high: 900
+    calibration: low
+    region: global
+    timeline_months: [8, 16]
+    actor: developer
+    notes: Addresses interannual variability. Cheap to build, expensive to retrofit.
+
+  zero_liquid_discharge:
+    unit: each
+    low: 8_000_000
+    high: 20_000_000
+    calibration: low
+    region: global
+    timeline_months: [18, 30]
+    actor: developer
+    notes: Plus material opex. Triggered where discharge permitting requires it.
+
+  air_cooled_conversion_premium:
+    unit: per_MW_IT
+    low: 150_000
+    high: 400_000
+    calibration: low
+    region: global
+    timeline_months: [0, 0]
+    actor: developer
+    notes: >
+      Design-stage choice, not a retrofit. Eliminates water consumption at the cost of
+      10-30% more power — which at scale usually exceeds the capex difference. Model
+      the power penalty explicitly rather than treating this as a pure capex item.
+
+community:
+  acoustic_barrier:
+    unit: per_linear_foot
+    low: 200
+    high: 600
+    calibration: low
+    region: US
+    timeline_months: [4, 10]
+    actor: developer
+
+  low_noise_equipment_premium:
+    unit: per_MW_IT
+    low: 30_000
+    high: 90_000
+    calibration: low
+    region: global
+    actor: developer
+    notes: Low-noise fan selection and enclosures. Cheap relative to losing a hearing.
+
+  community_benefit_agreement:
+    unit: per_project
+    low: 1_000_000
+    high: 20_000_000
+    calibration: low
+    region: US
+    timeline_months: [6, 18]
+    actor: developer + community
+    notes: >
+      Highly variable and politically determined. Often the difference between approval
+      and denial in a contested jurisdiction, and cheap relative to a two-year delay.
+
+  pre_application_engagement:
+    unit: per_project
+    low: 100_000
+    high: 600_000
+    calibration: low
+    region: global
+    timeline_months: [3, 12]
+    actor: developer
+    notes: >
+      Near-always positive expected value. Moves a political factor for almost no
+      capital, and the cheapest item in this file by an order of magnitude.
+
+land:
+  site_earthwork_per_pct_slope:
+    unit: per_hectare_per_pct_slope
+    low: 12_000
+    high: 40_000
+    calibration: low
+    region: global
+    notes: >
+      Rough proxy for cut/fill on a large flat-pad campus. Cost rises faster than
+      linearly above ~4% slope. Replace with an actual cut/fill volume estimate once
+      DEM resolution supports it.
+
+  brownfield_remediation:
+    unit: per_hectare
+    low: 50_000
+    high: 800_000
+    calibration: low
+    region: US
+    timeline_months: [12, 48]
+    actor: developer
+    notes: >
+      Enormous range because contamination type dominates. Coal ash management at a
+      retired coal plant can exceed the top of this range substantially and must be
+      costed separately with site-specific data.
+
+  heavy_haul_route_upgrade:
+    unit: per_mile
+    low: 500_000
+    high: 3_000_000
+    calibration: low
+    region: US
+    timeline_months: [8, 24]
+    actor: developer + state DOT
+    notes: Bridge reinforcement dominates. Cheap to check early, expensive to discover late.
+
+connectivity:
+  fiber_build_rural:
+    unit: per_mile
+    low: 60_000
+    high: 200_000
+    calibration: medium
+    region: US
+    timeline_months: [8, 20]
+    actor: developer + carrier
+
+  fiber_build_urban:
+    unit: per_mile
+    low: 200_000
+    high: 800_000
+    calibration: medium
+    region: US
+    timeline_months: [12, 30]
+    actor: developer + carrier
+    notes: Permitting and restoration dominate urban cost, not the fiber itself.
+
+  diverse_path_second_route:
+    unit: per_project
+    low: 2_000_000
+    high: 15_000_000
+    calibration: low
+    region: global
+    timeline_months: [12, 30]
+    actor: developer + carrier
+    notes: >
+      Cost of achieving genuine physical diversity, not just a second contract on the
+      same conduit. Confirm separation with route maps before paying for it.
+
+reference_totals:
+  # For sanity-checking recommendation magnitudes against overall project cost.
+  datacenter_total_project_cost:
+    unit: per_MW_IT
+    low: 9_000_000
+    high: 15_000_000
+    calibration: medium
+    region: US
+    basis_year: 2025
+    notes: >
+      Shell plus electrical plus mechanical, EXCLUDING IT equipment. High-density
+      AI-capable liquid-cooled builds sit at the top of the range. IT equipment for an
+      AI campus typically exceeds facility cost by several multiples, which is why
+      equipment sales tax exemption dominates every other incentive.

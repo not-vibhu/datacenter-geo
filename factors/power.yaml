@@ -1,0 +1,266 @@
+# Power domain — 12 factors
+# The binding constraint for AI data centers globally. If a site fails here,
+# nothing else matters. Weight this domain highest in every profile.
+domain: power
+domain_weight: {hyperscale_training: 10, inference_edge: 7, retrofit_colo: 9}
+description: >
+  Can this site obtain the target load, by the target year, at a price and carbon
+  intensity that clears the investment hurdle? Twelve factors, of which three
+  (queue time, substation headroom, large-load tariff) account for most real-world
+  site failures.
+
+factors:
+
+  - id: pwr.transmission_proximity
+    name: Transmission line proximity
+    question: Distance to the nearest transmission line of sufficient voltage to serve target load.
+    unit: km
+    direction: lower_is_better
+    best_tier: A
+    min_voltage_kv: 230        # 110 kV acceptable for <100 MW; see notes
+    scale:
+      type: piecewise
+      points: [[0, 100], [1, 98], [3, 92], [6, 82], [12, 62], [25, 35], [50, 12], [100, 0]]
+    sources: [openinframap, osm_overpass, gem_transmission]
+    adapter: dcgeo.adapters.openinframap:nearest_transmission
+    weights: {hyperscale_training: 9, inference_edge: 7, retrofit_colo: 6}
+    notes: >
+      Proximity is necessary but nowhere near sufficient — a line overhead with no
+      available capacity is worth less than a line 15 km away with headroom. Always
+      read alongside pwr.substation_headroom. For loads under 100 MW, 110-138 kV is
+      usually adequate and the min_voltage_kv threshold should be lowered via
+      --assume. OSM transmission coverage is excellent in Europe and North America,
+      good in India, and patchy in parts of China and Africa — degrade tier to C and
+      cross-check against Global Energy Monitor where OSM density looks implausible.
+
+  - id: pwr.substation_headroom
+    name: Substation available capacity
+    question: How much spare capacity (MVA) exists at the nearest suitable substation?
+    unit: MVA
+    direction: higher_is_better
+    best_tier: B
+    scale:
+      type: piecewise
+      points: [[0, 0], [50, 20], [100, 40], [200, 65], [400, 85], [800, 97], [1500, 100]]
+    sources: [utility_planning_docs, ferc_form_715, cea_india, iso_capacity_maps]
+    adapter: dcgeo.adapters.grid:substation_headroom
+    weights: {hyperscale_training: 10, inference_edge: 8, retrofit_colo: 9}
+    gate: gate.power_path_exists
+    notes: >
+      Rarely available as an API anywhere in the world. In the US, some utilities
+      publish hosting-capacity maps (a distribution-level artifact, only partly
+      applicable to transmission-served loads); most do not. Expect Tier B at best
+      from utility integrated resource plans and transmission planning studies, Tier C
+      commonly. Do not guess. An unknown here should push the site to CONDITIONAL,
+      not to a midpoint score — this is precisely the factor most likely to kill a
+      deal after twelve months of diligence.
+
+  - id: pwr.interconnect_queue_time
+    name: Interconnection queue time to energization
+    question: Realistic years from application to energization for target load.
+    unit: years
+    direction: lower_is_better
+    best_tier: B
+    scale:
+      type: piecewise
+      points: [[0, 100], [1, 95], [2, 85], [3, 70], [4, 52], [5, 35], [7, 15], [10, 0]]
+    sources: [iso_queue_pjm, iso_queue_ercot, iso_queue_miso, iso_queue_spp, iso_queue_caiso, lbnl_queued_up, cea_india, provincial_grid_cn]
+    adapter: dcgeo.adapters.iso_queues:queue_time_estimate
+    weights: {hyperscale_training: 10, inference_edge: 7, retrofit_colo: 8}
+    gate: gate.power_path_exists
+    notes: >
+      The single most decisive factor in US site selection as of 2026, and the one
+      most often misrepresented in marketing materials. Use the ISO's own published
+      queue plus LBNL "Queued Up" historical completion statistics for the specific
+      ISO — median *completed* time, not median *queued* time; the difference is
+      large because most projects withdraw. ERCOT's connect-and-manage regime is
+      structurally faster than PJM/MISO cluster studies and the scale must not be
+      applied uniformly across ISOs without noting this. In India, use CEA/CTU
+      connectivity timelines plus state DISCOM sanction time. In China, provincial
+      grid company approval within a designated 东数西算 hub is materially faster than
+      outside one.
+
+  - id: pwr.large_load_tariff
+    name: Large-load tariff availability
+    question: Does a tariff exist for loads of this size, and on what terms?
+    unit: category
+    direction: categorical
+    best_tier: B
+    categories:
+      established_favorable: 100    # published large-load tariff, DC precedent in territory
+      established_neutral: 78
+      negotiable: 55                # special contract path exists, no published tariff
+      restrictive: 28               # tariff exists but with punitive demand ratchets or exit fees
+      hostile: 5                    # utility has moratorium or refuses new large loads
+      unknown: null
+    sources: [utility_tariff_filings, puc_dockets, state_regulator_cn, serc_india]
+    adapter: dcgeo.adapters.tariffs:large_load_tariff
+    weights: {hyperscale_training: 8, inference_edge: 5, retrofit_colo: 7}
+    notes: >
+      An increasingly common deal-killer as utilities respond to load growth by
+      imposing minimum-take obligations, collateral requirements, and exit fees on
+      data center customers. Several US utilities filed restrictive large-load tariffs
+      in 2024-2026. Check the PUC docket, not the utility's marketing page. In India
+      the analogous question is open-access eligibility plus wheeling and banking
+      charges, which vary by state and change annually.
+
+  - id: pwr.retail_power_price
+    name: Industrial retail power price
+    question: All-in delivered price for industrial-scale load.
+    unit: USD/MWh
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[20, 100], [35, 92], [50, 80], [70, 62], [90, 42], [120, 20], [180, 3], [250, 0]]
+    sources: [eia_861, eia_electricity_data, ceic_cn, cea_india, iea_prices]
+    adapter: dcgeo.adapters.eia:industrial_price
+    weights: {hyperscale_training: 9, inference_edge: 6, retrofit_colo: 8}
+    notes: >
+      At 400 MW and 90% utilization, a $10/MWh difference is roughly $31 M/year —
+      which typically dwarfs every land and tax consideration in this model combined.
+      Use state or provincial industrial average as the Tier-A baseline, then adjust
+      to Tier C with the actual utility tariff where obtainable. Note whether the
+      price includes transmission and rider charges; the headline number usually
+      does not.
+
+  - id: pwr.wholesale_basis_risk
+    name: Nodal congestion and basis volatility
+    question: How volatile and congested is the local node relative to the hub?
+    unit: USD/MWh_stddev
+    direction: lower_is_better
+    best_tier: B
+    scale:
+      type: piecewise
+      points: [[0, 100], [5, 88], [10, 72], [20, 50], [35, 28], [60, 8], [100, 0]]
+    sources: [ercot_lmp, pjm_dataminer, miso_lmp, caiso_oasis]
+    adapter: dcgeo.adapters.lmp:nodal_basis
+    weights: {hyperscale_training: 6, inference_edge: 3, retrofit_colo: 5}
+    notes: >
+      Matters for merchant/hedged supply strategies and for anyone contemplating
+      demand-response revenue. Irrelevant under a fixed-price bundled retail tariff —
+      set weight to 0 via --weight when the supply strategy is known to be fixed.
+      Only meaningful in liberalized markets; mark N/A in single-buyer markets.
+
+  - id: pwr.grid_carbon_intensity
+    name: Grid carbon intensity
+    question: Average and marginal gCO2e per kWh of grid supply.
+    unit: gCO2e/kWh
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 100], [50, 95], [150, 82], [300, 62], [450, 42], [600, 22], [800, 6], [1000, 0]]
+    sources: [electricity_maps, ember_climate, epa_egrid, iea_emission_factors]
+    adapter: dcgeo.adapters.carbon:grid_intensity
+    weights: {hyperscale_training: 7, inference_edge: 5, retrofit_colo: 6}
+    notes: >
+      Report both average and marginal intensity; they diverge sharply and marginal
+      is the honest number for a large new load. Hyperscaler procurement commitments
+      (24/7 CFE, RE100) make this a hard requirement rather than a preference for
+      some tenants — when the tenant is known to have a 24/7 CFE commitment, promote
+      this to a gate via config. Note that carbon intensity and power price are
+      strongly anti-correlated in several markets; the scoring model does not
+      penalize this twice but a naive reader may double-count it.
+
+  - id: pwr.grid_reliability
+    name: Grid reliability
+    question: Historical outage frequency and duration on the serving grid.
+    unit: SAIDI_minutes_per_year
+    direction: lower_is_better
+    best_tier: B
+    scale:
+      type: piecewise
+      points: [[0, 100], [30, 94], [60, 86], [120, 70], [240, 48], [480, 24], [1000, 5], [2000, 0]]
+    sources: [eia_861_reliability, ceer_benchmarking, cea_india, world_bank_wgi]
+    adapter: dcgeo.adapters.reliability:saidi
+    weights: {hyperscale_training: 6, inference_edge: 7, retrofit_colo: 7}
+    notes: >
+      Use SAIDI excluding major event days for the baseline and including them as a
+      secondary figure — the difference tells you about weather exposure. Poor grid
+      reliability is an economic penalty (more generator runtime, more fuel storage,
+      higher N+ redundancy) rather than an absolute barrier, and the Recommender
+      should price it as such.
+
+  - id: pwr.onsite_generation_potential
+    name: On-site generation potential
+    question: Can the site self-supply or bridge with on-site generation?
+    unit: index_0_100
+    direction: higher_is_better
+    best_tier: A
+    composite_of:
+      gas_pipeline_distance_km: {weight: 0.40, better: lower}
+      solar_ghi_kwh_m2_day:     {weight: 0.25, better: higher}
+      wind_capacity_factor:     {weight: 0.20, better: higher}
+      land_for_generation_ha:   {weight: 0.15, better: higher}
+    sources: [osm_pipelines, gem_gas_infrastructure, nasa_power, global_wind_atlas, global_solar_atlas]
+    adapter: dcgeo.adapters.onsite_gen:potential_index
+    weights: {hyperscale_training: 8, inference_edge: 4, retrofit_colo: 5}
+    notes: >
+      "Bring your own power" has become the dominant strategy for beating
+      interconnection queues in the US. Gas pipeline proximity is the highest-signal
+      component because behind-the-meter gas generation can be deployed in 18-30
+      months versus 4-7 years for grid interconnection. Solar and wind alone cannot
+      firm a data center load and should never be scored as if they can — they are
+      counted here for their contribution to a hybrid or bridging strategy, not as a
+      standalone supply.
+
+  - id: pwr.firm_capacity_nearby
+    name: Dispatchable generation within 50 km
+    question: How much firm, dispatchable capacity sits electrically close to the site?
+    unit: MW
+    direction: higher_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 0], [200, 22], [500, 45], [1000, 65], [2000, 82], [4000, 95], [8000, 100]]
+    sources: [gem_power_plants, wri_powerwatch, eia_860, cea_india]
+    adapter: dcgeo.adapters.gem:firm_capacity_within
+    weights: {hyperscale_training: 6, inference_edge: 4, retrofit_colo: 5}
+    notes: >
+      Proximity to generation reduces transmission dependence and improves the odds
+      of a favorable interconnection study result. Count only dispatchable capacity
+      (gas, coal, nuclear, hydro with storage, geothermal); exclude variable
+      renewables, which are counted in pwr.onsite_generation_potential instead.
+      Retiring plants are a special case worth flagging: a retiring coal plant is an
+      exceptional data center site because the interconnection rights, transmission,
+      water rights, and often the land itself are already in place.
+
+  - id: pwr.renewable_procurement_depth
+    name: Clean power procurement market depth
+    question: Can 24/7 or annually-matched clean power be procured at scale here?
+    unit: index_0_100
+    direction: higher_is_better
+    best_tier: C
+    scale:
+      type: piecewise
+      points: [[0, 0], [25, 25], [50, 50], [75, 75], [100, 100]]
+    sources: [lbnl_ppa_data, ember_climate, cleanenergybuyers, ireda_india]
+    adapter: dcgeo.adapters.ppa:market_depth
+    weights: {hyperscale_training: 6, inference_edge: 3, retrofit_colo: 4}
+    notes: >
+      Composite of: whether a liberalized PPA market exists at all, observed PPA
+      volume in the market, availability of hourly-matched products, and REC/GO
+      market liquidity. Largely Tier C — assembled from market reports rather than
+      APIs. In India, evaluate state open-access rules specifically; national
+      averages are misleading because banking and wheeling charges are set per state
+      and have been tightened in several states since 2023.
+
+  - id: pwr.nuclear_smr_adjacency
+    name: Nuclear and SMR adjacency
+    question: Distance to operating nuclear capacity or a credible announced SMR.
+    unit: km
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 100], [10, 92], [25, 78], [50, 58], [100, 32], [200, 10], [400, 0]]
+    sources: [gem_nuclear, iaea_pris, nrc_applications]
+    adapter: dcgeo.adapters.gem:nearest_nuclear
+    weights: {hyperscale_training: 5, inference_edge: 2, retrofit_colo: 3}
+    notes: >
+      A low-weight but high-optionality factor. Co-location with nuclear offers firm
+      carbon-free power and has driven several 2024-2026 US transactions. Score
+      announced-but-unbuilt SMRs at Tier C or D with a heavy discount and record the
+      announced COD explicitly — announced SMR dates have slipped consistently, and
+      an analysis that credits an unbuilt SMR at face value is not credible.

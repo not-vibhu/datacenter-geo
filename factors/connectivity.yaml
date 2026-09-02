@@ -1,0 +1,125 @@
+# Connectivity domain — 6 factors
+# Weighting differs radically by profile: near-irrelevant for a training campus
+# (which can tolerate 50 ms to anywhere), decisive for inference and edge.
+domain: connectivity
+domain_weight: {hyperscale_training: 5, inference_edge: 10, retrofit_colo: 8}
+description: >
+  Can data get in and out, over physically diverse paths, at the latency the workload
+  requires? Training workloads are latency-insensitive and bandwidth-hungry;
+  inference is the opposite. Do not apply one connectivity standard to both.
+
+factors:
+
+  - id: cnx.longhaul_fiber_proximity
+    name: Long-haul fiber proximity
+    question: Distance to the nearest long-haul fiber route.
+    unit: km
+    direction: lower_is_better
+    best_tier: B
+    scale:
+      type: piecewise
+      points: [[0, 100], [1, 96], [3, 88], [8, 72], [20, 48], [50, 20], [120, 0]]
+    sources: [osm_telecom, itu_transmission_maps, telegeography_paid, state_broadband_maps]
+    adapter: dcgeo.adapters.fiber:nearest_longhaul
+    weights: {hyperscale_training: 7, inference_edge: 9, retrofit_colo: 8}
+    notes: >
+      Open fiber route data is genuinely poor globally — carriers treat routes as
+      confidential and OSM coverage is sparse and inconsistent. Use ITU transmission
+      maps and state broadband maps where they exist, and infer from proxies
+      (railway and highway rights-of-way, long-distance power line corridors) where
+      they do not, marking the inference explicitly as Tier D. This factor's tier
+      should be reported honestly rather than dressed up; it is one of the weakest
+      data availability situations in the entire framework.
+
+  - id: cnx.path_diversity
+    name: Physical path diversity
+    question: How many physically distinct fiber routes serve this location?
+    unit: count_distinct_paths
+    direction: higher_is_better
+    best_tier: C
+    scale:
+      type: piecewise
+      points: [[0, 0], [1, 25], [2, 62], [3, 82], [4, 92], [6, 100]]
+    sources: [osm_telecom, carrier_route_maps, state_broadband_maps]
+    adapter: dcgeo.adapters.fiber:path_diversity
+    weights: {hyperscale_training: 6, inference_edge: 9, retrofit_colo: 9}
+    notes: >
+      Two carriers sharing one conduit is one path, not two — this distinction is the
+      whole point of the factor and is exactly what carrier sales materials obscure.
+      Physical diversity means separate rights-of-way with meaningful geographic
+      separation. Single-path sites are viable for training campuses and unacceptable
+      for anything carrying production inference traffic.
+
+  - id: cnx.carrier_count
+    name: Carrier availability
+    question: How many distinct network operators can deliver service on site?
+    unit: count_carriers
+    direction: higher_is_better
+    best_tier: C
+    scale:
+      type: piecewise
+      points: [[0, 0], [1, 22], [2, 48], [3, 66], [5, 84], [8, 95], [12, 100]]
+    sources: [peeringdb, carrier_coverage_maps, state_broadband_maps]
+    adapter: dcgeo.adapters.fiber:carrier_count
+    weights: {hyperscale_training: 4, inference_edge: 8, retrofit_colo: 8}
+    notes: >
+      Carrier count drives transit pricing more than it drives availability. A single
+      carrier will serve almost any site given enough money; the question is what
+      that money is. Where carrier count is low, the Recommender should price a fiber
+      build to the nearest carrier-dense point rather than treating the site as
+      unserved.
+
+  - id: cnx.ixp_proximity
+    name: Internet exchange and cloud on-ramp proximity
+    question: Network distance to the nearest significant IXP or cloud on-ramp.
+    unit: km
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 100], [10, 95], [40, 85], [100, 68], [250, 45], [600, 20], [1500, 2]]
+    sources: [peeringdb, cloud_region_maps, packet_clearing_house]
+    adapter: dcgeo.adapters.fiber:nearest_ixp
+    weights: {hyperscale_training: 3, inference_edge: 9, retrofit_colo: 7}
+    notes: >
+      PeeringDB is a genuinely good, free, machine-readable Tier-A source for IXPs
+      and facilities. Weight this near zero for a training campus: the workload does
+      not care, and over-weighting it biases the entire system toward expensive metro
+      land, which is precisely the mistake this tool exists to prevent.
+
+  - id: cnx.latency_to_demand
+    name: Latency to demand centers
+    question: Round-trip latency to the population and compute centers being served.
+    unit: ms_rtt_p50
+    direction: lower_is_better
+    best_tier: B
+    scale:
+      type: piecewise
+      points: [[0, 100], [5, 95], [10, 88], [20, 74], [40, 52], [70, 28], [120, 8], [200, 0]]
+    sources: [ripe_atlas, cloudflare_radar, derived, ghsl_population]
+    adapter: dcgeo.adapters.latency:to_demand_centers
+    weights: {hyperscale_training: 2, inference_edge: 10, retrofit_colo: 8}
+    notes: >
+      Model as great-circle distance × 1.4 route factor × fiber propagation
+      (approximately 4.9 µs/km) plus switching overhead, then validate against RIPE
+      Atlas measurements where probes exist nearby. State which demand centers are
+      being measured to — the answer is meaningless without that. For training
+      campuses this factor is close to irrelevant and is weighted accordingly.
+
+  - id: cnx.subsea_landing
+    name: Subsea cable landing proximity
+    question: Distance to a subsea cable landing station.
+    unit: km
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 100], [20, 92], [60, 78], [150, 58], [400, 32], [900, 10], [2000, 0]]
+    sources: [telegeography_submarine_map, peeringdb]
+    adapter: dcgeo.adapters.fiber:nearest_subsea_landing
+    weights: {hyperscale_training: 2, inference_edge: 6, retrofit_colo: 5}
+    notes: >
+      Decisive for international-facing capacity, near-irrelevant for domestic
+      training. Highly relevant to India (Mumbai and Chennai landing clusters) and to
+      any island or peninsular market. TeleGeography's public submarine cable map is
+      free for non-commercial use and is accurate at the landing-station level.

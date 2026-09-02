@@ -1,0 +1,164 @@
+# Water & cooling domain — 7 factors
+# The second-most-common cause of public opposition after noise, and an increasingly
+# common cause of permit denial. Note that water and power trade off directly:
+# air-cooled designs use ~0 water and 10-30% more power.
+domain: water
+domain_weight: {hyperscale_training: 8, inference_edge: 4, retrofit_colo: 6}
+description: >
+  Can this site be cooled — legally, sustainably, and through the worst week of the
+  worst year? The analysis must always state the assumed cooling architecture,
+  because water demand varies by two orders of magnitude between evaporative and
+  closed-loop designs.
+
+cooling_assumption_default: hybrid_adiabatic   # override with --assume cooling=air_cooled
+
+factors:
+
+  - id: wtr.basin_stress
+    name: Baseline water stress
+    question: What fraction of available renewable supply is already withdrawn in this basin?
+    unit: ratio
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 100], [0.1, 92], [0.2, 82], [0.4, 60], [0.6, 40], [0.8, 20], [1.0, 8], [2.0, 0]]
+    sources: [wri_aqueduct_40, fao_aquastat]
+    adapter: dcgeo.adapters.aqueduct:baseline_water_stress
+    weights: {hyperscale_training: 8, inference_edge: 4, retrofit_colo: 6}
+    gate: gate.water_viable
+    notes: >
+      WRI Aqueduct 4.0 is the global standard and is genuinely Tier A — a versioned
+      raster with documented methodology. Use the baseline stress indicator plus the
+      2030 and 2050 projections under a business-as-usual scenario; a site that is
+      fine today and extremely high stress in 2040 is a bad 25-year asset. High basin
+      stress does not automatically disqualify: air-cooled and closed-loop designs
+      operate in the Arizona and Nevada deserts. It disqualifies *evaporative* designs,
+      and it raises political risk sharply regardless of design.
+
+  - id: wtr.supply_availability
+    name: Physical water supply availability
+    question: Is there a deliverable supply of the required volume, and from where?
+    unit: m3_per_day
+    direction: higher_is_better
+    best_tier: C
+    scale:
+      type: piecewise
+      points: [[0, 0], [500, 25], [2000, 50], [5000, 72], [12000, 88], [30000, 100]]
+    sources: [municipal_utility_reports, usgs_nwis, cgwb_india, provincial_water_cn]
+    adapter: dcgeo.adapters.water_supply:deliverable_volume
+    weights: {hyperscale_training: 7, inference_edge: 4, retrofit_colo: 6}
+    notes: >
+      Distinguish four sources and record which one the number refers to: municipal
+      potable, raw surface withdrawal, groundwater, and reclaimed/recycled. They have
+      completely different costs, permit pathways, and political optics. A 100 MW
+      evaporatively-cooled facility runs roughly 1,500-2,500 m3/day depending on
+      climate; state the load and cooling assumption alongside the requirement or the
+      number is meaningless.
+
+  - id: wtr.reclaimed_availability
+    name: Reclaimed water availability
+    question: Is treated effluent available at sufficient volume and acceptable distance?
+    unit: km_to_wwtp
+    direction: lower_is_better
+    best_tier: B
+    scale:
+      type: piecewise
+      points: [[0, 100], [2, 92], [5, 80], [10, 62], [20, 38], [40, 15], [80, 0]]
+    sources: [osm_wastewater, epa_cwns, municipal_utility_reports]
+    adapter: dcgeo.adapters.water_supply:nearest_wwtp
+    weights: {hyperscale_training: 6, inference_edge: 2, retrofit_colo: 4}
+    notes: >
+      Reclaimed water is the highest-leverage water intervention available to a data
+      center developer: it neutralizes most community opposition, is usually cheaper
+      per unit than potable, and is often actively encouraged by the municipality.
+      Capture WWTP treated flow capacity, not just distance — a 5 km plant producing
+      800 m3/day cannot serve a 2,000 m3/day load. Pipeline cost is in the cost model
+      and this factor frequently produces the best score-per-dollar recommendation in
+      the entire system.
+
+  - id: wtr.withdrawal_permitting
+    name: Water rights and withdrawal permitting
+    question: How hard is it to obtain the legal right to the required volume?
+    unit: category
+    direction: categorical
+    best_tier: C
+    categories:
+      unrestricted_or_allocated: 100    # rights already attach to the parcel
+      routine_permit: 78
+      contested_but_available: 50
+      severely_constrained: 22          # adjudicated basin, moratorium on new withdrawals
+      unavailable: 0
+      unknown: null
+    sources: [state_water_authority, cgwb_india, provincial_water_cn, basin_authority_filings]
+    adapter: dcgeo.adapters.water_rights:permit_regime
+    weights: {hyperscale_training: 7, inference_edge: 3, retrofit_colo: 5}
+    gate: gate.water_viable
+    notes: >
+      Legal availability and physical availability are different questions and the
+      legal one kills more projects. Prior-appropriation states in the US West,
+      adjudicated basins, and India's CGWB notified over-exploited blocks all have
+      water physically present that you cannot lawfully take. In India, check whether
+      the district is a CGWB "over-exploited" or "critical" block — groundwater
+      abstraction there requires central authority clearance that is frequently denied
+      for industrial use.
+
+  - id: wtr.wetbulb_profile
+    name: Wet-bulb temperature profile
+    question: How many hours per year exceed the free-cooling wet-bulb threshold?
+    unit: hours_above_24C_wetbulb
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 100], [100, 92], [300, 80], [700, 62], [1200, 42], [2000, 20], [3000, 5], [4000, 0]]
+    sources: [era5_reanalysis, open_meteo_archive, nasa_power]
+    adapter: dcgeo.adapters.climate:wetbulb_hours
+    weights: {hyperscale_training: 7, inference_edge: 5, retrofit_colo: 6}
+    notes: >
+      This is the physically correct driver of cooling energy and water consumption,
+      and it is one of the few factors where a genuinely precise Tier-A answer is
+      available anywhere on Earth from reanalysis data. Compute from hourly
+      temperature and relative humidity over a 10-year window; report the design
+      wet-bulb (0.4% exceedance, per ASHRAE convention) alongside the annual hours.
+      Feed directly into the PUE/WUE model rather than scoring it in isolation.
+
+  - id: wtr.discharge_permitting
+    name: Blowdown and thermal discharge permitting
+    question: Can cooling blowdown be discharged legally and affordably?
+    unit: category
+    direction: categorical
+    best_tier: C
+    categories:
+      sewer_capacity_available: 100
+      permit_routine: 80
+      permit_constrained: 48
+      zero_liquid_discharge_required: 25
+      infeasible: 0
+      unknown: null
+    sources: [epa_npdes, state_environmental_agency, cpcb_india, mee_china]
+    adapter: dcgeo.adapters.water_rights:discharge_regime
+    weights: {hyperscale_training: 5, inference_edge: 2, retrofit_colo: 4}
+    notes: >
+      Frequently overlooked in early screening and expensive to discover late.
+      Blowdown carries concentrated dissolved solids and treatment chemicals. Where
+      zero-liquid-discharge is mandated, add $8-20 M capex and material opex to the
+      cooling system — the Recommender should price this, not just flag it.
+
+  - id: wtr.flood_of_water_infrastructure
+    name: Water infrastructure resilience
+    question: Is the water supply itself exposed to drought or failure?
+    unit: index_0_100
+    direction: higher_is_better
+    best_tier: B
+    scale:
+      type: piecewise
+      points: [[0, 0], [25, 25], [50, 50], [75, 75], [100, 100]]
+    sources: [wri_aqueduct_40, us_drought_monitor, imd_india]
+    adapter: dcgeo.adapters.aqueduct:drought_risk_index
+    weights: {hyperscale_training: 4, inference_edge: 2, retrofit_colo: 3}
+    notes: >
+      Combines interannual variability, drought frequency, and dependence on a single
+      source. A site with adequate average supply but high interannual variability
+      needs on-site storage — cheap to build, expensive to retrofit, and rarely
+      considered in early screening.

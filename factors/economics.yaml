@@ -1,0 +1,128 @@
+# Economics, construction & supply chain domain — 6 factors
+# Determines whether a technically viable site can actually be built on schedule.
+domain: economics
+domain_weight: {hyperscale_training: 6, inference_edge: 5, retrofit_colo: 6}
+description: >
+  Can this be constructed and operated here, and at what cost? Schedule risk in this
+  domain is currently dominated by electrical equipment lead times, not by labor.
+
+factors:
+
+  - id: eco.construction_labor
+    name: Construction labor availability
+    question: Is there sufficient skilled electrical and mechanical trade capacity in the market?
+    unit: index_0_100
+    direction: higher_is_better
+    best_tier: C
+    scale:
+      type: piecewise
+      points: [[0, 0], [25, 25], [50, 50], [75, 75], [100, 100]]
+    sources: [bls_oes, union_local_data, state_labor_dept, national_labor_stats]
+    adapter: dcgeo.adapters.labor:construction_capacity
+    weights: {hyperscale_training: 7, inference_edge: 4, retrofit_colo: 5}
+    notes: >
+      Electricians are the binding trade for data center construction. Markets with
+      several concurrent large campuses experience real wage inflation and schedule
+      slip — Northern Virginia, Phoenix, and Columbus have all shown this. Measure
+      the count of electricians within commuting distance *against concurrent
+      committed data center construction in the same market*, not in isolation; an
+      absolute count without the demand side is misleading.
+
+  - id: eco.construction_cost_index
+    name: Construction cost index
+    question: How expensive is building here relative to a national baseline?
+    unit: index_100_baseline
+    direction: lower_is_better
+    best_tier: B
+    scale:
+      type: piecewise
+      points: [[60, 100], [80, 90], [95, 76], [105, 62], [120, 42], [140, 20], [180, 0]]
+    sources: [rsmeans_paid, turner_cost_index, national_construction_stats]
+    adapter: dcgeo.adapters.cost:construction_index
+    weights: {hyperscale_training: 5, inference_edge: 5, retrofit_colo: 5}
+    notes: >
+      Shell and civil costs vary regionally by 30-50%; electrical and mechanical
+      equipment is globally priced and varies far less. Since electrical and
+      mechanical dominate data center cost, a high regional construction index hurts
+      less than it would for a warehouse or an office. Apply the index to the civil
+      and shell portion only, and say so — applying it to total project cost, as
+      generic cost indices invite, materially overstates its effect.
+
+  - id: eco.equipment_lead_time
+    name: Critical equipment lead time
+    question: Lead time for transformers, switchgear, generators and chillers to this market.
+    unit: months
+    direction: lower_is_better
+    best_tier: C
+    scale:
+      type: piecewise
+      points: [[0, 100], [12, 88], [24, 70], [36, 50], [48, 30], [72, 8], [96, 0]]
+    sources: [industry_lead_time_surveys, manufacturer_guidance, trade_press]
+    adapter: dcgeo.adapters.supply:equipment_lead_time
+    weights: {hyperscale_training: 7, inference_edge: 5, retrofit_colo: 6}
+    notes: >
+      Large power transformers have run 2-4 year lead times through the mid-2020s and
+      are the most common cause of energization slip after interconnection itself.
+      This is mostly a market-level rather than a site-level factor, but it varies by
+      country through import duties, standards (IEC vs ANSI), and manufacturer
+      regional allocation. Domestic manufacturing capacity in-country materially
+      improves it — relevant for India (BHEL and others) and China.
+
+  - id: eco.port_rail_access
+    name: Port and rail access
+    question: Can heavy imported equipment reach the site efficiently?
+    unit: km_to_capable_port_or_rail
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 100], [25, 92], [75, 80], [200, 60], [500, 35], [1000, 12], [2000, 0]]
+    sources: [osm_ports, osm_railways, world_port_index]
+    adapter: dcgeo.adapters.transport:port_rail_access
+    weights: {hyperscale_training: 4, inference_edge: 2, retrofit_colo: 3}
+    notes: >
+      Matters most where major equipment is imported, which is the normal case
+      outside the US and China. Read together with lnd.heavy_haul_access: a nearby
+      port is worthless if the final 20 km cannot carry a 300 tonne load. Inland
+      sites served by heavy-lift-capable rail are often better than coastal sites
+      without it.
+
+  - id: eco.operations_labor
+    name: Operations talent pool
+    question: Can the facility be staffed and kept staffed?
+    unit: index_0_100
+    direction: higher_is_better
+    best_tier: C
+    scale:
+      type: piecewise
+      points: [[0, 0], [25, 25], [50, 50], [75, 75], [100, 100]]
+    sources: [bls_oes, census_acs, local_university_programs, national_labor_stats]
+    adapter: dcgeo.adapters.labor:ops_talent
+    weights: {hyperscale_training: 4, inference_edge: 5, retrofit_colo: 5}
+    notes: >
+      Permanent headcount is small, so absolute pool size matters less than the
+      presence of a technical training pipeline (community college or ITI programs,
+      military bases, existing DC operators nearby). Remote and rural sites can be
+      staffed successfully but carry higher retention risk and higher travel cost for
+      specialist maintenance, which should be priced rather than scored away.
+
+  - id: eco.total_cost_of_ownership
+    name: Modeled 10-year TCO
+    question: All-in modeled cost per kW-year across power, land, construction, tax and ops.
+    unit: USD_per_kW_year
+    direction: lower_is_better
+    best_tier: D
+    scale:
+      type: piecewise
+      points: [[200, 100], [350, 88], [500, 72], [700, 52], [950, 30], [1300, 10], [2000, 0]]
+    sources: [derived]
+    adapter: dcgeo.adapters.tco:model
+    weights: {hyperscale_training: 8, inference_edge: 7, retrofit_colo: 8}
+    notes: >
+      A derived factor: composed from measured power price, land price, construction
+      index, tax package, labor, and the PUE implied by the climate factors. It is
+      Tier D by construction because it inherits every upstream uncertainty, and it
+      must be presented as a range with the dominant sensitivity named — which is
+      almost always power price. Do not let this factor's apparent precision obscure
+      that. Its value is comparative, not absolute: a TCO delta between two sites
+      computed the same way is meaningful even when the absolute number is not.

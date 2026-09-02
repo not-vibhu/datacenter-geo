@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uv run dcgeo:*)",
+      "Bash(uv run python:*)",
+      "Bash(uv sync)",
+      "Bash(uv run pytest:*)",
+      "Read(//Users/**)",
+      "WebFetch",
+      "WebSearch"
+    ]
+  }
+}

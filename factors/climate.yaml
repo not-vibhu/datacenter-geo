@@ -1,0 +1,185 @@
+# Climate & natural hazard domain — 9 factors
+# A data center is a 25-40 year asset. Score present-day hazard AND the 2050
+# projection; several sites that look fine today do not survive that test.
+domain: climate
+domain_weight: {hyperscale_training: 7, inference_edge: 6, retrofit_colo: 7}
+description: >
+  What will the physical environment do to this asset over its life, and what does
+  that cost in design premium, insurance, and downtime? Most climate factors are
+  Tier A — this is the domain where the system is most defensibly precise.
+
+factors:
+
+  - id: clm.dry_bulb_profile
+    name: Dry-bulb temperature profile and free-cooling hours
+    question: How many hours per year permit free (economizer) cooling?
+    unit: free_cooling_hours_per_year
+    direction: higher_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 0], [1500, 22], [3000, 42], [5000, 65], [6500, 82], [7800, 95], [8760, 100]]
+    sources: [era5_reanalysis, open_meteo_archive, nasa_power]
+    adapter: dcgeo.adapters.climate:free_cooling_hours
+    weights: {hyperscale_training: 7, inference_edge: 5, retrofit_colo: 6}
+    notes: >
+      Compute against the supply-air setpoint implied by the cooling assumption
+      (default 27 °C for air-cooled IT, per ASHRAE A1 allowable). Free-cooling hours
+      map almost linearly to annual PUE, which maps to opex — so this factor should
+      be reported in dollars in the report, not just as a score.
+
+  - id: clm.extreme_heat_trend
+    name: Extreme heat trend to 2050
+    question: How much does design-day temperature rise over the asset life?
+    unit: delta_C_design_day_2050
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 100], [0.5, 92], [1.0, 82], [1.5, 68], [2.0, 52], [3.0, 28], [4.5, 5], [6.0, 0]]
+    sources: [cmip6_nex_gddp, copernicus_cds, wri_climate_watch]
+    adapter: dcgeo.adapters.climate:heat_projection
+    weights: {hyperscale_training: 5, inference_edge: 4, retrofit_colo: 5}
+    notes: >
+      Use NEX-GDDP-CMIP6 downscaled projections under SSP2-4.5 as the base case and
+      SSP5-8.5 as a stress case; report both. The practical consequence is chiller
+      plant sizing: a plant sized to today's design day loses capacity headroom as
+      design day rises, and derating a plant in year 15 is far more expensive than
+      oversizing it in year 0.
+
+  - id: clm.flood_riverine
+    name: Riverine and pluvial flood exposure
+    question: Does the site intersect a modeled flood zone, and at what return period?
+    unit: return_period_years
+    direction: higher_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 0], [50, 8], [100, 25], [200, 55], [500, 82], [1000, 96], [2000, 100]]
+    sources: [fathom_global, jrc_global_flood, fema_nfhl, wri_aqueduct_floods]
+    adapter: dcgeo.adapters.flood:flood_return_period
+    weights: {hyperscale_training: 8, inference_edge: 7, retrofit_colo: 8}
+    gate: gate.flood_exclusion
+    notes: >
+      A hard gate at the 100-year floodplain and a strong penalty inside the 500-year.
+      This is not primarily an engineering constraint — sites can be elevated — it is
+      an insurance and financing constraint, and lenders apply it categorically.
+      FEMA NFHL is authoritative in the US; JRC and WRI Aqueduct provide global
+      coverage at coarser resolution, which is adequate for screening but must be
+      confirmed with a local study before acquisition. Note that pluvial (flash)
+      flooding is poorly captured by all global datasets and is a known blind spot.
+
+  - id: clm.flood_coastal
+    name: Coastal flood and sea level rise exposure
+    question: Storm surge and 2050 sea level rise exposure.
+    unit: m_freeboard_2050
+    direction: higher_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[-2, 0], [0, 10], [1, 35], [3, 65], [6, 85], [10, 96], [20, 100]]
+    sources: [climate_central_coastal_dem, noaa_slr, wri_aqueduct_floods]
+    adapter: dcgeo.adapters.flood:coastal_exposure
+    weights: {hyperscale_training: 6, inference_edge: 6, retrofit_colo: 7}
+    gate: gate.flood_exclusion
+    notes: >
+      Only evaluated within 50 km of a coastline; scored N/A inland. Freeboard is site
+      elevation minus projected 2050 100-year storm tide. Relevant to a surprising
+      number of candidate sites because subsea cable landings and coastal population
+      centers pull edge and colo facilities toward the coast.
+
+  - id: clm.seismic
+    name: Seismic hazard
+    question: Peak ground acceleration at 10% exceedance in 50 years.
+    unit: g_pga_475yr
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 100], [0.05, 95], [0.1, 88], [0.2, 72], [0.3, 55], [0.5, 30], [0.8, 8], [1.2, 0]]
+    sources: [gem_global_seismic, usgs_hazard, is1893_india, gb18306_china]
+    adapter: dcgeo.adapters.hazard:seismic_pga
+    weights: {hyperscale_training: 5, inference_edge: 5, retrofit_colo: 6}
+    notes: >
+      Seismic hazard is a cost, not usually a barrier — Tokyo and Silicon Valley both
+      host large data centers. Above 0.3 g expect a meaningful structural premium and
+      significantly higher costs for raised floors, containment, and equipment
+      anchoring. The Recommender should price the premium rather than penalizing the
+      site twice. Report the national code zone alongside PGA, since local design
+      practice is what the EPC will actually price against.
+
+  - id: clm.wind_hazard
+    name: Extreme wind, cyclone and tornado hazard
+    question: Design wind speed and severe convective exposure.
+    unit: design_wind_speed_ms
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[20, 100], [30, 92], [40, 78], [50, 58], [60, 36], [75, 12], [90, 0]]
+    sources: [gar_cyclone, noaa_storm_events, imd_cyclone, era5_reanalysis]
+    adapter: dcgeo.adapters.hazard:wind_hazard
+    weights: {hyperscale_training: 4, inference_edge: 4, retrofit_colo: 5}
+    notes: >
+      Separate tropical cyclone exposure from severe convective (tornado/hail) — they
+      have different design responses and different insurance treatments. Hail is an
+      underrated risk specifically because it destroys outdoor chiller and dry-cooler
+      coils, which are on the roof and are the least-protected critical component in
+      a modern air-cooled design.
+
+  - id: clm.wildfire
+    name: Wildfire exposure
+    question: Wildfire hazard potential at and around the site.
+    unit: index_0_100
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 100], [10, 92], [25, 78], [45, 58], [65, 35], [85, 12], [100, 0]]
+    sources: [usfs_whp, global_fire_atlas, modis_burned_area, copernicus_effis]
+    adapter: dcgeo.adapters.hazard:wildfire_potential
+    weights: {hyperscale_training: 4, inference_edge: 4, retrofit_colo: 4}
+    notes: >
+      The primary wildfire risk to a data center is not the building burning — it is
+      smoke ingress fouling air-side economizers and filters, transmission line
+      de-energization events (PSPS in California), and access road closure. Score
+      accordingly: a site 5 km from high-hazard terrain has real operational exposure
+      even if the structure itself is defensible.
+
+  - id: clm.air_quality
+    name: Ambient air quality
+    question: Does particulate loading constrain air-side economization?
+    unit: pm25_annual_ugm3
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 100], [5, 95], [12, 85], [25, 65], [40, 42], [60, 22], [90, 5], [150, 0]]
+    sources: [openaq, cams_copernicus, cpcb_india, mee_china]
+    adapter: dcgeo.adapters.air:pm25_annual
+    weights: {hyperscale_training: 4, inference_edge: 3, retrofit_colo: 4}
+    notes: >
+      High PM2.5 forces higher-grade filtration (MERV 14+ or sealed designs), which
+      costs fan energy and therefore PUE, and it can rule out air-side economization
+      entirely. This factor is decisive in parts of northern India and northern China
+      and is routinely omitted from Western-authored site selection frameworks — it
+      is included here specifically because the tool is meant to work outside the US.
+      Also check whether the airshed is a non-attainment zone, which affects the
+      generator air permit; that is scored separately under reg.air_permit.
+
+  - id: clm.lightning
+    name: Lightning density
+    question: Flash density affecting surge protection and outage frequency.
+    unit: flashes_per_km2_per_year
+    direction: lower_is_better
+    best_tier: A
+    scale:
+      type: piecewise
+      points: [[0, 100], [1, 96], [4, 88], [10, 72], [20, 52], [40, 25], [80, 5], [150, 0]]
+    sources: [nasa_lis_otd, vaisala_gld360]
+    adapter: dcgeo.adapters.hazard:lightning_density
+    weights: {hyperscale_training: 2, inference_edge: 2, retrofit_colo: 2}
+    notes: >
+      Low weight, cheaply measured, and mainly an input to surge protection design
+      and to expected utility feed interruptions. Included for completeness; it
+      should almost never change a decision on its own.

@@ -1,0 +1,176 @@
+# Regulatory & political domain — 7 factors
+# Almost entirely Tier C. Jurisdiction-specific by definition — do not apply US
+# regulatory assumptions elsewhere.
+domain: regulatory
+domain_weight: {hyperscale_training: 8, inference_edge: 7, retrofit_colo: 7}
+description: >
+  Will the state permit this, on what timeline, at what cost, and with what
+  incentives? Regulatory risk is the second-largest source of schedule slip after
+  interconnection, and unlike interconnection it is rarely quantified in early
+  screening.
+
+factors:
+
+  - id: reg.permitting_timeline
+    name: Permitting timeline
+    question: Historical median months from application to construction permit for comparable projects.
+    unit: months
+    direction: lower_is_better
+    best_tier: C
+    scale:
+      type: piecewise
+      points: [[0, 100], [3, 94], [6, 86], [12, 68], [18, 48], [30, 22], [48, 4], [72, 0]]
+    sources: [county_permit_records, state_env_agency, moef_india, mee_china, local_news]
+    adapter: dcgeo.adapters.permitting:timeline_estimate
+    weights: {hyperscale_training: 8, inference_edge: 7, retrofit_colo: 7}
+    notes: >
+      Derive from actual comparable projects in the same jurisdiction wherever
+      possible — jurisdictions vary far more than national averages suggest, and the
+      variance within a US state between two adjacent counties can exceed the variance
+      between countries. Where no comparable exists, use the jurisdiction's statutory
+      timeline and add the observed national slip factor, marking it Tier D.
+
+  - id: reg.environmental_review
+    name: Environmental review burden
+    question: What level of environmental assessment is triggered?
+    unit: category
+    direction: categorical
+    best_tier: B
+    categories:
+      categorical_exclusion: 100
+      screening_only: 82
+      full_ea_eia: 52
+      full_eis_with_litigation_risk: 22
+      prohibited: 0
+      unknown: null
+    sources: [nepa_ceq, state_env_agency, eia_notification_india, mee_china, eu_eia_directive]
+    adapter: dcgeo.adapters.permitting:env_review_tier
+    weights: {hyperscale_training: 7, inference_edge: 5, retrofit_colo: 6}
+    notes: >
+      Federal nexus is the key US question — a purely private project on private land
+      with no federal permit, funding, or land generally avoids NEPA entirely, while
+      a wetland fill permit or federal land crossing pulls the whole project in. In
+      India, whether the project falls under the EIA Notification 2006 schedule
+      depends on built-up area and category; most standalone data centers fall
+      outside it, but associated captive power generation frequently does not.
+
+  - id: reg.tax_incentives
+    name: Tax incentive package
+    question: What is the net present value of available incentives?
+    unit: index_0_100
+    direction: higher_is_better
+    best_tier: B
+    scale:
+      type: piecewise
+      points: [[0, 0], [15, 22], [35, 45], [55, 65], [75, 85], [100, 100]]
+    components:
+      sales_tax_exemption_equipment: 0.40   # the largest single lever in most US states
+      property_tax_abatement_pilot: 0.30
+      income_tax_credit: 0.12
+      utility_rate_rider: 0.10
+      capital_subsidy: 0.08
+    sources: [state_statute, state_edc, state_dc_policy_india, provincial_policy_cn]
+    adapter: dcgeo.adapters.incentives:package_value
+    weights: {hyperscale_training: 7, inference_edge: 5, retrofit_colo: 6}
+    notes: >
+      Sales tax exemption on IT equipment dominates everything else for an AI campus,
+      because the equipment is the overwhelming majority of project cost — at $10 B of
+      GPUs, a 6% sales tax exemption is worth $600 M, which is larger than the entire
+      land and construction budget of most sites. Always cite the statute, verify the
+      current sunset date, and check the qualification thresholds (minimum investment,
+      minimum jobs) which many AI campuses fail on the jobs test. Several US states
+      tightened or paused data center incentives in 2024-2026; verify currency.
+
+  - id: reg.air_permit
+    name: Generator air permitting
+    question: Can the required backup generation be permitted?
+    unit: category
+    direction: categorical
+    best_tier: B
+    categories:
+      minor_source_routine: 100
+      minor_source_constrained: 74
+      major_source_psd_required: 42
+      nonattainment_offsets_required: 20
+      effectively_blocked: 0
+      unknown: null
+    sources: [epa_nonattainment, state_air_agency, cpcb_india, mee_china]
+    adapter: dcgeo.adapters.permitting:air_permit_regime
+    weights: {hyperscale_training: 6, inference_edge: 4, retrofit_colo: 5}
+    notes: >
+      A 500 MW campus needs roughly 150-250 MW-equivalent of diesel or gas backup,
+      which is a large emissions source even at low run hours. Non-attainment areas
+      require emission offsets that may be unavailable at any price. This has become
+      a live constraint in several US metros and is a common late-stage surprise.
+      Where on-site prime power generation is contemplated rather than backup only,
+      the permit becomes a major-source review and the timeline changes categorically.
+
+  - id: reg.data_sovereignty
+    name: Data sovereignty and cross-border regime
+    question: Do local law and cross-border data rules match the intended workload?
+    unit: category
+    direction: categorical
+    best_tier: C
+    categories:
+      open_and_stable: 100
+      open_with_sectoral_rules: 78
+      localization_required: 50
+      restrictive_with_access_mandates: 25
+      incompatible: 0
+      unknown: null
+    sources: [national_data_law, gdpr_adequacy, dpdp_india, cac_china, itif_data_localization]
+    adapter: dcgeo.adapters.legal:sovereignty_regime
+    weights: {hyperscale_training: 5, inference_edge: 6, retrofit_colo: 6}
+    notes: >
+      Localization requirements are an opportunity as often as a constraint — they
+      are precisely why in-country capacity gets built. Score against the intended
+      workload and customer base, not in the abstract. Government access mandates
+      matter enormously to some tenants and not at all to others; record the fact and
+      let the profile weight it.
+
+  - id: reg.export_controls
+    name: Accelerator export control exposure
+    question: Can the intended compute legally be installed and operated here?
+    unit: category
+    direction: categorical
+    best_tier: B
+    categories:
+      unrestricted: 100
+      license_routine: 72
+      license_uncertain: 38
+      restricted_high_end: 15
+      prohibited: 0
+      unknown: null
+    sources: [bis_entity_list, us_ear_ai_rules, eu_dual_use, national_import_rules]
+    adapter: dcgeo.adapters.legal:export_control_status
+    weights: {hyperscale_training: 9, inference_edge: 6, retrofit_colo: 6}
+    gate: gate.compute_legally_deployable
+    notes: >
+      This factor is what distinguishes an "AI data center" analysis from a generic
+      data center analysis, and it is the reason a technically excellent site in
+      certain jurisdictions is not investable for frontier training. US export
+      controls on advanced accelerators have changed repeatedly since 2022 and are
+      the single fastest-moving input in this framework — always check the current
+      rule text and record the rule version and date in the evidence ledger, because
+      an analysis citing a superseded rule is worse than no analysis. For China in
+      particular, distinguish clearly between domestic-accelerator deployments and
+      those requiring controlled Western hardware; they are different investments.
+
+  - id: reg.jurisdiction_stability
+    name: Jurisdictional and political stability
+    question: How stable are the rules over a 25-year asset life?
+    unit: index_0_100
+    direction: higher_is_better
+    best_tier: B
+    scale:
+      type: piecewise
+      points: [[0, 0], [20, 18], [40, 40], [60, 62], [80, 85], [100, 100]]
+    sources: [world_bank_wgi, oecd_country_risk, eiu_democracy_index]
+    adapter: dcgeo.adapters.country_risk:stability_index
+    weights: {hyperscale_training: 6, inference_edge: 5, retrofit_colo: 6}
+    notes: >
+      Composite of rule of law, regulatory quality, contract enforcement, currency
+      convertibility, and expropriation risk. Applied at national level and adjusted
+      for subnational variation where it is material. A low score here should widen
+      the required return rather than eliminate the site — but it must be visible,
+      because it is routinely omitted from technical site assessments.

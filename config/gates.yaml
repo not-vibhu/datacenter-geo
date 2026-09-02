@@ -1,0 +1,140 @@
+# Hard gates. Evaluated before scoring; a FAIL sets verdict to NO-GO regardless of
+# score. Gates exist because deal-killers are categorical, and a weighted average
+# will otherwise happily average them away.
+#
+# outcomes: PASS | CONDITIONAL | FAIL
+# A gate failing on Tier C/D evidence yields "FAIL (low confidence)" -> flagged for
+# human verification, not treated as settled. We do not kill sites on a news article.
+version: 1
+
+gates:
+
+  - id: gate.power_path_exists
+    name: Credible power path to target load
+    severity: fatal
+    applies_to_profiles: [hyperscale_training, inference_edge, retrofit_colo]
+    logic: |
+      FAIL if (pwr.interconnect_queue_time > (target_energization_year - current_year))
+              AND pwr.onsite_generation_potential < 45
+      CONDITIONAL if pwr.substation_headroom is unknown
+              OR pwr.substation_headroom < target_load_mva * 1.15
+      else PASS
+    capped_score_if_conditional: 68
+    rationale: >
+      A site that cannot be energized by the target year is not a site, it is a land
+      bank. The on-site generation escape hatch reflects the current reality that
+      behind-the-meter gas can be deployed far faster than a grid interconnection,
+      and that many 2025-2026 US projects are being built on exactly that basis.
+    remediation_hint: Evaluate behind-the-meter generation, or shift target year, or reduce target load.
+
+  - id: gate.water_viable
+    name: Water viability for the assumed cooling architecture
+    severity: conditional
+    applies_to_profiles: [hyperscale_training, retrofit_colo]
+    logic: |
+      PASS if cooling_assumption == "air_cooled"
+      FAIL if wtr.withdrawal_permitting == "unavailable"
+      CONDITIONAL if wtr.basin_stress > 0.8 AND cooling_assumption uses evaporative
+      CONDITIONAL if wtr.supply_availability < required_m3_per_day
+      else PASS
+    capped_score_if_conditional: 74
+    rationale: >
+      Water is almost never an absolute barrier — air-cooled designs work in deserts —
+      but it is a design constraint with a power penalty and a political cost. The
+      gate forces the cooling assumption to be made explicit rather than assumed away.
+    remediation_hint: Switch to air-cooled or closed-loop (costs 10-30% more power), or secure reclaimed water.
+
+  - id: gate.flood_exclusion
+    name: Flood exclusion
+    severity: fatal
+    applies_to_profiles: [hyperscale_training, inference_edge, retrofit_colo]
+    logic: |
+      FAIL if clm.flood_riverine return_period <= 100
+      FAIL if clm.flood_coastal freeboard_2050 < 0
+      CONDITIONAL if clm.flood_riverine return_period <= 500
+      else PASS
+    capped_score_if_conditional: 80
+    rationale: >
+      This is a financing and insurance constraint more than an engineering one.
+      Sites can be elevated; lenders and insurers apply the exclusion categorically
+      anyway, so treating it as engineering-solvable misprices the risk.
+    remediation_hint: Site the pad outside the mapped zone, or commission a local flood study — global datasets are coarse.
+
+  - id: gate.land_sufficient
+    name: Sufficient contiguous developable land
+    severity: fatal
+    applies_to_profiles: [hyperscale_training, inference_edge, retrofit_colo]
+    logic: |
+      FAIL if lnd.contiguous_area < profile.land_requirement_ha.min
+      CONDITIONAL if lnd.contiguous_area < profile.land_requirement_ha.typical
+      else PASS
+    capped_score_if_conditional: 78
+    rationale: >
+      Computed developable area is an upper bound on acquirable area. Failing this
+      gate on the computed figure means the site cannot work even under the most
+      optimistic assembly assumption.
+    remediation_hint: Expand the AOI, consider adjacent parcel assembly, or re-profile to a smaller build.
+
+  - id: gate.entitlement_path_exists
+    name: Entitlement path exists
+    severity: fatal
+    applies_to_profiles: [hyperscale_training, inference_edge, retrofit_colo]
+    logic: |
+      FAIL if lnd.zoning_status == "incompatible"
+      CONDITIONAL if lnd.zoning_status in ["rezoning_contested", "rezoning_routine"]
+      else PASS
+    capped_score_if_conditional: 72
+    rationale: >
+      A discretionary rezoning converts an engineering problem into a political one.
+      That is survivable but it must be visible in the verdict and priced into the
+      schedule, not discovered at the first public hearing.
+    remediation_hint: Pre-application meeting with planning staff; budget 9-24 months and community engagement.
+
+  - id: gate.protected_exclusion
+    name: Protected area exclusion
+    severity: fatal
+    applies_to_profiles: [hyperscale_training, inference_edge, retrofit_colo]
+    logic: |
+      FAIL if lnd.protected_overlap > 10
+      CONDITIONAL if lnd.protected_overlap > 0
+      else PASS
+    capped_score_if_conditional: 82
+    rationale: >
+      Includes designated protected areas, Ramsar wetlands, key biodiversity areas,
+      and (in India) any land classified as forest, which triggers Forest
+      Conservation Act clearance regardless of actual tree cover.
+    remediation_hint: Reconfigure the site boundary to avoid overlap entirely — mitigation pathways are slow and uncertain.
+
+  - id: gate.no_active_moratorium
+    name: No active data center moratorium
+    severity: fatal
+    applies_to_profiles: [hyperscale_training, inference_edge, retrofit_colo]
+    logic: |
+      FAIL if com.opposition_risk == "moratorium_active"
+      CONDITIONAL if com.opposition_risk == "organized_opposition"
+      else PASS
+    capped_score_if_conditional: 65
+    evidence_tier_floor: C
+    rationale: >
+      Moratoria are typically time-limited (6-24 months) — record the expiry date, as
+      a moratorium expiring before the target application date may be immaterial.
+      This gate is unusual in relying on Tier C evidence, so a FAIL here is always
+      flagged for human verification rather than treated as final.
+    remediation_hint: Verify moratorium scope and expiry; some exempt by-right industrial zones or cap by megawatt.
+
+  - id: gate.compute_legally_deployable
+    name: Intended compute is legally deployable
+    severity: fatal
+    applies_to_profiles: [hyperscale_training]
+    logic: |
+      FAIL if reg.export_controls == "prohibited"
+      CONDITIONAL if reg.export_controls in ["restricted_high_end", "license_uncertain"]
+      else PASS
+    capped_score_if_conditional: 60
+    rationale: >
+      The gate that distinguishes an AI data center analysis from a generic one. A
+      technically excellent site where the intended accelerators cannot be lawfully
+      installed is not investable for frontier training, though it may be perfectly
+      investable for domestic-accelerator or non-frontier workloads. Record the rule
+      version and date — this input changes faster than any other in the framework.
+    remediation_hint: Re-profile to domestically-available accelerators, or evaluate license pathway with counsel.

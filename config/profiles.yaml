@@ -1,0 +1,80 @@
+# Use-case profiles. The same site scores very differently depending on what you
+# intend to build. Add a profile by copying a block and setting weights; factor
+# weights themselves live in factors/*.yaml keyed by profile name.
+version: 1
+
+profiles:
+
+  hyperscale_training:
+    label: Hyperscale AI training campus
+    description: >
+      Large-scale model training. Latency-insensitive, power-dominated, needs
+      enormous contiguous land and a multi-hundred-megawatt power path. This is the
+      profile most 2025-2030 AI capex targets.
+    target_it_load_mw: {min: 300, typical: 500, max: 1500}
+    target_energization_year: 2030
+    land_requirement_ha: {min: 80, typical: 200}
+    rack_density_kw: {typical: 80, max: 250}
+    cooling: liquid_direct_to_chip_with_hybrid_rejection
+    latency_requirement_ms: null          # genuinely does not matter
+    availability_target: "99.9%"          # training tolerates more downtime than transaction workloads
+    notes: >
+      The defining characteristic is that almost nothing matters except power at
+      scale, on schedule, at a price. Do not let a rich factor framework obscure
+      that — if the power gate fails, the analysis is over.
+
+  inference_edge:
+    label: Inference and edge serving
+    description: >
+      User-facing inference. Latency-critical, modest power, must be near demand.
+      Land and power price matter far less; connectivity and metro proximity dominate.
+    target_it_load_mw: {min: 5, typical: 20, max: 50}
+    target_energization_year: 2028
+    land_requirement_ha: {min: 1.5, typical: 5}
+    rack_density_kw: {typical: 40, max: 130}
+    cooling: air_or_hybrid
+    latency_requirement_ms: 25
+    availability_target: "99.99%"
+    notes: >
+      Expect this profile to favor expensive metro-adjacent land that the training
+      profile rejects. That divergence is the point of having profiles at all.
+
+  retrofit_colo:
+    label: Retrofit / colocation conversion
+    description: >
+      Converting existing industrial shells or upgrading legacy colo to AI-capable
+      density. Constrained by existing structure, floor loading, and power feed.
+    target_it_load_mw: {min: 20, typical: 60, max: 150}
+    target_energization_year: 2028
+    land_requirement_ha: {min: 4, typical: 10}
+    rack_density_kw: {typical: 40, max: 100}
+    cooling: retrofit_liquid_where_feasible
+    latency_requirement_ms: 40
+    availability_target: "99.99%"
+    notes: >
+      Structural factors (floor loading, ceiling height, existing electrical service)
+      matter more than raw land, and are captured through lnd.brownfield_opportunity
+      plus manual overrides. The speed advantage of an existing shell with existing
+      power is often decisive despite worse fundamentals elsewhere.
+
+# Score aggregation
+aggregation:
+  method: weighted_mean_of_domains       # domains weighted by domain_weight, factors within domain by factor weight
+  unknown_handling: exclude_and_penalize_confidence   # never substitute a midpoint
+  min_measured_fraction: 0.55            # below this, refuse to publish a headline score
+  band_constant: 22                      # band = ±(1 - confidence) * band_constant
+
+tier_weights:
+  A: 1.00
+  B: 0.85
+  C: 0.60
+  D: 0.35
+  unknown: 0.0
+
+verdict_thresholds:
+  # Applied to the profile score, after gates. Gates override.
+  strong_candidate: 75
+  viable: 60
+  conditional: 45
+  weak: 30
+  # below weak -> "poor"

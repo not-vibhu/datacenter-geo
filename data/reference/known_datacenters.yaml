@@ -1,0 +1,248 @@
+# Validation set for /dc-validate.
+#
+# WHY NEGATIVE CONTROLS MATTER MORE THAN POSITIVE ONES
+# Any scoring model will rate Ashburn highly — it is surrounded by data centers. The
+# real question is whether the model REJECTS sites that were actually rejected. A model
+# that scores everything 70-80 is useless no matter how well it ranks the winners.
+#
+# The strongest test in this file is the Hanover County pair: the same developer
+# (Tract), in the same county, had a 1,200-acre campus APPROVED in 2024 and a 430-acre
+# campus REJECTED 4-3 in May 2026. Jurisdiction, state incentives, climate, and grid
+# are all held constant. If the model cannot separate these two, it is not measuring
+# anything real about local approval risk.
+#
+# COORDINATES are approximate area centroids, not exact facility locations. That is
+# appropriate — this system analyzes areas, not buildings. Anything marked
+# `coord_confidence: low` should be refined before being used as evidence.
+version: 1
+last_reviewed: 2026-09-02
+
+cases:
+
+# ─────────────────────────── UNITED STATES ───────────────────────────
+
+  - id: ashburn_va
+    name: Ashburn, Loudoun County, Virginia
+    country: US
+    coord: [39.0437, -77.4875]
+    coord_confidence: high
+    class: operating
+    profile: hyperscale_training
+    expected_verdict: viable_or_better
+    context: >
+      "Data Center Alley" — the largest concentration of data centers on Earth.
+      Dominion Energy territory, PJM. Virginia's sales and use tax exemption on data
+      center equipment is the decisive incentive. Should score well on power
+      infrastructure, connectivity and entitlement history; should score poorly on
+      community factors, land price, and increasingly on grid cost allocation, which is
+      an active Virginia SCC issue.
+    what_it_tests: Does the model recognize a proven site, and does it flag its real emerging risks?
+
+  - id: abilene_tx
+    name: Abilene, Taylor County, Texas
+    country: US
+    coord: [32.4200, -99.8500]
+    coord_confidence: medium
+    class: announced
+    profile: hyperscale_training
+    expected_verdict: viable_or_better
+    context: >
+      Large greenfield AI campus development in ERCOT. The archetype of the current
+      build strategy: cheap land, fast ERCOT connect-and-manage interconnection,
+      abundant gas for behind-the-meter generation, no state income tax, weak
+      connectivity that does not matter for training. Water is the pressure point.
+    what_it_tests: >
+      Does the model reward ERCOT's structurally faster interconnection, and does it
+      correctly refuse to penalize weak IXP proximity for a training profile?
+
+  - id: new_albany_oh
+    name: New Albany, Licking County, Ohio
+    country: US
+    coord: [40.0812, -82.7860]
+    coord_confidence: medium
+    class: operating
+    profile: hyperscale_training
+    expected_verdict: viable_or_better
+    context: >
+      Major multi-operator cluster. AEP Ohio territory, PJM. Notable because AEP Ohio's
+      large-load tariff proceeding at the PUCO made ratepayer cost allocation a live,
+      well-documented issue here — a direct test of com.grid_cost_allocation.
+    what_it_tests: Does the model detect an active ratepayer cost-allocation proceeding?
+
+  - id: hanover_ashland_va
+    name: Ashland area campus, Hanover County, Virginia
+    country: US
+    coord: [37.7400, -77.5100]
+    coord_confidence: low
+    class: operating
+    profile: hyperscale_training
+    expected_verdict: viable_or_better
+    outcome: Rezoning APPROVED 2024; ~1,200-acre campus under construction.
+    developer: Tract
+    context: >
+      The positive half of the Hanover pair. Approved in 2024 in the same county that
+      rejected the same developer's second application two years later.
+    what_it_tests: Half of the paired control. See hanover_mountain_road_va.
+
+  - id: hanover_mountain_road_va
+    name: Mountain Road Technology Park, Hanover County, Virginia
+    country: US
+    coord: [37.6650, -77.5800]
+    coord_confidence: low
+    class: rejected
+    profile: hyperscale_training
+    expected_verdict: conditional_or_worse
+    outcome: >
+      Conditional use permit and rezoning REJECTED 4-3 by the Hanover County Board of
+      Supervisors, May 2026. ~430 acres along Mountain Road (US Route 33) near the
+      Henrico County line and the Chickahominy River.
+    developer: Tract
+    opposition_basis: [water use, environmental, traffic, noise]
+    references:
+      - https://virginiabusiness.com/hanover-supervisors-reject-430-acre-data-center-campus/
+      - https://www.datacenterdynamics.com/en/news/tracts-430-acre-data-center-rejected-by-local-officials-in-hanover-county-virginia/
+    context: >
+      THE KEY NEGATIVE CONTROL. Same state, same county, same developer, same
+      incentive regime and same grid as hanover_ashland_va — but rejected. The
+      difference is local: residential proximity along a populated corridor, proximity
+      to the Chickahominy River, and organized opposition. If the model scores this
+      the same as the Ashland site, community and land factors are not doing any work.
+    what_it_tests: >
+      Discrimination on com.opposition_risk, com.residential_proximity, and
+      lnd.zoning_status when every jurisdiction-level factor is held constant.
+
+  - id: douglas_county_ga
+    name: Douglas County, Georgia
+    country: US
+    coord: [33.7000, -84.7800]
+    coord_confidence: low
+    class: rejected
+    profile: hyperscale_training
+    expected_verdict: conditional_or_worse
+    outcome: Rezoning REJECTED 4-1 by the Douglas County Commission for a ~4.4M sq ft data center.
+    references:
+      - https://www.fox5atlanta.com/news/douglas-county-leaders-just-killed-massive-data-center-project
+    context: Georgia Power territory, non-ISO Southeast — no public interconnection queue.
+    what_it_tests: Negative control in a non-ISO market where power data is Tier C.
+
+  - id: monroe_county_ga
+    name: Bolingbroke, Monroe County, Georgia
+    country: US
+    coord: [32.9500, -83.8000]
+    coord_confidence: low
+    class: rejected
+    profile: hyperscale_training
+    expected_verdict: conditional_or_worse
+    outcome: >
+      Rezoning of 900+ acres DENIED unanimously by the Monroe County Board of
+      Commissioners.
+    references:
+      - https://www.govtech.com/products/monroe-county-ga-officials-shoot-down-new-data-center
+    context: >
+      A unanimous denial is a stronger signal than a split vote — it indicates no
+      political constituency for the project at all.
+    what_it_tests: Whether the model detects rural jurisdictions with no appetite for data centers.
+
+# ─────────────────────────────── CHINA ───────────────────────────────
+
+  - id: ulanqab_nmg
+    name: Ulanqab, Inner Mongolia (乌兰察布)
+    country: CN
+    coord: [41.0200, 113.1300]
+    coord_confidence: medium
+    class: operating
+    profile: hyperscale_training
+    expected_verdict: viable_or_better
+    context: >
+      A designated node in the national 东数西算 (East Data West Computing) programme.
+      The Chinese strategy in one site: cold climate (very high free-cooling hours),
+      abundant wind and coal generation, cheap land, low population density, and
+      ~400 km from Beijing so latency to the demand centre remains workable. Provincial
+      PUE mandates are more permissive in the west than the eastern hubs.
+    what_it_tests: >
+      Does the model handle non-US regulatory structure? Does reg.export_controls
+      correctly distinguish domestic-accelerator deployment from frontier Western
+      hardware? Does OSM coverage degrade gracefully (expect tier downgrades)?
+
+  - id: guian_guizhou
+    name: Gui'an New Area, Guizhou (贵安新区)
+    country: CN
+    coord: [26.3800, 106.3500]
+    coord_confidence: medium
+    class: operating
+    profile: hyperscale_training
+    expected_verdict: viable_or_better
+    context: >
+      National big data comprehensive pilot zone and a 东数西算 hub. Mild climate,
+      abundant hydropower (low grid carbon intensity), karst terrain — which should
+      show up as a geotechnical flag and is a genuine construction cost driver here.
+    what_it_tests: Does lnd.geotechnical surface karst? Does grid carbon reflect hydro?
+
+# ─────────────────────────────── INDIA ────────────────────────────────
+
+  - id: jamnagar_gj
+    name: Jamnagar, Gujarat
+    country: IN
+    coord: [22.4700, 70.0600]
+    coord_confidence: medium
+    class: announced
+    profile: hyperscale_training
+    expected_verdict: viable_or_better
+    context: >
+      Announced gigawatt-scale AI data center co-located with an existing industrial
+      complex and captive generation. The interesting case for this framework: it
+      largely bypasses the grid interconnection constraint through captive power, and
+      it sits in a hot, arid, water-stressed coastal location where cooling is the hard
+      problem. Should score well on power, poorly on water and climate.
+    what_it_tests: >
+      Does gate.power_path_exists correctly recognize the on-site generation escape
+      hatch? Does the water gate fire on basin stress? Does high wet-bulb show up?
+
+  - id: navi_mumbai
+    name: Navi Mumbai / Panvel, Maharashtra
+    country: IN
+    coord: [19.1000, 73.0000]
+    coord_confidence: medium
+    class: operating
+    profile: inference_edge
+    expected_verdict: viable_or_better
+    context: >
+      India's largest data center cluster. Subsea cable landings, dense carrier
+      presence, proximity to the country's financial centre. Maharashtra's state data
+      center policy provides the incentive package. Constraints are land price and
+      availability, monsoon flooding, and high wet-bulb.
+    what_it_tests: >
+      Profile sensitivity — this should score far better as inference_edge than as
+      hyperscale_training. If it does not, the profile weights are not working.
+
+  - id: chennai_ambattur
+    name: Ambattur / Chennai, Tamil Nadu
+    country: IN
+    coord: [13.1100, 80.1500]
+    coord_confidence: medium
+    class: operating
+    profile: inference_edge
+    expected_verdict: viable_or_better
+    context: >
+      Major cluster anchored by subsea cable landings. Tamil Nadu has an active data
+      center policy with SIPCOT industrial land. Chennai's 2015 floods are directly
+      relevant history and should be visible in the flood factor. Water stress is a
+      recurring constraint in this metro.
+    what_it_tests: Does clm.flood_riverine reflect a metro with documented severe flood history?
+
+# ─────────────────────────── HOW TO READ RESULTS ───────────────────────────
+scoring_guidance: >
+  Agreement rate alone is not the metric. The metric is DISCRIMINATION: the mean score
+  of the `operating` and `announced` cases minus the mean score of the `rejected` cases.
+  If those means are close, the model is not working, however high the agreement rate
+  looks.
+
+  Disagreements are findings, not failures. A model that scores an operating data
+  center as NO-GO is telling you something: either a threshold is wrong, or the site
+  really does have that problem and was built anyway for reasons outside the model —
+  an incumbent's adjacent campus, a strategic customer, a subsidized deal. Investigate
+  before adjusting.
+
+  NEVER tune thresholds to fit this set. It is a dozen sites; fitting to it destroys
+  generality. If a threshold is wrong, change it because the domain argument is wrong,
+  and record the reasoning in the factor spec.

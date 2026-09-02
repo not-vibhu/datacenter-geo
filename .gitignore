@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+data/cache/
+runs/run_*/
+runs/scan_*.json
+runs/sweep_state.json
+runs/leaderboard.json
+!runs/examples/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+.DS_Store
