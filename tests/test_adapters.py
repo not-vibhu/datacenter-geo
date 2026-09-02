@@ -1,0 +1,41 @@
+"""Adapter contract tests. No network — these check the invariants that keep one
+bad endpoint from corrupting or aborting an analysis."""
+from dcgeo.adapters import flood
+from dcgeo.adapters.base import measured, unknown
+from dcgeo.measure import DISPATCH
+from dcgeo.registry import load_factors
+
+
+def test_unknown_measurement_carries_a_reason_and_unknown_tier():
+    m = unknown("pwr.transmission_proximity", "osm_overpass", "endpoint down", "km")
+    assert m.value is None
+    assert m.tier == "unknown"
+    assert m.unknown_reason == "endpoint down"
+    assert not m.is_known
+
+
+def test_measured_records_geometry_when_given_coordinates():
+    m = measured("lnd.slope", 2.0, "percent_slope", "A", "opentopography", lat=39.0, lon=-77.0)
+    assert m.geometry_ref.startswith("geohash:")
+    assert m.is_known
+
+
+def test_flood_skips_the_network_entirely_outside_us_coverage():
+    """Querying FEMA for a Chinese coordinate cannot succeed and costs a slow round
+    trip per site, which is prohibitive when scanning a region."""
+    m = flood.flood_return_period(41.02, 113.13)[0]
+    assert m.value is None
+    assert "non-US" in m.unknown_reason
+    assert not flood._maybe_us(41.02, 113.13)
+    assert flood._maybe_us(39.04, -77.49)
+
+
+def test_coastal_adapter_returns_unknown_rather_than_guessing():
+    m = flood.coastal_exposure(39.0, -77.0)[0]
+    assert m.value is None
+    assert "not implemented" in m.unknown_reason
+
+
+def test_every_dispatch_domain_is_a_real_domain():
+    domains = {s["domain"] for s in load_factors().values()}
+    assert set(DISPATCH) <= domains

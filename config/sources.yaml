@@ -187,11 +187,20 @@ sources:
     tier: A
     auth: none
     base_url: https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer
+    mirrors:
+      - https://services5.arcgis.com/7weheFjxuNkGGiZi/arcgis/rest/services/USA_Flood_Hazard_Areas_view/FeatureServer/0
     coverage: United States
     ttl_days: 90
     license: public domain
     serves: [clm.flood_riverine]
-    notes: Authoritative for the US and what lenders actually use. ArcGIS REST query by geometry.
+    notes: >
+      Authoritative for the US and what lenders actually use. ArcGIS REST query by
+      geometry. NOTE: hazards.fema.gov appears to be geo-restricted and is unreachable
+      from some networks (it hangs rather than refusing, so it is given a short
+      timeout). The Esri Living Atlas mirror carries the same NFHL data, is globally
+      reachable, and is tried first. Zone X "reduced flood risk due to levee" is
+      handled specially — it is not formally SFHA but the protection depends on a
+      third-party structure whose accreditation can lapse.
 
   jrc_global_flood:
     name: JRC Global Flood Hazard Maps

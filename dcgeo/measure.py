@@ -9,7 +9,7 @@ from __future__ import annotations
 import traceback
 from typing import Callable
 
-from .adapters import climate, context, overpass, peeringdb, solar, terrain
+from .adapters import climate, context, flood, overpass, peeringdb, solar, terrain
 from .adapters.base import unknown
 from .adapters.overpass import gas_pipeline_distance
 from .models import Measurement
@@ -29,6 +29,7 @@ DISPATCH: dict[str, list[tuple[str, Callable]]] = {
     "climate": [
         ("free_cooling", climate.free_cooling_hours),
         ("heat_trend", climate.heat_projection),
+        ("flood", flood.flood_return_period),
     ],
     "land": [
         ("slope", terrain.slope_stats),

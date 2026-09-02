@@ -16,7 +16,8 @@ from . import measure as measure_mod
 from . import report as report_mod
 from .gates import evaluate_gates, validate_gate_coverage
 from .geo import bbox_around, parse_latlon, tile_region
-from .models import Analysis, Measurement, Site
+from .models import (Analysis, FactorScore, GateResult, Measurement, ProfileScore,
+                     Recommendation, Site)
 from .registry import (ROOT, load_factors, load_gates, load_profiles, load_sources,
                        profile_names, resolve_source, validate)
 from .scoring import apply_gates_to_scores, score_profile
@@ -61,6 +62,19 @@ def _load(run: str) -> Analysis:
     for m in d["measurements"]:
         m.pop("id", None)
         a.measurements.append(Measurement(**m))
+
+    # Restore derived state so a loaded analysis round-trips losslessly. Without
+    # this, anything reading a saved run sees it as unscored.
+    for g in d.get("gates", []):
+        a.gates.append(GateResult(**g))
+    for name, ps in d.get("profiles", {}).items():
+        fs = [FactorScore(**f) for f in ps.pop("factor_scores", [])]
+        a.profiles[name] = ProfileScore(**{**ps, "factor_scores": fs})
+    for r in d.get("recommendations", []):
+        r.pop("leverage_pts_per_10m", None)
+        if isinstance(r.get("timeline_months"), list):
+            r["timeline_months"] = tuple(r["timeline_months"])
+        a.recommendations.append(Recommendation(**r))
     return a
 
 
@@ -492,6 +506,92 @@ def docs() -> None:
     from .docs_gen import generate
     for p in generate():
         console.print(f"  wrote {p.relative_to(ROOT)}")
+
+
+@cli.command("validate-set")
+@click.option("--country", default=None, help="Filter: US, CN, IN")
+@click.option("--profile", default=None, help="Override each case's stated profile")
+def validate_set(country: str | None, profile: str | None) -> None:
+    """Backtest scored runs against data/reference/known_datacenters.yaml.
+
+    Matches existing runs to reference cases by proximity, then reports agreement
+    AND discrimination. Discrimination is the metric that matters: a model that
+    scores everything 70-80 has high agreement on positives and is useless.
+    """
+    import yaml
+    from .geo import haversine_km
+
+    ref_path = ROOT / "data" / "reference" / "known_datacenters.yaml"
+    cases = yaml.safe_load(ref_path.read_text())["cases"]
+    if country:
+        cases = [c for c in cases if c["country"] == country.upper()]
+
+    runs = []
+    for d in sorted(RUNS.glob("run_*")):
+        try:
+            runs.append(_load(d.name))
+        except Exception:
+            continue
+
+    t = Table(title="Validation against known outcomes")
+    for c in ("case", "class", "expected", "predicted", "conf", "agree"):
+        t.add_column(c)
+
+    positives, negatives, agreed, evaluated = [], [], 0, 0
+    for case in cases:
+        clat, clon = case["coord"]
+        match = min(
+            (r for r in runs if haversine_km(r.site.centroid, (clat, clon)) < 25),
+            key=lambda r: haversine_km(r.site.centroid, (clat, clon)), default=None)
+        if match is None:
+            t.add_row(case["id"], case["class"], case["expected_verdict"],
+                      "[dim]not analyzed[/dim]", "—", "—")
+            continue
+
+        prof = profile or case.get("profile", "hyperscale_training")
+        ps = match.profiles.get(prof)
+        if ps is None or ps.score is None:
+            t.add_row(case["id"], case["class"], case["expected_verdict"],
+                      "[dim]unscored[/dim]", "—", "—")
+            continue
+
+        evaluated += 1
+        good = {"strong-candidate", "viable"}
+        bad = {"conditional", "weak", "poor", "NO-GO", "NO-GO (unverified)"}
+        if case["expected_verdict"] == "viable_or_better":
+            ok = ps.verdict in good
+            positives.append(ps.score)
+        else:
+            ok = ps.verdict in bad
+            negatives.append(ps.score)
+        agreed += ok
+
+        t.add_row(case["id"], case["class"], case["expected_verdict"],
+                  f"{ps.verdict} ({ps.score:.0f}±{ps.band:.0f})", f"{ps.confidence:.2f}",
+                  "[green]yes[/green]" if ok else "[red]no[/red]")
+    console.print(t)
+
+    if not evaluated:
+        console.print("[yellow]No reference cases have been analyzed yet. "
+                      "Run `dcgeo analyze` at the case coordinates first.[/yellow]")
+        return
+
+    console.print(f"\nAgreement: {agreed}/{evaluated}")
+    if positives and negatives:
+        pm, nm = sum(positives)/len(positives), sum(negatives)/len(negatives)
+        sep = pm - nm
+        console.print(f"Discrimination: positives mean {pm:.1f}, negatives mean {nm:.1f}, "
+                      f"separation {sep:+.1f}")
+        if sep < 8:
+            console.print("[red]Model is NOT discriminating.[/red] Built and rejected sites "
+                          "score alike. Agreement rate is misleading — check whether the "
+                          "community, regulatory and land factors were actually measured, "
+                          "since those are what separate these cases.")
+        else:
+            console.print("[green]Model separates built from rejected sites.[/green]")
+    else:
+        console.print("[yellow]Need both positive and negative controls scored to measure "
+                      "discrimination. Negative controls are the ones that matter.[/yellow]")
 
 
 @cli.command("cache")
