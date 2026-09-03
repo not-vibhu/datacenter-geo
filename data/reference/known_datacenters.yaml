@@ -70,25 +70,39 @@ cases:
     what_it_tests: Does the model detect an active ratepayer cost-allocation proceeding?
 
   - id: hanover_ashland_va
-    name: Ashland area campus, Hanover County, Virginia
+    name: Hickory Hill Road campus, Hanover County, Virginia
     country: US
-    coord: [37.7400, -77.5100]
-    coord_confidence: low
+    coord: [37.7992, -77.4648]
+    coord_confidence: medium
     class: operating
     profile: hyperscale_training
     expected_verdict: viable_or_better
-    outcome: Rezoning APPROVED 2024; ~1,200-acre campus under construction.
+    outcome: >
+      Rezoning APPROVED UNANIMOUSLY by the Hanover County Board of Supervisors on
+      27 March 2024, following a unanimous Planning Commission recommendation in
+      January. ~1,200 acres in the Beaverdam District, south side of Hickory Hill
+      Road just east of I-95. Developer paid $33M for the land in May 2024.
+      ~30 buildings planned; ~37% of the site reserved as buffer and open space.
     developer: Tract
+    references:
+      - https://richmondbizsense.com/2024/03/28/hanover-approves-zoning-request-for-1200-acre-data-center-project/
+      - https://www.hanovercounty.gov/CivicAlerts.aspx?AID=770
+    coord_note: >
+      CORRECTED 2026-09-03 from an eyeball estimate to the geocoded Hickory Hill Road
+      location named in the approval coverage.
     context: >
-      The positive half of the Hanover pair. Approved in 2024 in the same county that
-      rejected the same developer's second application two years later.
+      The positive half of the Hanover pair. Approved UNANIMOUSLY in March 2024 in the
+      same county that rejected the same developer's next application 4-3 two years
+      later. The vote counts are the discriminating signal: unanimous approval versus a
+      split denial is exactly the difference com.opposition_risk is meant to capture,
+      and it is not visible in any machine-readable dataset.
     what_it_tests: Half of the paired control. See hanover_mountain_road_va.
 
   - id: hanover_mountain_road_va
     name: Mountain Road Technology Park, Hanover County, Virginia
     country: US
-    coord: [37.6650, -77.5800]
-    coord_confidence: low
+    coord: [37.6871, -77.5438]
+    coord_confidence: medium
     class: rejected
     profile: hyperscale_training
     expected_verdict: conditional_or_worse
@@ -101,6 +115,14 @@ cases:
     references:
       - https://virginiabusiness.com/hanover-supervisors-reject-430-acre-data-center-campus/
       - https://www.datacenterdynamics.com/en/news/tracts-430-acre-data-center-rejected-by-local-officials-in-hanover-county-virginia/
+    coord_note: >
+      CORRECTED 2026-09-03. The first coordinate used here (37.6650, -77.5800) was an
+      eyeball estimate and reverse-geocoded to HENRICO County, not Hanover — which
+      silently invalidated the control, since the whole point is to hold the
+      jurisdiction constant. The current value is Nominatim's geocode of "Mountain
+      Road, Hanover County, Virginia" and reverse-geocodes to Hanover County. This is
+      exactly what the coord_confidence field exists to flag: treat every `low` entry
+      as unvalidated until someone confirms the county.
     context: >
       THE KEY NEGATIVE CONTROL. Same state, same county, same developer, same
       incentive regime and same grid as hanover_ashland_va — but rejected. The
