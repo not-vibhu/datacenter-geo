@@ -41,3 +41,11 @@ jobs:
             git diff --stat -- docs/
             exit 1
           fi
+
+      - name: Site data is not stale
+        run: |
+          uv run python scripts/build_site_data.py
+          git diff --exit-code --stat site/data || {
+            echo "::error::site/data is stale. Run 'uv run python scripts/build_site_data.py' and commit."
+            exit 1
+          }
