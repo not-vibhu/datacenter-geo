@@ -224,3 +224,8 @@ footer .frow{display:flex; gap:20px; flex-wrap:wrap; align-items:baseline}
   .detail .dhead{padding:18px 16px}
   .dbar{grid-template-columns:84px 1fr 36px; gap:8px}
 }
+
+/* Understated credit — present, not competing with the content. */
+.byline{font-size:13px; color:var(--faint)}
+.byline a{color:var(--muted); text-decoration:none; border-bottom:1px solid var(--rule)}
+.byline a:hover{color:var(--accent); border-bottom-color:var(--accent)}
