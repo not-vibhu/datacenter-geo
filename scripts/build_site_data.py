@@ -35,6 +35,19 @@ HEADLINE = [
 
 def build() -> dict:
     factors = load_factors()
+
+    # 332 unmeasured entries share only 57 distinct reasons — nearly all of them
+    # "no adapter implemented". Interning them keeps the payload small enough to
+    # stay a single static file.
+    reasons: list[str] = []
+    reason_index: dict[str, int] = {}
+
+    def intern_reason(text: str) -> int:
+        if text not in reason_index:
+            reason_index[text] = len(reasons)
+            reasons.append(text)
+        return reason_index[text]
+
     profiles = load_profiles()
     sites = []
 
@@ -45,10 +58,23 @@ def build() -> dict:
         d = json.loads(f.read_text())
         site = d["site"]
 
+        # Measured factors carry their full context; unmeasured ones carry only
+        # what the page needs to say honestly that they are missing and why.
+        # Without this the payload is dominated by spec text duplicated across
+        # hundreds of unknowns.
         measurements = []
+        unmeasured = []
         for m in d["measurements"]:
             spec = factors.get(m["factor_id"])
             if not spec:
+                continue
+            if m["value"] is None:
+                unmeasured.append({
+                    "factor_id": m["factor_id"],
+                    "name": spec["name"],
+                    "domain": spec["domain"],
+                    "reason_id": intern_reason((m.get("unknown_reason") or "")[:180]),
+                })
                 continue
             measurements.append({
                 "factor_id": m["factor_id"],
@@ -61,7 +87,6 @@ def build() -> dict:
                 "source": m["source"],
                 "source_url": m.get("source_url"),
                 "notes": m.get("notes"),
-                "unknown_reason": m.get("unknown_reason"),
                 "headline": m["factor_id"] in HEADLINE,
             })
 
@@ -94,6 +119,7 @@ def build() -> dict:
                 for g in d["gates"]
             ],
             "measurements": measurements,
+            "unmeasured": unmeasured,
             "red_team": d.get("red_team", []),
             "recommendations": d.get("recommendations", []),
         })
@@ -103,9 +129,11 @@ def build() -> dict:
     for s in sites:
         for m in s["measurements"]:
             tier_counts[m["tier"]] = tier_counts.get(m["tier"], 0) + 1
+        tier_counts["unknown"] = tier_counts.get("unknown", 0) + len(s["unmeasured"])
 
     srcs = load_sources()
     return {
+        "reasons": reasons,
         "generated": max((s["created"] for s in sites), default=""),
         "sites": sites,
         "meta": {
@@ -127,8 +155,13 @@ def build() -> dict:
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     payload = build()
-    (OUT / "sites.json").write_text(json.dumps(payload, indent=2, default=str))
+    # Minified: this file is read by the browser, not by people. The human-readable
+    # source of truth is the per-run analysis.json committed under runs/.
+    (OUT / "sites.json").write_text(
+        json.dumps(payload, separators=(",", ":"), default=str)
+    )
     n = len(payload["sites"])
     nm = sum(len(s["measurements"]) for s in payload["sites"])
-    print(f"wrote site/data/sites.json — {n} sites, {nm} measurements, "
-          f"tiers {payload['meta']['tier_counts']}")
+    kb = (OUT / "sites.json").stat().st_size / 1024
+    print(f"wrote site/data/sites.json — {n} sites, {nm} measured, "
+          f"tiers {payload['meta']['tier_counts']}, {kb:.0f} KB")

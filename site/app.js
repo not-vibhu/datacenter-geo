@@ -197,7 +197,26 @@ function select(runId) {
       <div class="dbars">${doms || "<p style='color:var(--muted);margin:0'>No domains scored.</p>"}</div></div>
     <div class="dsec"><h4>Key measurements</h4>${measured}</div>
     <div class="dsec"><h4>Gates — the knockout checks</h4>${gates || "<p style='color:var(--muted);margin:0'>No gates evaluated.</p>"}</div>
+    <div class="dsec"><h4>Not measured (${(s.unmeasured || []).length} of ${(s.unmeasured || []).length + s.measurements.length})</h4>
+      <p style="font-size:14px;color:var(--muted);margin:0 0 12px;max-width:none">
+        Listed rather than hidden. Each of these lowers the confidence figure above and
+        widens the &plusmn; band; none of them is silently filled with an average.</p>
+      <details><summary style="cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--accent)">Show what is missing</summary>
+        <div style="margin-top:12px">${unmeasuredHtml(s)}</div></details></div>
   `;
+}
+
+function unmeasuredHtml(s) {
+  const byDomain = {};
+  (s.unmeasured || []).forEach((u) => (byDomain[u.domain] ||= []).push(u));
+  const keys = Object.keys(byDomain).sort();
+  if (!keys.length) return "<p style='color:var(--muted);margin:0'>Everything was measured.</p>";
+  return keys.map((d) => `<div style="margin-bottom:10px">
+      <div class="mono" style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+        color:var(--faint);margin-bottom:4px">${esc(d)} · ${byDomain[d].length}</div>
+      <div style="font-size:13.5px;color:var(--ink-2);line-height:1.5">
+        ${byDomain[d].map((u) => `<span title="${esc(DATA.reasons?.[u.reason_id] || "")}">${esc(u.name)}</span>`).join(" · ")}</div>
+    </div>`).join("");
 }
 
 /* ---------- wet-bulb chart ---------- */

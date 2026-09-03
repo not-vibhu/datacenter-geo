@@ -211,3 +211,16 @@ code{font-family:"IBM Plex Mono",monospace; font-size:.88em; background:var(--su
 footer{border-top:1.5px solid var(--rule); padding:28px 0 60px; color:var(--muted); font-size:14.5px}
 footer a{color:var(--accent)}
 footer .frow{display:flex; gap:20px; flex-wrap:wrap; align-items:baseline}
+
+/* Narrow screens: the measurement row's three columns (name / value / tier chip)
+   cannot fit at 375px — the chip overflowed the viewport by 4px. Stack the value
+   and chip under the name instead of letting them fight for width. */
+@media (max-width:560px){
+  .mrow{grid-template-columns:1fr; gap:4px}
+  .mrow .mv{grid-column:1; justify-self:start}
+  .mrow .tchip{grid-column:1; justify-self:start}
+  .dsec{padding:18px 16px}
+  .vcard{padding:14px 16px}
+  .detail .dhead{padding:18px 16px}
+  .dbar{grid-template-columns:84px 1fr 36px; gap:8px}
+}
