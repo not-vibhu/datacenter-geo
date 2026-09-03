@@ -1,0 +1,28 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.5438,
+          37.6871
+        ]
+      },
+      "properties": {
+        "site_id": "site_68043",
+        "name": "Mountain Road Tech Park, Hanover County VA (REJECTED 4-3, May 2026)",
+        "radius_km": 10.0,
+        "country": "United States",
+        "admin1": "Virginia",
+        "admin2": "Hanover County",
+        "utility": null,
+        "market": "PJM",
+        "origin": "manual",
+        "hypothesis": null,
+        "notes": null
+      }
+    }
+  ]
+}

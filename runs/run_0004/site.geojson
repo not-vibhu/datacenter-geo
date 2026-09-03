@@ -1,0 +1,28 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.06,
+          22.47
+        ]
+      },
+      "properties": {
+        "site_id": "site_85512",
+        "name": "Jamnagar, Gujarat IN",
+        "radius_km": 10.0,
+        "country": "India",
+        "admin1": "Gujarat",
+        "admin2": "Jamnagar City Taluka",
+        "utility": null,
+        "market": "DISCOM / Gujarat SERC",
+        "origin": "manual",
+        "hypothesis": null,
+        "notes": null
+      }
+    }
+  ]
+}
