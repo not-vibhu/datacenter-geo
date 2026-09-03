@@ -3,7 +3,7 @@
 *Generated from `config/sources.yaml`.*
 
 69 sources, 154 dataset aliases. 
-47 require no key at all.
+48 require no key at all.
 
 | Source | Tier | Auth | Coverage | TTL (d) |
 |---|---|---|---|---|
@@ -47,7 +47,7 @@
 | `open_meteo_archive` | A | none | global, hourly, 1940-present | 180 |
 | `openaq` | A | free_key | global where monitors exist (sparse in rural areas) | 30 |
 | `openinframap` | A | none | global (OSM-dependent) | 30 |
-| `opentopography` | A | free_key | global (GLO-30 to 85°N/S) | 365 |
+| `opentopography` | A | none | global | 365 |
 | `osm_overpass` | A | none | global (density varies) | 30 |
 | `overture_maps` | A | none | global | 90 |
 | `peeringdb` | A | free_registration | global | 30 |
@@ -251,7 +251,7 @@ Tier **A** · auth `none` · TTL 90 d · license: public domain
 
 **Serves:** `clm.flood_riverine`
 
-Authoritative for the US and what lenders actually use. ArcGIS REST query by geometry.
+Authoritative for the US and what lenders actually use. ArcGIS REST query by geometry. NOTE: hazards.fema.gov appears to be geo-restricted and is unreachable from some networks (it hangs rather than refusing, so it is given a short timeout). The Esri Living Atlas mirror carries the same NFHL data, is globally reachable, and is tried first. Zone X "reduced flood risk due to levee" is handled specially — it is not formally SFHA but the protection depends on a third-party structure whose accreditation can lapse.
 
 ### `gem_trackers` — Global Energy Monitor trackers
 
@@ -467,17 +467,17 @@ Tier **A** · auth `none` · TTL 30 d · license: ODbL
 
 A rendering of OSM power tags, not a separate dataset — query Overpass directly for `power=line`, `power=substation`, `voltage=*`. Substation *capacity* is rarely tagged; presence is not capacity, and conflating the two is the most common analytical error in this domain.
 
-### `opentopography` — OpenTopography (Copernicus GLO-30, SRTM, ALOS)
+### `opentopography` — OpenTopoData / OpenTopography DEM
 
-Tier **A** · auth `free_key` · TTL 365 d · license: varies by dataset; Copernicus DEM free for any use
+Tier **A** · auth `none` · TTL 365 d · license: varies by dataset
 
-`https://portal.opentopography.org/API/globaldem`
+`https://api.opentopodata.org/v1`
 
 **Serves:** `lnd.slope`, `clm.flood_coastal`, `lnd.contiguous_area`
 
 **Aliases:** `alos_world3d`, `copernicus_dem_30m`, `srtm_30m`, `srtm_slope`
 
-Copernicus GLO-30 is the best free global DEM. SRTM has voids above 60°N.
+IMPORTANT: the public api.opentopodata.org instance does NOT serve Copernicus GLO-30 — that requires a self-hosted instance or the OpenTopography portal API with a key. The adapter tries `mapzen` (global blended terrain: SRTM, ArcticDEM, EU-DEM and others — best global coverage), then `srtm30m` (clear provenance but voids above 60 deg latitude), then `aster30m`. The dataset actually used is recorded in the measurement's `raw.dem_dataset`, because slope derived from different DEMs is not strictly comparable. For bulk scanning, self-host: the public rate limit of 1000 calls/day caps a sweep at 1000 tiles.
 
 ### `osm_overpass` — OSM Overpass API
 
