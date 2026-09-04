@@ -2,6 +2,7 @@
 it handles caching, rate limits, retries, and evidence recording."""
 from __future__ import annotations
 
+import dataclasses
 import json
 import re
 from datetime import datetime
@@ -69,6 +70,18 @@ def _load(run: str) -> Analysis:
     if not path.exists():
         raise click.ClickException(f"no analysis found at {run}")
     d = json.loads(path.read_text())
+
+    def only_known(cls, raw: dict) -> dict:
+        """Drop fields this version of the model no longer has.
+
+        Runs are committed and outlive the code that wrote them, so loading must
+        tolerate a schema that has moved on. Unknown keys are dropped rather than
+        raising — a run from an older release stays readable, and re-scoring it
+        writes it back in the current shape.
+        """
+        allowed = {f.name for f in dataclasses.fields(cls)}
+        return {k: v for k, v in raw.items() if k in allowed}
+
     site = Site(**{**d["site"], "centroid": tuple(d["site"]["centroid"])})
     a = Analysis(
         run_id=d["run_id"], site=site, created=d["created"], parent_run=d.get("parent_run"),
@@ -77,21 +90,21 @@ def _load(run: str) -> Analysis:
         red_team=d.get("red_team", []),
     )
     for m in d["measurements"]:
-        m.pop("id", None)
-        a.measurements.append(Measurement(**m))
+        a.measurements.append(Measurement(**only_known(Measurement, m)))
 
     # Restore derived state so a loaded analysis round-trips losslessly. Without
     # this, anything reading a saved run sees it as unscored.
     for g in d.get("gates", []):
-        a.gates.append(GateResult(**g))
+        a.gates.append(GateResult(**only_known(GateResult, g)))
     for name, ps in d.get("profiles", {}).items():
-        fs = [FactorScore(**f) for f in ps.pop("factor_scores", [])]
-        a.profiles[name] = ProfileScore(**{**ps, "factor_scores": fs})
+        fs = [FactorScore(**only_known(FactorScore, f))
+              for f in ps.pop("factor_scores", [])]
+        a.profiles[name] = ProfileScore(
+            **{**only_known(ProfileScore, ps), "factor_scores": fs})
     for r in d.get("recommendations", []):
-        r.pop("leverage_pts_per_10m", None)
         if isinstance(r.get("timeline_months"), list):
             r["timeline_months"] = tuple(r["timeline_months"])
-        a.recommendations.append(Recommendation(**r))
+        a.recommendations.append(Recommendation(**only_known(Recommendation, r)))
     return a
 
 

@@ -209,16 +209,21 @@ def markdown(analysis: Analysis) -> str:
         L.append("")
         L.append("| Factor | Value | Unit | Score | Weight | Evidence | Source | Retrieved |")
         L.append("|---|---|---|---|---|---|---|---|")
+        # Source and retrieval date live on the Measurement, joined by factor_id —
+        # the scored factor carries only what scoring derived from them.
+        mmap = a.measurement_map()
         for fs in primary.factor_scores:
             name = factors.get(fs.factor_id, {}).get("name", fs.factor_id)
             val = "—" if fs.raw_value is None else str(fs.raw_value)
             norm = "—" if fs.normalized is None else f"{fs.normalized:.0f}"
-            src = f"`{fs.source}`" if fs.source and fs.normalized is not None else "—"
+            m = mmap.get(fs.factor_id)
+            known = m is not None and m.is_known
+            src = f"`{m.source}`" if known else "—"
             when = "—"
-            if fs.retrieved:
+            if known and m.retrieved:
                 age = f" ({fs.age_days:.0f}d)" if fs.age_days is not None else ""
                 flag = "" if fs.freshness == "fresh" else f" **{fs.freshness}**"
-                when = f"{fs.retrieved[:10]}{age}{flag}"
+                when = f"{m.retrieved[:10]}{age}{flag}"
             L.append(f"| {name} <br>`{fs.factor_id}` | {val} | {fs.unit} | {norm} | "
                      f"{fs.weight:.0f} | {TIER_LABEL[fs.tier]} | {src} | {when} |")
         L.append("")

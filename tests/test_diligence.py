@@ -1,6 +1,9 @@
 """The diligence layer must never turn an absence of evidence into a decision."""
 from __future__ import annotations
 
+import json
+import pathlib
+import tempfile
 from datetime import UTC, datetime, timedelta
 
 import pytest
@@ -62,13 +65,32 @@ def test_unknown_measurement_has_zero_datapoint_confidence():
     assert ann["unknown_reason"] == "no adapter"
 
 
-def test_every_scored_factor_carries_its_provenance():
+def test_scored_factors_carry_derived_provenance_but_not_copies():
+    """Source and date live once, on the Measurement. The score carries what it derived."""
     a = _scored([_m("pwr.transmission_proximity", 1.0, source="osm_overpass")])
     fs = next(f for f in a.profiles[PROFILE].factor_scores
               if f.factor_id == "pwr.transmission_proximity")
-    assert fs.source == "osm_overpass"
-    assert fs.retrieved is not None
     assert fs.freshness == "fresh"
+    assert fs.age_days is not None
+    assert fs.evidence_weight == 1.0
+    for copied in ("source", "source_url", "retrieved", "unknown_reason"):
+        assert not hasattr(fs, copied), f"{copied} duplicates the Measurement"
+    # ... and the join back to the source still works, by factor_id.
+    assert a.measurement_map()["pwr.transmission_proximity"].source == "osm_overpass"
+
+
+def test_a_run_written_by_an_older_schema_still_loads():
+    """Runs are committed and outlive the code; unknown fields must not raise."""
+    from dcgeo.cli import _load
+    a = _scored([_m("pwr.transmission_proximity", 1.0)])
+    raw = a.to_dict()
+    raw["profiles"][PROFILE]["factor_scores"][0]["retired_field"] = "from an old release"
+    raw["measurements"][0]["another_retired_field"] = 42
+    tmp = pathlib.Path(tempfile.mkdtemp()) / "analysis.json"
+    tmp.write_text(json.dumps(raw, default=str))
+    loaded = _load(str(tmp))
+    assert loaded.run_id == a.run_id
+    assert loaded.profiles[PROFILE].factor_scores
 
 
 # ── sensitivity ──────────────────────────────────────────────────────────────

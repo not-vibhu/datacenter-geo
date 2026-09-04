@@ -1054,13 +1054,9 @@
           "weight": 10.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "osm_overpass",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "OSM does not publish substation capacity. Found 169 substation(s) within 40 km (43 at >=110 kV); nearest qualifying is Mahape at 2.54 km, 220.0 kV. Headroom must be obtained from the utility's IRP or transmission planning study."
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.interconnect_queue_time",
@@ -1071,13 +1067,9 @@
           "weight": 10.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: iso_queue_pjm, iso_queue_ercot, iso_queue_miso)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.contiguous_area",
@@ -1088,13 +1080,9 @@
           "weight": 9.0,
           "tier": "C",
           "tier_weight": 0.6,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:22Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.6,
-          "unknown_reason": null
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "pwr.transmission_proximity",
@@ -1105,13 +1093,9 @@
           "weight": 9.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:17:17Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "pwr.retail_power_price",
@@ -1122,13 +1106,9 @@
           "weight": 9.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: eia_861, eia_electricity_data, ceic_cn)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.export_controls",
@@ -1139,13 +1119,9 @@
           "weight": 9.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: bis_entity_list, us_ear_ai_rules, eu_dual_use)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.flood_riverine",
@@ -1156,13 +1132,9 @@
           "weight": 8.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "fema_nfhl",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "outside FEMA NFHL coverage (non-US). Use JRC Global Flood Hazard Maps or WRI Aqueduct floods instead (Tier B, 90 m, coarser). Global flood datasets do not capture pluvial flash flooding."
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.opposition_risk",
@@ -1173,13 +1145,9 @@
           "weight": 8.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: local_news_search, county_meeting_minutes, change_org)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.total_cost_of_ownership",
@@ -1190,13 +1158,9 @@
           "weight": 8.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: derived)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.zoning_status",
@@ -1207,13 +1171,9 @@
           "weight": 8.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: county_zoning_gis, municipal_code, state_industrial_corp)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.large_load_tariff",
@@ -1224,13 +1184,9 @@
           "weight": 8.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: utility_tariff_filings, puc_dockets, state_regulator_cn)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.onsite_generation_potential",
@@ -1241,13 +1197,9 @@
           "weight": 8.0,
           "tier": "C",
           "tier_weight": 0.6,
-          "source": "composite",
-          "source_url": null,
-          "retrieved": "2026-09-03T05:18:02Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.6,
-          "unknown_reason": null
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "reg.permitting_timeline",
@@ -1258,13 +1210,9 @@
           "weight": 8.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: county_permit_records, state_env_agency, moef_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.basin_stress",
@@ -1275,13 +1223,9 @@
           "weight": 8.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: wri_aqueduct_40, fao_aquastat)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.dry_bulb_profile",
@@ -1292,13 +1236,9 @@
           "weight": 7.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "open_meteo_archive",
-          "source_url": "https://archive-api.open-meteo.com/v1/archive",
-          "retrieved": "2026-09-03T05:18:15Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "com.residential_proximity",
@@ -1309,13 +1249,9 @@
           "weight": 7.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:59Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "cnx.longhaul_fiber_proximity",
@@ -1326,13 +1262,9 @@
           "weight": 7.0,
           "tier": "C",
           "tier_weight": 0.6,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:51Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.6,
-          "unknown_reason": null
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "eco.construction_labor",
@@ -1343,13 +1275,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: bls_oes, union_local_data, state_labor_dept)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.equipment_lead_time",
@@ -1360,13 +1288,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: industry_lead_time_surveys, manufacturer_guidance, trade_press)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.grid_carbon_intensity",
@@ -1377,13 +1301,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: electricity_maps, ember_climate, epa_egrid)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.environmental_review",
@@ -1394,13 +1314,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: nepa_ceq, state_env_agency, eia_notification_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.tax_incentives",
@@ -1411,13 +1327,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: state_statute, state_edc, state_dc_policy_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.supply_availability",
@@ -1428,13 +1340,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: municipal_utility_reports, usgs_nwis, cgwb_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.withdrawal_permitting",
@@ -1445,13 +1353,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: state_water_authority, cgwb_india, provincial_water_cn)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.wetbulb_profile",
@@ -1462,13 +1366,9 @@
           "weight": 7.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "open_meteo_archive",
-          "source_url": "https://archive-api.open-meteo.com/v1/archive",
-          "retrieved": "2026-09-03T05:18:04Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "clm.flood_coastal",
@@ -1479,13 +1379,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: climate_central_coastal_dem, noaa_slr, wri_aqueduct_floods)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.grid_cost_allocation",
@@ -1496,13 +1392,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: puc_dockets, state_regulator_filings, local_news_search)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.path_diversity",
@@ -1513,13 +1405,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: osm_telecom, carrier_route_maps, state_broadband_maps)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.slope",
@@ -1530,13 +1418,9 @@
           "weight": 6.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "opentopography",
-          "source_url": "https://www.opentopodata.org/datasets/copernicus/",
-          "retrieved": "2026-09-03T05:18:16Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "lnd.protected_overlap",
@@ -1547,13 +1431,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: wdpa_protected_planet, ramsar, nwi_wetlands)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.brownfield_opportunity",
@@ -1564,13 +1444,9 @@
           "weight": 6.0,
           "tier": "C",
           "tier_weight": 0.6,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:23Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.6,
-          "unknown_reason": null
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "pwr.wholesale_basis_risk",
@@ -1581,13 +1457,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: ercot_lmp, pjm_dataminer, miso_lmp)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.grid_reliability",
@@ -1598,13 +1470,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: eia_861_reliability, ceer_benchmarking, cea_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.firm_capacity_nearby",
@@ -1615,13 +1483,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: gem_power_plants, wri_powerwatch, eia_860)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.renewable_procurement_depth",
@@ -1632,13 +1496,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: lbnl_ppa_data, ember_climate, cleanenergybuyers)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.air_permit",
@@ -1649,13 +1509,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: epa_nonattainment, state_air_agency, cpcb_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.jurisdiction_stability",
@@ -1666,13 +1522,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: world_bank_wgi, oecd_country_risk, eiu_democracy_index)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.reclaimed_availability",
@@ -1683,13 +1535,9 @@
           "weight": 6.0,
           "tier": "B",
           "tier_weight": 0.85,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:15Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.85,
-          "unknown_reason": null
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "clm.extreme_heat_trend",
@@ -1700,13 +1548,9 @@
           "weight": 5.0,
           "tier": "D",
           "tier_weight": 0.35,
-          "source": "open_meteo_archive",
-          "source_url": "https://archive-api.open-meteo.com/v1/archive",
-          "retrieved": "2026-09-03T05:18:15Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.35,
-          "unknown_reason": null
+          "evidence_weight": 0.35
         },
         {
           "factor_id": "clm.seismic",
@@ -1717,13 +1561,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: gem_global_seismic, usgs_hazard, is1893_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.economic_alignment",
@@ -1734,13 +1574,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: bls_local_unemployment, county_edc_priorities, census_acs)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.construction_cost_index",
@@ -1751,13 +1587,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: rsmeans_paid, turner_cost_index, national_construction_stats)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.price",
@@ -1768,13 +1600,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: county_assessor, costar_paid, reonomy_paid)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.heavy_haul_access",
@@ -1785,13 +1613,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: osm_highways, state_dot_permits, bridge_inventory_nbi)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.nuclear_smr_adjacency",
@@ -1802,13 +1626,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: gem_nuclear, iaea_pris, nrc_applications)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.data_sovereignty",
@@ -1819,13 +1639,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: national_data_law, gdpr_adequacy, dpdp_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.discharge_permitting",
@@ -1836,13 +1652,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: epa_npdes, state_environmental_agency, cpcb_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.wind_hazard",
@@ -1853,13 +1665,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: gar_cyclone, noaa_storm_events, imd_cyclone)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.wildfire",
@@ -1870,13 +1678,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: usfs_whp, global_fire_atlas, modis_burned_area)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.air_quality",
@@ -1887,13 +1691,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: openaq, cams_copernicus, cpcb_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.carrier_count",
@@ -1904,13 +1704,9 @@
           "weight": 4.0,
           "tier": "B",
           "tier_weight": 0.85,
-          "source": "peeringdb",
-          "source_url": "https://www.peeringdb.com/",
-          "retrieved": "2026-09-03T05:18:24Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.85,
-          "unknown_reason": null
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "eco.port_rail_access",
@@ -1921,13 +1717,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "osm_overpass",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "all Overpass mirrors failed: ReadTimeout: The read operation timed out"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.operations_labor",
@@ -1938,13 +1730,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: bls_oes, census_acs, local_university_programs)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.geotechnical",
@@ -1955,13 +1743,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: soilgrids_isric, usgs_karst, insar_subsidence)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.flood_of_water_infrastructure",
@@ -1972,13 +1756,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: wri_aqueduct_40, us_drought_monitor, imd_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.ixp_proximity",
@@ -1989,13 +1769,9 @@
           "weight": 3.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "peeringdb",
-          "source_url": "https://www.peeringdb.com/fac/15540",
-          "retrieved": "2026-09-03T05:18:24Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "clm.lightning",
@@ -2006,13 +1782,9 @@
           "weight": 2.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: nasa_lis_otd, vaisala_gld360)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.latency_to_demand",
@@ -2023,13 +1795,9 @@
           "weight": 2.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: ripe_atlas, cloudflare_radar, derived)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.subsea_landing",
@@ -2040,13 +1808,9 @@
           "weight": 2.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: telegeography_submarine_map, peeringdb)"
+          "evidence_weight": 0.0
         }
       ],
       "capped_by": null,
@@ -2079,13 +1843,9 @@
           "weight": 10.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: ripe_atlas, cloudflare_radar, derived)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.longhaul_fiber_proximity",
@@ -2096,13 +1856,9 @@
           "weight": 9.0,
           "tier": "C",
           "tier_weight": 0.6,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:51Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.6,
-          "unknown_reason": null
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "cnx.path_diversity",
@@ -2113,13 +1869,9 @@
           "weight": 9.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: osm_telecom, carrier_route_maps, state_broadband_maps)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.ixp_proximity",
@@ -2130,13 +1882,9 @@
           "weight": 9.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "peeringdb",
-          "source_url": "https://www.peeringdb.com/fac/15540",
-          "retrieved": "2026-09-03T05:18:24Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "cnx.carrier_count",
@@ -2147,13 +1895,9 @@
           "weight": 8.0,
           "tier": "B",
           "tier_weight": 0.85,
-          "source": "peeringdb",
-          "source_url": "https://www.peeringdb.com/",
-          "retrieved": "2026-09-03T05:18:24Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.85,
-          "unknown_reason": null
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "pwr.substation_headroom",
@@ -2164,13 +1908,9 @@
           "weight": 8.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "osm_overpass",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "OSM does not publish substation capacity. Found 169 substation(s) within 40 km (43 at >=110 kV); nearest qualifying is Mahape at 2.54 km, 220.0 kV. Headroom must be obtained from the utility's IRP or transmission planning study."
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.flood_riverine",
@@ -2181,13 +1921,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "fema_nfhl",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "outside FEMA NFHL coverage (non-US). Use JRC Global Flood Hazard Maps or WRI Aqueduct floods instead (Tier B, 90 m, coarser). Global flood datasets do not capture pluvial flash flooding."
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.total_cost_of_ownership",
@@ -2198,13 +1934,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: derived)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.zoning_status",
@@ -2215,13 +1947,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: county_zoning_gis, municipal_code, state_industrial_corp)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.transmission_proximity",
@@ -2232,13 +1960,9 @@
           "weight": 7.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:17:17Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "pwr.interconnect_queue_time",
@@ -2249,13 +1973,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: iso_queue_pjm, iso_queue_ercot, iso_queue_miso)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.grid_reliability",
@@ -2266,13 +1986,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: eia_861_reliability, ceer_benchmarking, cea_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.permitting_timeline",
@@ -2283,13 +1999,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: county_permit_records, state_env_agency, moef_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.flood_coastal",
@@ -2300,13 +2012,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: climate_central_coastal_dem, noaa_slr, wri_aqueduct_floods)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.opposition_risk",
@@ -2317,13 +2025,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: local_news_search, county_meeting_minutes, change_org)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.subsea_landing",
@@ -2334,13 +2038,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: telegeography_submarine_map, peeringdb)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.contiguous_area",
@@ -2351,13 +2051,9 @@
           "weight": 6.0,
           "tier": "C",
           "tier_weight": 0.6,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:22Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.6,
-          "unknown_reason": null
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "lnd.price",
@@ -2368,13 +2064,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: county_assessor, costar_paid, reonomy_paid)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.retail_power_price",
@@ -2385,13 +2077,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: eia_861, eia_electricity_data, ceic_cn)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.data_sovereignty",
@@ -2402,13 +2090,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: national_data_law, gdpr_adequacy, dpdp_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.export_controls",
@@ -2419,13 +2103,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: bis_entity_list, us_ear_ai_rules, eu_dual_use)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.dry_bulb_profile",
@@ -2436,13 +2116,9 @@
           "weight": 5.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "open_meteo_archive",
-          "source_url": "https://archive-api.open-meteo.com/v1/archive",
-          "retrieved": "2026-09-03T05:18:15Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "clm.seismic",
@@ -2453,13 +2129,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: gem_global_seismic, usgs_hazard, is1893_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.construction_cost_index",
@@ -2470,13 +2142,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: rsmeans_paid, turner_cost_index, national_construction_stats)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.equipment_lead_time",
@@ -2487,13 +2155,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: industry_lead_time_surveys, manufacturer_guidance, trade_press)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.operations_labor",
@@ -2504,13 +2168,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: bls_oes, census_acs, local_university_programs)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.protected_overlap",
@@ -2521,13 +2181,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: wdpa_protected_planet, ramsar, nwi_wetlands)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.large_load_tariff",
@@ -2538,13 +2194,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: utility_tariff_filings, puc_dockets, state_regulator_cn)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.grid_carbon_intensity",
@@ -2555,13 +2207,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: electricity_maps, ember_climate, epa_egrid)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.environmental_review",
@@ -2572,13 +2220,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: nepa_ceq, state_env_agency, eia_notification_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.tax_incentives",
@@ -2589,13 +2233,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: state_statute, state_edc, state_dc_policy_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.jurisdiction_stability",
@@ -2606,13 +2246,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: world_bank_wgi, oecd_country_risk, eiu_democracy_index)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.wetbulb_profile",
@@ -2623,13 +2259,9 @@
           "weight": 5.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "open_meteo_archive",
-          "source_url": "https://archive-api.open-meteo.com/v1/archive",
-          "retrieved": "2026-09-03T05:18:04Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "clm.extreme_heat_trend",
@@ -2640,13 +2272,9 @@
           "weight": 4.0,
           "tier": "D",
           "tier_weight": 0.35,
-          "source": "open_meteo_archive",
-          "source_url": "https://archive-api.open-meteo.com/v1/archive",
-          "retrieved": "2026-09-03T05:18:15Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.35,
-          "unknown_reason": null
+          "evidence_weight": 0.35
         },
         {
           "factor_id": "clm.wind_hazard",
@@ -2657,13 +2285,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: gar_cyclone, noaa_storm_events, imd_cyclone)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.wildfire",
@@ -2674,13 +2298,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: usfs_whp, global_fire_atlas, modis_burned_area)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.residential_proximity",
@@ -2691,13 +2311,9 @@
           "weight": 4.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:59Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "com.economic_alignment",
@@ -2708,13 +2324,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: bls_local_unemployment, county_edc_priorities, census_acs)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.construction_labor",
@@ -2725,13 +2337,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: bls_oes, union_local_data, state_labor_dept)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.slope",
@@ -2742,13 +2350,9 @@
           "weight": 4.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "opentopography",
-          "source_url": "https://www.opentopodata.org/datasets/copernicus/",
-          "retrieved": "2026-09-03T05:18:16Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "pwr.onsite_generation_potential",
@@ -2759,13 +2363,9 @@
           "weight": 4.0,
           "tier": "C",
           "tier_weight": 0.6,
-          "source": "composite",
-          "source_url": null,
-          "retrieved": "2026-09-03T05:18:02Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.6,
-          "unknown_reason": null
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "pwr.firm_capacity_nearby",
@@ -2776,13 +2376,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: gem_power_plants, wri_powerwatch, eia_860)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.air_permit",
@@ -2793,13 +2389,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: epa_nonattainment, state_air_agency, cpcb_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.basin_stress",
@@ -2810,13 +2402,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: wri_aqueduct_40, fao_aquastat)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.supply_availability",
@@ -2827,13 +2415,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: municipal_utility_reports, usgs_nwis, cgwb_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.air_quality",
@@ -2844,13 +2428,9 @@
           "weight": 3.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: openaq, cams_copernicus, cpcb_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.grid_cost_allocation",
@@ -2861,13 +2441,9 @@
           "weight": 3.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: puc_dockets, state_regulator_filings, local_news_search)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.brownfield_opportunity",
@@ -2878,13 +2454,9 @@
           "weight": 3.0,
           "tier": "C",
           "tier_weight": 0.6,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:23Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.6,
-          "unknown_reason": null
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "lnd.geotechnical",
@@ -2895,13 +2467,9 @@
           "weight": 3.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: soilgrids_isric, usgs_karst, insar_subsidence)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.wholesale_basis_risk",
@@ -2912,13 +2480,9 @@
           "weight": 3.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: ercot_lmp, pjm_dataminer, miso_lmp)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.renewable_procurement_depth",
@@ -2929,13 +2493,9 @@
           "weight": 3.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: lbnl_ppa_data, ember_climate, cleanenergybuyers)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.withdrawal_permitting",
@@ -2946,13 +2506,9 @@
           "weight": 3.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: state_water_authority, cgwb_india, provincial_water_cn)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.lightning",
@@ -2963,13 +2519,9 @@
           "weight": 2.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: nasa_lis_otd, vaisala_gld360)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.port_rail_access",
@@ -2980,13 +2532,9 @@
           "weight": 2.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "osm_overpass",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "all Overpass mirrors failed: ReadTimeout: The read operation timed out"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.heavy_haul_access",
@@ -2997,13 +2545,9 @@
           "weight": 2.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: osm_highways, state_dot_permits, bridge_inventory_nbi)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.nuclear_smr_adjacency",
@@ -3014,13 +2558,9 @@
           "weight": 2.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: gem_nuclear, iaea_pris, nrc_applications)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.reclaimed_availability",
@@ -3031,13 +2571,9 @@
           "weight": 2.0,
           "tier": "B",
           "tier_weight": 0.85,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:15Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.85,
-          "unknown_reason": null
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "wtr.discharge_permitting",
@@ -3048,13 +2584,9 @@
           "weight": 2.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: epa_npdes, state_environmental_agency, cpcb_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.flood_of_water_infrastructure",
@@ -3065,13 +2597,9 @@
           "weight": 2.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: wri_aqueduct_40, us_drought_monitor, imd_india)"
+          "evidence_weight": 0.0
         }
       ],
       "capped_by": "gate.compute_legally_deployable",
@@ -3104,13 +2632,9 @@
           "weight": 9.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: osm_telecom, carrier_route_maps, state_broadband_maps)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.substation_headroom",
@@ -3121,13 +2645,9 @@
           "weight": 9.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "osm_overpass",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "OSM does not publish substation capacity. Found 169 substation(s) within 40 km (43 at >=110 kV); nearest qualifying is Mahape at 2.54 km, 220.0 kV. Headroom must be obtained from the utility's IRP or transmission planning study."
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.flood_riverine",
@@ -3138,13 +2658,9 @@
           "weight": 8.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "fema_nfhl",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "outside FEMA NFHL coverage (non-US). Use JRC Global Flood Hazard Maps or WRI Aqueduct floods instead (Tier B, 90 m, coarser). Global flood datasets do not capture pluvial flash flooding."
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.longhaul_fiber_proximity",
@@ -3155,13 +2671,9 @@
           "weight": 8.0,
           "tier": "C",
           "tier_weight": 0.6,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:51Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.6,
-          "unknown_reason": null
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "cnx.carrier_count",
@@ -3172,13 +2684,9 @@
           "weight": 8.0,
           "tier": "B",
           "tier_weight": 0.85,
-          "source": "peeringdb",
-          "source_url": "https://www.peeringdb.com/",
-          "retrieved": "2026-09-03T05:18:24Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.85,
-          "unknown_reason": null
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "cnx.latency_to_demand",
@@ -3189,13 +2697,9 @@
           "weight": 8.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: ripe_atlas, cloudflare_radar, derived)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.total_cost_of_ownership",
@@ -3206,13 +2710,9 @@
           "weight": 8.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: derived)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.interconnect_queue_time",
@@ -3223,13 +2723,9 @@
           "weight": 8.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: iso_queue_pjm, iso_queue_ercot, iso_queue_miso)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.retail_power_price",
@@ -3240,13 +2736,9 @@
           "weight": 8.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: eia_861, eia_electricity_data, ceic_cn)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.flood_coastal",
@@ -3257,13 +2749,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: climate_central_coastal_dem, noaa_slr, wri_aqueduct_floods)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.ixp_proximity",
@@ -3274,13 +2762,9 @@
           "weight": 7.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "peeringdb",
-          "source_url": "https://www.peeringdb.com/fac/15540",
-          "retrieved": "2026-09-03T05:18:24Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "pwr.large_load_tariff",
@@ -3291,13 +2775,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: utility_tariff_filings, puc_dockets, state_regulator_cn)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.grid_reliability",
@@ -3308,13 +2788,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: eia_861_reliability, ceer_benchmarking, cea_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.permitting_timeline",
@@ -3325,13 +2801,9 @@
           "weight": 7.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: county_permit_records, state_env_agency, moef_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.dry_bulb_profile",
@@ -3342,13 +2814,9 @@
           "weight": 6.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "open_meteo_archive",
-          "source_url": "https://archive-api.open-meteo.com/v1/archive",
-          "retrieved": "2026-09-03T05:18:15Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "clm.seismic",
@@ -3359,13 +2827,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: gem_global_seismic, usgs_hazard, is1893_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.opposition_risk",
@@ -3376,13 +2840,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: local_news_search, county_meeting_minutes, change_org)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.equipment_lead_time",
@@ -3393,13 +2853,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: industry_lead_time_surveys, manufacturer_guidance, trade_press)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.zoning_status",
@@ -3410,13 +2866,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: county_zoning_gis, municipal_code, state_industrial_corp)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.transmission_proximity",
@@ -3427,13 +2879,9 @@
           "weight": 6.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:17:17Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "pwr.grid_carbon_intensity",
@@ -3444,13 +2892,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: electricity_maps, ember_climate, epa_egrid)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.environmental_review",
@@ -3461,13 +2905,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: nepa_ceq, state_env_agency, eia_notification_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.tax_incentives",
@@ -3478,13 +2918,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: state_statute, state_edc, state_dc_policy_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.data_sovereignty",
@@ -3495,13 +2931,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: national_data_law, gdpr_adequacy, dpdp_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.export_controls",
@@ -3512,13 +2944,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: bis_entity_list, us_ear_ai_rules, eu_dual_use)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.jurisdiction_stability",
@@ -3529,13 +2957,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: world_bank_wgi, oecd_country_risk, eiu_democracy_index)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.basin_stress",
@@ -3546,13 +2970,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: wri_aqueduct_40, fao_aquastat)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.supply_availability",
@@ -3563,13 +2983,9 @@
           "weight": 6.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: municipal_utility_reports, usgs_nwis, cgwb_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.wetbulb_profile",
@@ -3580,13 +2996,9 @@
           "weight": 6.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "open_meteo_archive",
-          "source_url": "https://archive-api.open-meteo.com/v1/archive",
-          "retrieved": "2026-09-03T05:18:04Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "clm.extreme_heat_trend",
@@ -3597,13 +3009,9 @@
           "weight": 5.0,
           "tier": "D",
           "tier_weight": 0.35,
-          "source": "open_meteo_archive",
-          "source_url": "https://archive-api.open-meteo.com/v1/archive",
-          "retrieved": "2026-09-03T05:18:15Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.35,
-          "unknown_reason": null
+          "evidence_weight": 0.35
         },
         {
           "factor_id": "clm.wind_hazard",
@@ -3614,13 +3022,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: gar_cyclone, noaa_storm_events, imd_cyclone)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.residential_proximity",
@@ -3631,13 +3035,9 @@
           "weight": 5.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:59Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "cnx.subsea_landing",
@@ -3648,13 +3048,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: telegeography_submarine_map, peeringdb)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.construction_labor",
@@ -3665,13 +3061,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: bls_oes, union_local_data, state_labor_dept)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.construction_cost_index",
@@ -3682,13 +3074,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: rsmeans_paid, turner_cost_index, national_construction_stats)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.operations_labor",
@@ -3699,13 +3087,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: bls_oes, census_acs, local_university_programs)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.contiguous_area",
@@ -3716,13 +3100,9 @@
           "weight": 5.0,
           "tier": "C",
           "tier_weight": 0.6,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:22Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.6,
-          "unknown_reason": null
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "lnd.brownfield_opportunity",
@@ -3733,13 +3113,9 @@
           "weight": 5.0,
           "tier": "C",
           "tier_weight": 0.6,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:23Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.6,
-          "unknown_reason": null
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "pwr.wholesale_basis_risk",
@@ -3750,13 +3126,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: ercot_lmp, pjm_dataminer, miso_lmp)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.onsite_generation_potential",
@@ -3767,13 +3139,9 @@
           "weight": 5.0,
           "tier": "C",
           "tier_weight": 0.6,
-          "source": "composite",
-          "source_url": null,
-          "retrieved": "2026-09-03T05:18:02Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.6,
-          "unknown_reason": null
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "pwr.firm_capacity_nearby",
@@ -3784,13 +3152,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: gem_power_plants, wri_powerwatch, eia_860)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.air_permit",
@@ -3801,13 +3165,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: epa_nonattainment, state_air_agency, cpcb_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.withdrawal_permitting",
@@ -3818,13 +3178,9 @@
           "weight": 5.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: state_water_authority, cgwb_india, provincial_water_cn)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.wildfire",
@@ -3835,13 +3191,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: usfs_whp, global_fire_atlas, modis_burned_area)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.air_quality",
@@ -3852,13 +3204,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: openaq, cams_copernicus, cpcb_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.economic_alignment",
@@ -3869,13 +3217,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: bls_local_unemployment, county_edc_priorities, census_acs)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.grid_cost_allocation",
@@ -3886,13 +3230,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: puc_dockets, state_regulator_filings, local_news_search)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.price",
@@ -3903,13 +3243,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: county_assessor, costar_paid, reonomy_paid)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.protected_overlap",
@@ -3920,13 +3256,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: wdpa_protected_planet, ramsar, nwi_wetlands)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.renewable_procurement_depth",
@@ -3937,13 +3269,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: lbnl_ppa_data, ember_climate, cleanenergybuyers)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.reclaimed_availability",
@@ -3954,13 +3282,9 @@
           "weight": 4.0,
           "tier": "B",
           "tier_weight": 0.85,
-          "source": "osm_overpass",
-          "source_url": "https://www.openstreetmap.org/copyright",
-          "retrieved": "2026-09-03T05:18:15Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 0.85,
-          "unknown_reason": null
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "wtr.discharge_permitting",
@@ -3971,13 +3295,9 @@
           "weight": 4.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: epa_npdes, state_environmental_agency, cpcb_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.port_rail_access",
@@ -3988,13 +3308,9 @@
           "weight": 3.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "osm_overpass",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "all Overpass mirrors failed: ReadTimeout: The read operation timed out"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.slope",
@@ -4005,13 +3321,9 @@
           "weight": 3.0,
           "tier": "A",
           "tier_weight": 1.0,
-          "source": "opentopography",
-          "source_url": "https://www.opentopodata.org/datasets/copernicus/",
-          "retrieved": "2026-09-03T05:18:16Z",
           "age_days": 1.1,
           "freshness": "fresh",
-          "evidence_weight": 1.0,
-          "unknown_reason": null
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "lnd.geotechnical",
@@ -4022,13 +3334,9 @@
           "weight": 3.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: soilgrids_isric, usgs_karst, insar_subsidence)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.heavy_haul_access",
@@ -4039,13 +3347,9 @@
           "weight": 3.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: osm_highways, state_dot_permits, bridge_inventory_nbi)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.nuclear_smr_adjacency",
@@ -4056,13 +3360,9 @@
           "weight": 3.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: gem_nuclear, iaea_pris, nrc_applications)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.flood_of_water_infrastructure",
@@ -4073,13 +3373,9 @@
           "weight": 3.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: wri_aqueduct_40, us_drought_monitor, imd_india)"
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.lightning",
@@ -4090,13 +3386,9 @@
           "weight": 2.0,
           "tier": "unknown",
           "tier_weight": 0.0,
-          "source": "none",
-          "source_url": null,
-          "retrieved": null,
           "age_days": null,
           "freshness": "undated",
-          "evidence_weight": 0.0,
-          "unknown_reason": "no adapter implemented; Tier C research required (sources: nasa_lis_otd, vaisala_gld360)"
+          "evidence_weight": 0.0
         }
       ],
       "capped_by": null,

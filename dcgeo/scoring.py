@@ -119,13 +119,9 @@ def score_profile(
                 weight=weight,
                 tier=tier,
                 tier_weight=_tier_weight(tier),
-                source=m.source if m else None,
-                source_url=m.source_url if m else None,
-                retrieved=m.retrieved if m and m.is_known else None,
                 age_days=None if age is None else round(age, 1),
                 freshness=fresh,
                 evidence_weight=round(ew, 3),
-                unknown_reason=(m.unknown_reason if m and not m.is_known else None),
             )
         )
 
