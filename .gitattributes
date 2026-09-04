@@ -1,0 +1,8 @@
+# Generated artifacts. Committed because the published site is built from them and
+# because a run must be reproducible from the repo alone — but they are machine
+# output, not code, and collapsing them keeps a review focused on the diff that
+# somebody actually has to read.
+runs/*/analysis.json   linguist-generated=true -diff
+runs/*/report.md       linguist-generated=true
+site/data/sites.json   linguist-generated=true -diff
+uv.lock                linguist-generated=true -diff

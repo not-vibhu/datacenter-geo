@@ -21,6 +21,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from dcgeo.cli import _load  # noqa: E402
+from dcgeo.diligence import briefs  # noqa: E402
 from dcgeo.registry import load_factors, load_profiles, load_sources  # noqa: E402
 
 OUT = ROOT / "site" / "data"
@@ -149,7 +151,9 @@ def build() -> dict:
                 "notes": m.get("notes"),
             })
 
-        dil = d.get("diligence", {})
+        # Briefs are derived, not stored — recompute them here so the published
+        # page can never show a decision the current code would not reach.
+        dil = {k: v.to_dict() for k, v in briefs(_load(run_dir.name)).items()}
         sites.append({
             "run_id": d["run_id"],
             "created": d["created"],

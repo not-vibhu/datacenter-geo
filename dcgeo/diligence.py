@@ -16,6 +16,11 @@ Everything here is arithmetic over the evidence ledger. No estimates enter, and
 no number appears that was not either measured or derived from measurements by
 code in this file. Where the system cannot answer, the brief says so in the
 `decision` field rather than degrading to a confident-sounding score.
+
+Briefs are computed on demand rather than stored. They are a pure function of the
+ledger, so a persisted copy would go stale the moment a gate or weight changed
+while still looking authoritative. `runs/<id>/report.md` is the point-in-time
+record; this module is how it gets written.
 """
 from __future__ import annotations
 
@@ -699,8 +704,13 @@ def build_brief(analysis: Analysis, profile: str) -> DiligenceBrief:
     )
 
 
-def attach(analysis: Analysis) -> None:
-    """Compute and store a brief for every scored profile. Called after gating."""
-    analysis.diligence = {
-        p: build_brief(analysis, p).to_dict() for p in analysis.profiles
-    }
+def briefs(analysis: Analysis) -> dict[str, DiligenceBrief]:
+    """A brief per scored profile.
+
+    Deliberately not persisted into analysis.json. The brief is derived entirely
+    from the ledger, so storing it would create a second copy that goes stale the
+    moment the gates, weights or thresholds change — and a stale decision that
+    looks authoritative is worse than one that has to be recomputed. The
+    point-in-time record is `report.md`, which is written per run and committed.
+    """
+    return {p: build_brief(analysis, p) for p in analysis.profiles}

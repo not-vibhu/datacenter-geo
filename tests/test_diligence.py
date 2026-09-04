@@ -168,12 +168,18 @@ def test_queue_items_are_actionable():
         assert v.points_at_risk > 0
 
 
-def test_brief_serializes_and_attaches_per_profile():
+def test_briefs_cover_every_scored_profile_and_serialize():
     a = _scored([_m("pwr.transmission_proximity", 1.0)])
     a.profiles["inference_edge"] = score_profile(a, "inference_edge")
-    diligence.attach(a)
-    assert set(a.diligence) == {PROFILE, "inference_edge"}
-    assert a.to_dict()["diligence"][PROFILE]["decision"] == diligence.NOT_PROVEN
+    bs = diligence.briefs(a)
+    assert set(bs) == {PROFILE, "inference_edge"}
+    assert bs[PROFILE].to_dict()["decision"] == diligence.NOT_PROVEN
+
+
+def test_the_brief_is_not_persisted_into_the_evidence_ledger():
+    """Derived output in the ledger would go stale while still looking authoritative."""
+    a = _scored([_m("pwr.transmission_proximity", 1.0)])
+    assert "diligence" not in a.to_dict()
 
 
 # ── comparison ───────────────────────────────────────────────────────────────

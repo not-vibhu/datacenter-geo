@@ -223,10 +223,6 @@ class Analysis:
     profiles: dict[str, ProfileScore] = field(default_factory=dict)
     red_team: list[str] = field(default_factory=list)
     recommendations: list[Recommendation] = field(default_factory=list)
-    # Decision briefs, keyed by profile. Computed by dcgeo.diligence at the end of
-    # every scoring pass and persisted so the answer is auditable next year, not
-    # only reproducible by re-running the code that produced it.
-    diligence: dict[str, Any] = field(default_factory=dict)
 
     def measurement_map(self) -> dict[str, Measurement]:
         """Latest measurement per factor, preferring the best tier then most recent."""
@@ -253,7 +249,6 @@ class Analysis:
             "profiles": {k: v.to_dict() for k, v in self.profiles.items()},
             "red_team": self.red_team,
             "recommendations": [r.to_dict() for r in self.recommendations],
-            "diligence": self.diligence,
         }
 
     def to_json(self, indent: int = 2) -> str:

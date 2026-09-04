@@ -191,8 +191,8 @@ Every scored factor, its measured value, and the tier of evidence behind it. A h
 |---|---|---|---|---|---|---|---|
 | Substation available capacity <br>`pwr.substation_headroom` | — | MVA | — | 10 | — (unmeasured) | — | — |
 | Interconnection queue time to energization <br>`pwr.interconnect_queue_time` | — | years | — | 10 | — (unmeasured) | — | — |
-| Contiguous developable area <br>`lnd.contiguous_area` | 1256.6 | hectares | 100 | 9 | C (researched) | `osm_overpass` | 2026-09-03 (0d) |
-| Transmission line proximity <br>`pwr.transmission_proximity` | 5.34 | km | 84 | 9 | A (machine API) | `osm_overpass` | 2026-09-03 (0d) |
+| Contiguous developable area <br>`lnd.contiguous_area` | 1256.6 | hectares | 100 | 9 | C (researched) | `osm_overpass` | 2026-09-03 (1d) |
+| Transmission line proximity <br>`pwr.transmission_proximity` | 5.34 | km | 84 | 9 | A (machine API) | `osm_overpass` | 2026-09-03 (1d) |
 | Industrial retail power price <br>`pwr.retail_power_price` | — | USD/MWh | — | 9 | — (unmeasured) | — | — |
 | Accelerator export control exposure <br>`reg.export_controls` | — | category | — | 9 | — (unmeasured) | — | — |
 | Riverine and pluvial flood exposure <br>`clm.flood_riverine` | — | return_period_years | — | 8 | — (unmeasured) | — | — |
@@ -200,12 +200,12 @@ Every scored factor, its measured value, and the tier of evidence behind it. A h
 | Modeled 10-year TCO <br>`eco.total_cost_of_ownership` | — | USD_per_kW_year | — | 8 | — (unmeasured) | — | — |
 | Zoning and entitlement status <br>`lnd.zoning_status` | — | category | — | 8 | — (unmeasured) | — | — |
 | Large-load tariff availability <br>`pwr.large_load_tariff` | — | category | — | 8 | — (unmeasured) | — | — |
-| On-site generation potential <br>`pwr.onsite_generation_potential` | 59.1 | index_0_100 | 59 | 8 | C (researched) | `composite` | 2026-09-03 (0d) |
+| On-site generation potential <br>`pwr.onsite_generation_potential` | 59.1 | index_0_100 | 59 | 8 | C (researched) | `composite` | 2026-09-03 (1d) |
 | Permitting timeline <br>`reg.permitting_timeline` | — | months | — | 8 | — (unmeasured) | — | — |
 | Baseline water stress <br>`wtr.basin_stress` | — | ratio | — | 8 | — (unmeasured) | — | — |
-| Dry-bulb temperature profile and free-cooling hours <br>`clm.dry_bulb_profile` | 1497.9 | free_cooling_hours_per_year | 22 | 7 | A (machine API) | `open_meteo_archive` | 2026-09-03 (0d) |
-| Residential proximity and noise exposure <br>`com.residential_proximity` | 214 | dwellings_within_1km | 54 | 7 | A (machine API) | `osm_overpass` | 2026-09-03 (0d) |
-| Long-haul fiber proximity <br>`cnx.longhaul_fiber_proximity` | 26.91 | km | 42 | 7 | C (researched) | `osm_overpass` | 2026-09-03 (0d) |
+| Dry-bulb temperature profile and free-cooling hours <br>`clm.dry_bulb_profile` | 1497.9 | free_cooling_hours_per_year | 22 | 7 | A (machine API) | `open_meteo_archive` | 2026-09-03 (1d) |
+| Residential proximity and noise exposure <br>`com.residential_proximity` | 214 | dwellings_within_1km | 54 | 7 | A (machine API) | `osm_overpass` | 2026-09-03 (1d) |
+| Long-haul fiber proximity <br>`cnx.longhaul_fiber_proximity` | 26.91 | km | 42 | 7 | C (researched) | `osm_overpass` | 2026-09-03 (1d) |
 | Construction labor availability <br>`eco.construction_labor` | — | index_0_100 | — | 7 | — (unmeasured) | — | — |
 | Critical equipment lead time <br>`eco.equipment_lead_time` | — | months | — | 7 | — (unmeasured) | — | — |
 | Grid carbon intensity <br>`pwr.grid_carbon_intensity` | — | gCO2e/kWh | — | 7 | — (unmeasured) | — | — |
@@ -213,21 +213,21 @@ Every scored factor, its measured value, and the tier of evidence behind it. A h
 | Tax incentive package <br>`reg.tax_incentives` | — | index_0_100 | — | 7 | — (unmeasured) | — | — |
 | Physical water supply availability <br>`wtr.supply_availability` | — | m3_per_day | — | 7 | — (unmeasured) | — | — |
 | Water rights and withdrawal permitting <br>`wtr.withdrawal_permitting` | — | category | — | 7 | — (unmeasured) | — | — |
-| Wet-bulb temperature profile <br>`wtr.wetbulb_profile` | 4319.7 | hours_above_24C_wetbulb | 0 | 7 | A (machine API) | `open_meteo_archive` | 2026-09-03 (0d) |
+| Wet-bulb temperature profile <br>`wtr.wetbulb_profile` | 4319.7 | hours_above_24C_wetbulb | 0 | 7 | A (machine API) | `open_meteo_archive` | 2026-09-03 (1d) |
 | Coastal flood and sea level rise exposure <br>`clm.flood_coastal` | — | m_freeboard_2050 | — | 6 | — (unmeasured) | — | — |
 | Ratepayer cost allocation sensitivity <br>`com.grid_cost_allocation` | — | category | — | 6 | — (unmeasured) | — | — |
 | Physical path diversity <br>`cnx.path_diversity` | — | count_distinct_paths | — | 6 | — (unmeasured) | — | — |
-| Terrain slope <br>`lnd.slope` | 0.49 | percent_slope | 99 | 6 | A (machine API) | `opentopography` | 2026-09-03 (0d) |
+| Terrain slope <br>`lnd.slope` | 0.49 | percent_slope | 99 | 6 | A (machine API) | `opentopography` | 2026-09-03 (1d) |
 | Protected area and habitat overlap <br>`lnd.protected_overlap` | — | percent_overlap | — | 6 | — (unmeasured) | — | — |
-| Brownfield and retired-asset opportunity <br>`lnd.brownfield_opportunity` | light_industrial_reuse | category | 60 | 6 | C (researched) | `osm_overpass` | 2026-09-03 (0d) |
+| Brownfield and retired-asset opportunity <br>`lnd.brownfield_opportunity` | light_industrial_reuse | category | 60 | 6 | C (researched) | `osm_overpass` | 2026-09-03 (1d) |
 | Nodal congestion and basis volatility <br>`pwr.wholesale_basis_risk` | — | USD/MWh_stddev | — | 6 | — (unmeasured) | — | — |
 | Grid reliability <br>`pwr.grid_reliability` | — | SAIDI_minutes_per_year | — | 6 | — (unmeasured) | — | — |
 | Dispatchable generation within 50 km <br>`pwr.firm_capacity_nearby` | — | MW | — | 6 | — (unmeasured) | — | — |
 | Clean power procurement market depth <br>`pwr.renewable_procurement_depth` | — | index_0_100 | — | 6 | — (unmeasured) | — | — |
 | Generator air permitting <br>`reg.air_permit` | — | category | — | 6 | — (unmeasured) | — | — |
 | Jurisdictional and political stability <br>`reg.jurisdiction_stability` | — | index_0_100 | — | 6 | — (unmeasured) | — | — |
-| Reclaimed water availability <br>`wtr.reclaimed_availability` | 0.51 | km_to_wwtp | 98 | 6 | B (bulk/structured) | `osm_overpass` | 2026-09-03 (0d) |
-| Extreme heat trend to 2050 <br>`clm.extreme_heat_trend` | 3.37 | delta_C_design_day_2050 | 22 | 5 | D (modeled) | `open_meteo_archive` | 2026-09-03 (0d) |
+| Reclaimed water availability <br>`wtr.reclaimed_availability` | 0.51 | km_to_wwtp | 98 | 6 | B (bulk/structured) | `osm_overpass` | 2026-09-03 (1d) |
+| Extreme heat trend to 2050 <br>`clm.extreme_heat_trend` | 3.37 | delta_C_design_day_2050 | 22 | 5 | D (modeled) | `open_meteo_archive` | 2026-09-03 (1d) |
 | Seismic hazard <br>`clm.seismic` | — | g_pga_475yr | — | 5 | — (unmeasured) | — | — |
 | Local economic alignment <br>`com.economic_alignment` | — | index_0_100 | — | 5 | — (unmeasured) | — | — |
 | Construction cost index <br>`eco.construction_cost_index` | — | index_100_baseline | — | 5 | — (unmeasured) | — | — |
@@ -239,12 +239,12 @@ Every scored factor, its measured value, and the tier of evidence behind it. A h
 | Extreme wind, cyclone and tornado hazard <br>`clm.wind_hazard` | — | design_wind_speed_ms | — | 4 | — (unmeasured) | — | — |
 | Wildfire exposure <br>`clm.wildfire` | — | index_0_100 | — | 4 | — (unmeasured) | — | — |
 | Ambient air quality <br>`clm.air_quality` | — | pm25_annual_ugm3 | — | 4 | — (unmeasured) | — | — |
-| Carrier availability <br>`cnx.carrier_count` | 60 | count_carriers | 100 | 4 | B (bulk/structured) | `peeringdb` | 2026-09-03 (0d) |
+| Carrier availability <br>`cnx.carrier_count` | 60 | count_carriers | 100 | 4 | B (bulk/structured) | `peeringdb` | 2026-09-03 (1d) |
 | Port and rail access <br>`eco.port_rail_access` | — | km_to_capable_port_or_rail | — | 4 | — (unmeasured) | — | — |
 | Operations talent pool <br>`eco.operations_labor` | — | index_0_100 | — | 4 | — (unmeasured) | — | — |
 | Geotechnical suitability <br>`lnd.geotechnical` | — | index_0_100 | — | 4 | — (unmeasured) | — | — |
 | Water infrastructure resilience <br>`wtr.flood_of_water_infrastructure` | — | index_0_100 | — | 4 | — (unmeasured) | — | — |
-| Internet exchange and cloud on-ramp proximity <br>`cnx.ixp_proximity` | 2.15 | km | 99 | 3 | A (machine API) | `peeringdb` | 2026-09-03 (0d) |
+| Internet exchange and cloud on-ramp proximity <br>`cnx.ixp_proximity` | 2.15 | km | 99 | 3 | A (machine API) | `peeringdb` | 2026-09-03 (1d) |
 | Lightning density <br>`clm.lightning` | — | flashes_per_km2_per_year | — | 2 | — (unmeasured) | — | — |
 | Latency to demand centers <br>`cnx.latency_to_demand` | — | ms_rtt_p50 | — | 2 | — (unmeasured) | — | — |
 | Subsea cable landing proximity <br>`cnx.subsea_landing` | — | km | — | 2 | — (unmeasured) | — | — |

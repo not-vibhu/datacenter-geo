@@ -268,9 +268,6 @@ def _finish(analysis: Analysis, profs: list[str]) -> None:
             seen.setdefault(g.gate_id, g)
     analysis.gates = list(seen.values())          # type: ignore[arg-type]
     apply_gates_to_scores(analysis)
-    # The brief runs last because it reads the gated scores. It is persisted so the
-    # decision is auditable from the run directory alone, without re-running code.
-    diligence.attach(analysis)
 
     d = _save(analysis)
     t = Table(title=f"{analysis.run_id} — {analysis.site.name[:60]}")
@@ -294,13 +291,14 @@ def _finish(analysis: Analysis, profs: list[str]) -> None:
             colour = "red" if g.outcome == "FAIL" else "yellow"
             console.print(f"  [{colour}]{g.outcome}[/{colour}] {g.name}: {g.reason[:150]}")
 
-    lead = analysis.diligence.get(profs[0], {})
-    if lead:
-        console.print(f"\n[bold]{lead['decision']}[/bold] — {lead['headline'][:220]}")
-        top = lead.get("verification_queue", [])[:3]
-        if top:
-            console.print("  verify next: " + ", ".join(v["factor_id"] for v in top)
-                          + f"   [dim](dcgeo brief {analysis.run_id})[/dim]")
+    # The brief is derived, not stored: it reads the gated scores and is recomputed
+    # wherever it is shown, so it can never drift from the code that produces it.
+    lead = diligence.build_brief(analysis, profs[0])
+    console.print(f"\n[bold]{lead.decision}[/bold] — {lead.headline[:220]}")
+    if lead.verification_queue:
+        console.print("  verify next: "
+                      + ", ".join(v.factor_id for v in lead.verification_queue[:3])
+                      + f"   [dim](dcgeo brief {analysis.run_id})[/dim]")
     console.print(f"\nwritten to [bold]{d}[/bold]")
 
 
