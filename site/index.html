@@ -3,161 +3,192 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>datacenter-geo — can this land host an AI data center?</title>
-<meta name="description" content="An open-source agent harness that scores land for AI data center suitability across 59 factors, with every number carrying the evidence tier it was measured at.">
+<title>datacenter-geo — can this site support a profitable data center?</title>
+<meta name="description" content="An evidence-backed diligence system for AI data center siting. Every datapoint carries its source, its timestamp and its confidence; every unknown is named, priced in score points, and routed to the counterparty who can close it.">
 <meta property="og:title" content="datacenter-geo">
-<meta property="og:description" content="Scoring land for AI data centers across 59 factors — where every number says how well it is known.">
+<meta property="og:description" content="Can this site support a profitable data center, and what must be verified next?">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛰️</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
+<a class="skip" href="#console">Skip to the console</a>
 
 <nav>
-  <div class="inner">
+  <div class="ninner">
     <span class="brand">datacenter-geo</span>
-    <div class="links">
-      <a href="#sites">Sites</a>
-      <a href="#climate">Climate finding</a>
-      <a href="#evidence">Evidence</a>
-      <a href="#limits">Limits</a>
-      <a href="https://github.com/not-vibhu/datacenter-geo">GitHub</a>
+    <span class="tag">evidence-backed siting diligence</span>
+    <div class="nlinks">
+      <a href="#method">How it decides</a>
+      <a href="#limits">What it can't do</a>
+      <a href="https://github.com/not-vibhu/datacenter-geo" rel="noopener">GitHub</a>
     </div>
   </div>
 </nav>
 
 <header class="hero">
   <div class="wrap">
-    <div class="eyebrow">
-      <span>Open source · Apache-2.0</span><span>59 factors · 8 domains</span>
-      <span id="hero-src">69 data sources</span>
-    </div>
-    <h1>Can this land host<span class="sub">an AI data center?</span></h1>
-    <p class="thesis">An agent harness that evaluates a place on Earth across power, water,
-      climate, land, connectivity, regulation, community and supply chain — and reports how
-      well it actually knows each answer.</p>
-
-    <div class="plain">
-      <p><strong>In plain terms:</strong> picking where to build an AI data center normally takes
-        a six-month consulting engagement. Most of the information needed is public, but it is
-        scattered across grid queues, county planning portals, satellite data and local news in
-        a hundred incompatible formats.</p>
-      <p>This project gathers it automatically and scores a location. The unusual part is that
-        it labels every single number with how it was obtained — measured from a live scientific
-        API, read off a government file, researched from news reports, or estimated. A confident
-        score built on guesses is worse than no score, so the system refuses to hide the
-        difference.</p>
-    </div>
-
-    <dl class="stats" id="stats"></dl>
+    <h1>Can this site support a profitable data center<span class="sub">— and what must be verified next?</span></h1>
+    <p class="thesis">Most siting tools answer with a score. This one answers with a
+      decision, the evidence behind it, and the specific open questions that would
+      change it — each priced in score points and addressed to the counterparty who
+      can close it. When the evidence does not support a decision, it says
+      <strong>not proven</strong> rather than producing a number.</p>
   </div>
 </header>
 
-<main id="main" class="wrap">
-
-  <section id="sites">
-    <div class="shead"><span class="idx">01</span><h2>Sites analyzed</h2></div>
-    <p class="lede">Seven locations across the United States, China and India — chosen because
-      they are mostly <em>known</em> outcomes. If the model cannot recognize sites that were
-      actually built, it is not measuring anything real.</p>
-
-    <div class="mapgrid">
-      <div id="map" role="application" aria-label="Map of analyzed sites"></div>
-      <div class="sitelist" id="sitelist" role="list" aria-label="Analyzed sites"></div>
+<!-- ── the console ─────────────────────────────────────────────────────── -->
+<section id="console" class="console">
+  <div class="ctrl">
+    <div class="ctrl-l">
+      <div class="segmented" id="profile-seg" role="tablist" aria-label="Use-case profile"></div>
+      <p class="profile-note" id="profile-note"></p>
     </div>
-    <div class="detail" id="detail" aria-live="polite"></div>
-  </section>
-
-  <section id="climate">
-    <div class="shead"><span class="idx">02</span><h2>The clearest result: cooling climate</h2></div>
-    <p class="lede">Wet-bulb temperature — not ordinary temperature — decides how hard a data
-      center is to cool. It is one of the few things this system can measure precisely
-      <em>anywhere on Earth</em>, from public weather reanalysis, with no API key.</p>
-
-    <div class="chart" id="chart"></div>
-
-    <div class="note" style="margin-top:22px">
-      <p><strong>Why this matters, and why intuition fails here.</strong> Abilene, Texas is
-        5.2&nbsp;°C hotter than Ashburn, Virginia on a design summer day. Yet Abilene's design
-        <em>wet-bulb</em> is cooler, and it spends less than half as many hours above the
-        threshold where evaporative cooling stops working well. West Texas is the better cooling
-        climate. "Hotter is worse" gets it backwards, because dry heat sheds easily and humid
-        heat does not.</p>
-      <p>Ulanqab in Inner Mongolia records <strong>zero</strong> hours above that threshold
-        across a decade of hourly data. China designated it a national computing hub, and this
-        harness surfaced the reason from open data alone — it was told nothing about the
-        designation.</p>
+    <div class="ctrl-r">
+      <button class="ghost" id="compare-btn" aria-pressed="false">Compare sites</button>
     </div>
-  </section>
+  </div>
 
-  <section id="evidence">
-    <div class="shead"><span class="idx">03</span><h2>Every number says how well it is known</h2></div>
-    <p class="lede">This is the core idea. A score of 82 built on satellite measurements is a
-      different asset from a score of 82 built on news articles, and most tools present them
-      identically.</p>
+  <div class="split">
+    <!-- map column -->
+    <div class="mapcol">
+      <div id="map" role="application" aria-label="Analyzed sites and area selection"></div>
 
+      <div class="maptools" role="toolbar" aria-label="Map tools">
+        <button data-draw="rect" title="Draw a rectangle (drag)" aria-label="Draw rectangle">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3.5" y="5.5" width="13" height="9" rx="1"/></svg>
+        </button>
+        <button data-draw="poly" title="Draw a polygon (click points, double-click to close)" aria-label="Draw polygon">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.5 17 8.5 14.5 16.5 5.5 16.5 3 8.5Z"/></svg>
+        </button>
+        <button data-draw="circle" title="Draw a radius (drag from centre)" aria-label="Draw radius">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/></svg>
+        </button>
+        <span class="tsep"></span>
+        <button data-draw="clear" title="Clear the drawn area" aria-label="Clear area">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5 15 15M15 5 5 15"/></svg>
+        </button>
+      </div>
+
+      <div class="maphint" id="maphint" hidden></div>
+
+      <div class="sitebar" id="sitebar" role="list" aria-label="Analyzed sites"></div>
+
+      <!-- appears only after an area is drawn -->
+      <div class="aoi" id="aoi" hidden></div>
+    </div>
+
+    <!-- decision column -->
+    <div class="panel" id="panel" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ── method ──────────────────────────────────────────────────────────── -->
+<main class="wrap">
+
+<section id="method">
+  <div class="shead"><span class="idx">01</span><h2>How it decides</h2></div>
+  <p class="lede">Four steps, in order, none of which is a judgement call. The
+    arithmetic is deterministic and lives in Python; the research is done by agents
+    that are forbidden from stating a number they did not measure or cite.</p>
+
+  <ol class="steps">
+    <li><h4>Measure, and record what could not be measured</h4>
+      <p>Adapters call public APIs and parse published datasets. Every result is
+        stored with its source, its retrieval timestamp and its evidence tier. A
+        failure is not dropped — it is written down as an unknown with a reason,
+        because an unknown that lowers confidence is useful and an unknown that
+        silently becomes an average is dangerous.</p></li>
+    <li><h4>Gate before scoring</h4>
+      <p>Deal-killers are categorical, and a weighted average will happily average
+        them away. Eight knockout checks run first. A gate whose input is missing
+        does not quietly pass — it is reported as <em>undecidable</em>, which is a
+        different and more honest state than <em>satisfied</em>.</p></li>
+    <li><h4>Score, then discount for age and for tier</h4>
+      <p>Confidence is the tier weight of every measurement discounted by how far
+        past its source's refresh window it is, weighted by how much the factor
+        matters. Low confidence widens the ± band. A domain with nothing measured
+        drops out of the score entirely, and the page says so rather than letting
+        the mean quietly cover a smaller model.</p></li>
+    <li><h4>Ask what would change the answer</h4>
+      <p>Each factor is re-scored at its best and worst plausible resolution, one at
+        a time, through the same scorer. Anything that moves the result across a
+        verdict threshold on its own is a factor that has not yet been decided by
+        evidence — and it goes to the top of the verification queue.</p></li>
+  </ol>
+
+  <div class="tiergrid">
+    <div class="tierhead">
+      <h3>Every number says how well it is known</h3>
+      <p>A score of 82 built on satellite measurements is a different asset from a
+        score of 82 built on news articles. Most tools present them identically.</p>
+    </div>
     <div class="ladder" id="ladder" role="img" aria-label="Distribution of evidence tiers across all measurements"></div>
-    <div class="tierdefs">
-      <div><span class="tstamp"><i class="swatch" style="background:var(--tA)"></i>Tier A</span>
-        <p>A live scientific API returned the number. Reproducible today and next year.</p></div>
-      <div><span class="tstamp"><i class="swatch" style="background:var(--tB)"></i>Tier B</span>
-        <p>An official published dataset or government file was parsed.</p></div>
-      <div><span class="tstamp"><i class="swatch" style="background:var(--tC)"></i>Tier C</span>
-        <p>Researched on the web and synthesized, with links. Real evidence, weaker footing.</p></div>
-      <div><span class="tstamp"><i class="swatch" style="background:var(--tD)"></i>Tier D</span>
-        <p>Modeled, estimated, or supplied as an assumption. Labeled loudly as such.</p></div>
-      <div><span class="tstamp"><i class="swatch" style="background:var(--tU)"></i>Unknown</span>
-        <p>Could not be measured. Recorded with a reason — never quietly filled with an average.</p></div>
-    </div>
+    <dl class="tierdefs">
+      <div><dt><i class="swatch" style="background:var(--tA)"></i>Tier A</dt>
+        <dd>A live scientific API returned the number. Reproducible today and next year.</dd></div>
+      <div><dt><i class="swatch" style="background:var(--tB)"></i>Tier B</dt>
+        <dd>An official published dataset or government file was parsed.</dd></div>
+      <div><dt><i class="swatch" style="background:var(--tC)"></i>Tier C</dt>
+        <dd>Researched on the web and synthesized, with links. Real evidence, weaker footing.</dd></div>
+      <div><dt><i class="swatch" style="background:var(--tD)"></i>Tier D</dt>
+        <dd>Modeled, estimated, or supplied as an assumption. Labeled loudly as such.</dd></div>
+      <div><dt><i class="swatch" style="background:var(--tU)"></i>Unknown</dt>
+        <dd>Could not be measured. Recorded with a reason — never quietly averaged in.</dd></div>
+    </dl>
+  </div>
 
-    <div class="note" style="margin-top:22px">
-      <p><strong>Most of the picture is still missing, and the site says so.</strong> Across
-        these seven analyses, <span id="cov-line">most factors are unmeasured</span>. That is
-        not a bug being hidden — it is the reason every score carries a
-        <strong>± band</strong>. Two sites whose bands overlap are reported as
-        <em>not separable</em> rather than ranked, because ranking them would be a fiction.</p>
-    </div>
-  </section>
+  <div class="note">
+    <p><strong>Most of the picture is still missing, and every page says so.</strong>
+      Across these analyses, <span id="cov-line">most factors are unmeasured</span>.
+      That is why every score carries a ± band, why the decision on all seven sites is
+      currently <em>not proven</em>, and why two sites whose bands overlap are reported
+      as <em>not separable</em> rather than ranked.</p>
+  </div>
+</section>
 
-  <section id="limits">
-    <div class="shead"><span class="idx">04</span><h2>What this cannot do</h2></div>
-    <p class="lede">Stated plainly, because a tool that oversells itself gets trusted once.</p>
-    <div class="caveat">
-      <div><h4>It is not due diligence</h4>
-        <p>It tells you which twenty sites out of two thousand deserve a real investigation, and
-          what to ask when you get there. It does not replace the investigation.</p></div>
-      <div><h4>It cannot predict a utility or a county board</h4>
-        <p>It reports published queue data and historical timelines. Whether a utility will
-          agree to serve 500&nbsp;MW is a negotiation, not a measurement.</p></div>
-      <div><h4>Land ownership is largely invisible</h4>
-        <p>Cadastral data is openly published in about a dozen countries. Elsewhere the system
-          resolves to administrative boundaries and says so rather than inventing parcels.</p></div>
-      <div><h4>Coverage is uneven by design</h4>
-        <p>Climate and terrain are strong everywhere. Grid capacity, land price and local
-          politics are weak nearly everywhere. The tiers make that visible per factor.</p></div>
-      <div><h4>Fiber route data is genuinely poor</h4>
-        <p>Carriers treat routes as confidential. Long-haul proximity is often inferred from
-          rights-of-way and marked as an inference.</p></div>
-      <div><h4>A paired control did not separate</h4>
-        <p>Two sites in one county — one approved, one rejected — diverge sharply on the
-          community domain but overlap on total score. The tool declines to rank them. That is
-          the design working in the case where it costs us the satisfying answer.</p></div>
-    </div>
-  </section>
+<section id="limits">
+  <div class="shead"><span class="idx">02</span><h2>What this cannot do</h2></div>
+  <p class="lede">Stated plainly, because a tool that oversells itself gets trusted once.</p>
+  <div class="caveat">
+    <div><h4>It is not due diligence</h4>
+      <p>It tells you which twenty sites out of two thousand deserve a real
+        investigation, and what to ask when you get there. The verification queue is
+        the handoff, not the answer.</p></div>
+    <div><h4>It cannot price a deal</h4>
+      <p>Profitability needs the tariff, the land price and the incentive package.
+        Where those are unmeasured the system refuses the profitability question
+        outright instead of implying it from the score.</p></div>
+    <div><h4>It cannot predict a utility or a county board</h4>
+      <p>It reports published queue data and historical timelines. Whether a utility
+        will agree to serve 500&nbsp;MW is a negotiation, not a measurement.</p></div>
+    <div><h4>Land ownership is largely invisible</h4>
+      <p>Cadastral data is openly published in about a dozen countries. Elsewhere the
+        system resolves to administrative boundaries and says so rather than
+        inventing parcels.</p></div>
+    <div><h4>Coverage is uneven by design</h4>
+      <p>Climate and terrain are strong everywhere. Grid capacity, land price and
+        local politics are weak nearly everywhere. The tiers make that visible per
+        factor rather than averaging it into a single number.</p></div>
+    <div><h4>Drawing an area does not analyze it</h4>
+      <p>The map computes geometry in your browser and hands you a command. Running
+        it calls live data sources, which costs somebody rate limit — so it happens
+        on your machine or in a tracked request, never silently from this page.</p></div>
+  </div>
+</section>
 
 </main>
 
 <footer>
   <div class="wrap frow">
     <span><strong>datacenter-geo</strong> · Apache-2.0</span>
-    <a href="https://github.com/not-vibhu/datacenter-geo">Source on GitHub</a>
+    <a href="https://github.com/not-vibhu/datacenter-geo" rel="noopener">Source on GitHub</a>
     <span class="byline">Built by <a href="https://vibhutripathi.com" rel="noopener">Vibhu Tripathi</a></span>
-    <span id="gen" class="mono" style="font-size:12px; color:var(--faint)"></span>
+    <span id="gen" class="mono"></span>
   </div>
 </footer>
 

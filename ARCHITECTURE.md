@@ -43,8 +43,12 @@ works because that is the shape of the task they were given.
 │  59 specs: formula, unit, direction, gate, scale, weights      │
 │  The contract between agents and measurements                  │
 ├────────────────────────────────────────────────────────────────┤
+│  DECISION LAYER          dcgeo/diligence.py  compare.py        │
+│  Blockers · sensitivity · verification queue · the brief        │
+│  Turns a score into "can this work, and what must be verified"  │
+├────────────────────────────────────────────────────────────────┤
 │  TOOL LAYER              dcgeo/  (Python CLI)                  │
-│  measure · score · evidence · cache · geo · report             │
+│  measure · score · provenance · evidence · cache · geo · report │
 │  Deterministic, testable, no LLM in the loop                   │
 ├────────────────────────────────────────────────────────────────┤
 │  ADAPTER LAYER           dcgeo/adapters/*.py                   │
@@ -166,15 +170,92 @@ Weights live in the factor specs, per profile, so adding a profile is a config c
 
 ### Stage 4 — Confidence
 
+Tier answers *how was this obtained*. It does not answer *is it still true*. So the
+weight an individual datapoint carries is two-dimensional (`dcgeo/provenance.py`):
+
 ```
-tier_weight = {A: 1.00, B: 0.85, C: 0.60, D: 0.35, unknown: 0.0}
-confidence  = Σ(weight_i × tier_weight_i) / Σ(weight_i)
-band        = ±(1 − confidence) × 22        # empirical spread constant
+tier_weight     = {A: 1.00, B: 0.85, C: 0.60, D: 0.35, unknown: 0.0}
+freshness       = age vs the source's declared ttl_days in sources.yaml
+                  fresh 1.00 · aging 0.85 · stale 0.55 · undated 0.70
+evidence_weight = tier_weight × freshness
+
+confidence      = Σ(weight_i × evidence_weight_i) / Σ(weight_i)
+band            = ±(1 − confidence) × 22        # empirical spread constant
 ```
 
 Reported as `78 ± 9 (confidence 0.61)`. The band is not decoration — a site at
 `78 ± 9` and one at `71 ± 3` are not meaningfully rankable, and the compare workflow
 says so explicitly instead of sorting them.
+
+A stale Tier-A number therefore reports lower confidence, and a wider band, than the
+same number measured yesterday. Staleness costs exactly what a weaker tier costs,
+because in practice it is the same problem.
+
+---
+
+## The decision layer
+
+Scoring is the middle of the pipeline. `dcgeo/diligence.py` turns a `ProfileScore`
+into a `DiligenceBrief` — the object the report, the CLI and the static site all
+render. It is pure arithmetic over the evidence ledger; no LLM touches it.
+
+### Blockers
+
+Six kinds, deduplicated downward so the list is a set of actions rather than a set of
+observations:
+
+| Kind | Severity | Raised when |
+|---|---|---|
+| `gate_fail` | fatal | A knockout check failed on Tier A/B evidence |
+| `gate_unverified` | fatal | A knockout check failed, but on Tier C/D evidence |
+| `gate_undecidable` | fatal | The factor a knockout check reads is unmeasured |
+| `domain_blackout` | fatal / major | A whole domain has no data and left the aggregate |
+| `unknown_material` | major / minor | An unmeasured factor carrying material swing |
+| `stale` / `weak_evidence` | major / minor | A measured value too old or too modeled to lean on |
+
+A `domain_blackout` absorbs the individual unknowns inside it: "dispatch the
+regulatory analyst" is one action, not seven. A `gate_condition` that exists only
+because its input was missing is suppressed in favour of the `gate_undecidable` entry
+naming the factor, which is the thing somebody can actually act on.
+
+Every blocker carries an owner and an artifact, routed through
+`config/verification.yaml`. That file is the difference between an unknown and an
+actionable unknown — a system that reports a gap without naming the counterparty who
+can close it has only relabelled the gap. Routing is jurisdictional: the counterparty
+for a grid question in India is a DISCOM and a State Load Despatch Centre, not an ISO.
+
+### Sensitivity
+
+For each weighted factor, the score is recomputed with that one factor forced to 0 and
+to 100, at the tier it would be measured at if somebody went and measured it properly.
+The swing is the difference.
+
+This runs **through `score_profile` itself**, via a `counterfactual` parameter, rather
+than through a second implementation of the aggregation. A parallel formula would
+drift from the scorer it claims to explain; this one cannot.
+
+Gate outcomes turn on raw values rather than normalized ones, so simulating them would
+mean inventing raw values. Instead, factors a gate reads are flagged `gate_critical`
+and handled as blockers — a claim about what is undecided, not a fabricated scenario.
+
+### The decision
+
+```
+NO-GO                    a fatal gate failed on evidence strong enough to act on
+NOT PROVEN               fatal blockers remain, or an unmeasured factor could move
+                         the verdict across a threshold on its own, or the measured
+                         fraction is below the publishable floor
+PROCEED WITH CONDITIONS  gates satisfied, major conditions outstanding
+PROCEED                  gates satisfied, nothing unmeasured can flip the verdict
+```
+
+`NOT PROVEN` is the load-bearing state. It is the honest answer for most screening
+work, and a system that cannot say it will say something worse instead.
+
+Profitability is refused separately and explicitly: unless every factor in
+`decision.profitability_factors` is measured, the brief states that the score is a
+suitability screen and not a return. Suitability and profitability are different
+questions and the score only answers one of them.
 
 ---
 

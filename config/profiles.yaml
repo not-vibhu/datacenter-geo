@@ -78,3 +78,30 @@ verdict_thresholds:
   conditional: 45
   weak: 30
   # below weak -> "poor"
+
+# Evidence freshness. A Tier A number retrieved three years ago is not a Tier A
+# number today. Age is compared against the source's ttl_days in sources.yaml;
+# the multiplier below is applied to the tier weight when computing confidence,
+# so staleness widens the ± band exactly the way a weak tier does.
+freshness:
+  fresh_multiplier: 1.00      # age <= ttl
+  aging_multiplier: 0.85      # ttl < age <= 2 * ttl
+  stale_multiplier: 0.55      # age > 2 * ttl
+  undated_multiplier: 0.70    # no retrieval timestamp, or source has no declared ttl
+  default_ttl_days: 180       # used when the source is not in the registry
+
+# Decision thresholds for the diligence brief. These decide when the system is
+# willing to say "proceed" rather than "not proven".
+decision:
+  # A swing at or above this many points is treated as material to the decision.
+  material_swing_points: 4.0
+  # An unknown whose best/worst case straddles a verdict threshold is verdict-
+  # flipping and blocks a PROCEED regardless of the current score.
+  max_flipping_unknowns_for_proceed: 0
+  # Factors that must be measured before any profitability claim is made at all.
+  profitability_factors:
+    - eco.total_cost_of_ownership
+    - pwr.retail_power_price
+    - pwr.large_load_tariff
+    - lnd.price
+    - reg.tax_incentives

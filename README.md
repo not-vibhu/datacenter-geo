@@ -1,15 +1,23 @@
 # datacenter-geo
 
-**An agent harness for evaluating whether a place on Earth can host an AI data center.**
+**An evidence-backed diligence system for AI data center siting.**
 
 Give it a coordinate, a parcel, a county, or a whole region. It runs a multi-agent
 analysis across 59 decision factors — power, water, climate, land, connectivity,
-regulation, community, supply chain — and returns a gated, profile-specific score
-with every number traced back to its source.
+regulation, community, supply chain — and answers one question:
+
+> **Can this site support a profitable data center, and what must be verified next?**
+
+The answer is a decision, not a score: `PROCEED`, `PROCEED WITH CONDITIONS`, `NO-GO`,
+or — most often, and most usefully — `NOT PROVEN`, with the specific open questions
+that are preventing a decision, each priced in score points and addressed to the
+counterparty who can close it.
 
 ```bash
 dcgeo analyze --at "39.0437,-77.4875" --radius 25 --profile hyperscale_training
-dcgeo scan --region "West Texas" --min-mw 300 --top 20
+dcgeo brief   run_0031                    # the decision, blockers, and what to verify next
+dcgeo compare run_0006 run_0008           # why each site wins and loses, not just a rank
+dcgeo scan --bbox 31.5,-102.5,33.0,-100.0
 dcgeo rerun run_0031 --assume "grid_upgrade_2029=true" --weight water=0.5
 ```
 
@@ -52,8 +60,15 @@ A site scoring 82 on Tier-A/B evidence is a completely different asset from one
 scoring 82 on Tier-C/D evidence. The system never hides that difference: every score
 ships with a confidence band and an evidence ledger.
 
+Tier answers *how was this obtained*. It does not answer *is it still true*, so every
+datapoint also carries its retrieval timestamp, and is discounted against its source's
+declared refresh window. A Tier-A number three years past its TTL reports lower
+confidence than the same number measured yesterday, and widens the ± band accordingly.
+
 **This tool does not replace due diligence.** It tells you which twenty sites out of
-two thousand deserve due diligence, and what to ask when you get there.
+two thousand deserve due diligence, and what to ask when you get there — which is what
+the verification queue is: a ranked, addressed list of the questions that would settle
+the decision.
 
 ## How it works
 
@@ -103,7 +118,61 @@ So scoring runs in three stages:
    latency, land size and power density completely differently. A West Texas mega-site
    that's brilliant for training is useless for edge inference.
 3. **Confidence** — derived from the evidence tiers actually achieved, not the tiers
-   theoretically available. Reported as a band, not a point.
+   theoretically available, and discounted for age. Reported as a band, not a point.
+
+A gate whose input is unmeasured does not quietly pass. It is reported as
+**undecidable**, which is a different and more honest state than *satisfied*: the
+knockout check ran against nothing, so its result is not evidence. Likewise a domain
+with no measurements at all drops out of the weighted mean entirely — the system says
+so rather than letting the headline quietly describe a smaller model than advertised.
+
+## From score to decision
+
+Scoring is the middle of the pipeline, not the end. Four things turn it into something
+somebody can act on, all of them deterministic and all in `dcgeo/diligence.py`:
+
+- **Decision blockers.** Every open question standing between the evidence and a
+  decision — a failed gate, an undecidable gate, a dark domain, a material unknown,
+  a stale or modeled number doing real work in the score. Each is ranked by severity
+  then by score points at risk, and each names the counterparty who can close it and
+  the artifact that closes it (`config/verification.yaml`).
+- **Sensitivity.** Every factor is re-scored at its best and worst plausible
+  resolution, one at a time, *through the real scorer* — so the sensitivity can never
+  disagree with the score it is explaining. Anything that moves the result across a
+  verdict threshold on its own is a factor the evidence has not yet decided.
+- **Verification queue.** What to find out next, ordered by how much of the decision
+  each answer settles. Gate-critical items come first regardless of points, because a
+  knockout check that cannot be evaluated can make everything below it irrelevant.
+- **Profitability, refused by default.** Suitability and profitability are different
+  questions. Unless the tariff, land price, incentive and TCO inputs are measured, the
+  brief states plainly that the score is a suitability screen and not a return.
+
+```bash
+dcgeo brief run_0006                 # decision, blockers, swing factors, queue
+dcgeo brief run_0006 --json          # the same, machine-readable
+```
+
+## Comparison explains itself
+
+A ranked list of scores is the least useful thing this system can output.
+`dcgeo compare` reports **why each site wins and loses** — the factors where it beats
+the field, in weighted score points contributed — and refuses to present an ordering
+when the confidence bands overlap:
+
+```
+Not separable: 1 adjacent pair overlap within their confidence bands
+(run_0006 / run_0008). The ordering is not supported by the evidence —
+compare them on the win/lose reasons below, not on the score.
+
+Hanover Ashland VA (APPROVED 2024)
+  + Organized opposition risk          +80 vs field  +1.77 pts  C
+  + Zoning and entitlement status      +27 vs field  +0.60 pts  C
+  - Transmission line proximity         -4 vs field  -0.10 pts  A
+```
+
+It also reports **shared blind spots** — factors unmeasured for every candidate, which
+are the questions the comparison silently assumes away equally, and therefore the ones
+most likely to be wrong in the same direction for all of them.
 
 ## Install
 
@@ -124,8 +193,9 @@ Paid adapters (Earth Engine, Planet, S&P Global, CoStar) have written interfaces
 | `.claude/agents/` | The 14 subagent definitions |
 | `.claude/skills/` | Slash-command workflows (`/dc-analyze`, `/dc-scan`, …) |
 | `factors/` | 59 factor specs — formula, thresholds, sources, gate, weights |
-| `config/` | Use-case profiles, gate definitions, data source registry |
-| `dcgeo/` | Python: scoring engine, evidence ledger, source adapters |
+| `config/` | Profiles, gates, source registry, verification routing |
+| `dcgeo/` | Python: scoring engine, diligence layer, evidence ledger, adapters |
+| `site/` | The static decision console — no server, no keys, no runtime data calls |
 | `data/reference/` | Validation set: known data centers + negative controls |
 | `docs/` | Methodology, evidence tiers, scoring math, source catalog |
 | `crons/` | Scheduled global sweep specs |

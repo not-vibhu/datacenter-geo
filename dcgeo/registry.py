@@ -53,6 +53,16 @@ def load_gates() -> list[dict[str, Any]]:
 
 
 @functools.lru_cache(maxsize=1)
+def load_verification() -> dict[str, Any]:
+    """Routing table for open questions: who can answer this, with what artifact.
+
+    Not measurements — instructions. Kept in config rather than in the factor
+    specs because the counterparty is jurisdictional and the factor is not.
+    """
+    return yaml.safe_load((CONFIG_DIR / "verification.yaml").read_text())
+
+
+@functools.lru_cache(maxsize=1)
 def _sources_doc() -> dict[str, Any]:
     return yaml.safe_load((CONFIG_DIR / "sources.yaml").read_text())
 
