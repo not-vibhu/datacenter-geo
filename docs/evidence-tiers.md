@@ -89,3 +89,27 @@ Be realistic about what is achievable. Some domains simply cannot reach Tier A:
 
 A `power` analysis at overall Tier C is not a failure — it may be the ceiling for that
 jurisdiction. What matters is that the report says so.
+
+## Tier is not freshness
+
+Tier answers *how was this obtained*. It does not answer *is it still true*.
+
+A Tier-A interconnection queue reading from three years ago is stale in a way the tier
+alone cannot express, and a system that treats it as current will confidently
+recommend a site on a number that has since moved. So every measurement is also judged
+against its source's declared `ttl_days` in `config/sources.yaml`:
+
+| Freshness | Age | Multiplier |
+|---|---|---|
+| `fresh` | within the refresh window | 1.00 |
+| `aging` | past it, under twice it | 0.85 |
+| `stale` | more than twice the window | 0.55 |
+| `undated` | no retrieval timestamp, or an unregistered source | 0.70 |
+
+The weight a datapoint actually carries is `tier_weight × freshness_multiplier`, and
+that is what feeds confidence — so a ledger of stale Tier-A numbers reports lower
+confidence, and a wider band, than one measured yesterday. Staleness costs what a
+weaker tier costs, because in practice it is the same problem.
+
+Multipliers live in `config/profiles.yaml` under `freshness:` so they are arguable
+rather than buried. A measurement whose value is unknown carries zero regardless.

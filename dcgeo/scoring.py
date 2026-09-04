@@ -9,6 +9,7 @@ from itertools import pairwise
 from typing import Any
 
 from .models import Analysis, FactorScore, Measurement, ProfileScore, Tier
+from .provenance import evidence_weight, freshness_of
 from .registry import load_factors, load_profiles
 
 
@@ -62,12 +63,22 @@ def score_profile(
     analysis: Analysis,
     profile: str,
     weight_overrides: dict[str, float] | None = None,
+    counterfactual: dict[str, tuple[float | None, Tier]] | None = None,
 ) -> ProfileScore:
-    """Score one site for one use-case profile."""
+    """Score one site for one use-case profile.
+
+    `counterfactual` replaces a factor's normalized value and tier without touching
+    the evidence ledger — {factor_id: (normalized_0_100_or_None, tier)}. It exists so
+    sensitivity analysis asks "what would the score be if this were resolved at 0 /
+    at 100" through the real scorer rather than through a second implementation of
+    the arithmetic that could drift from it. Nothing persists it; it never produces
+    a published number.
+    """
     factors = load_factors()
     cfg = load_profiles()
     agg = cfg["aggregation"]
     overrides = weight_overrides or {}
+    cf = counterfactual or {}
     mmap = analysis.measurement_map()
 
     fscores: list[FactorScore] = []
@@ -88,6 +99,16 @@ def score_profile(
         if norm is None:
             tier = "unknown"
 
+        ew = evidence_weight(m)
+        fresh, age, _ttl = (
+            freshness_of(m.source, m.retrieved) if m and m.is_known
+            else ("undated", None, None)
+        )
+
+        if fid in cf:
+            norm, tier = cf[fid]
+            ew = _tier_weight(tier) if norm is not None else 0.0
+
         fscores.append(
             FactorScore(
                 factor_id=fid,
@@ -98,6 +119,9 @@ def score_profile(
                 weight=weight,
                 tier=tier,
                 tier_weight=_tier_weight(tier),
+                age_days=None if age is None else round(age, 1),
+                freshness=fresh,
+                evidence_weight=round(ew, 3),
             )
         )
 
@@ -128,9 +152,11 @@ def score_profile(
     else:
         overall = None
 
-    # Confidence from the tiers actually achieved, weighted by factor importance.
+    # Confidence from the evidence actually achieved, weighted by factor importance.
+    # evidence_weight is the tier weight discounted for age, so a ledger full of
+    # stale Tier A numbers reports lower confidence than one measured yesterday.
     total_w = sum(f.weight for f in fscores) or 1.0
-    confidence = sum(f.weight * f.tier_weight for f in fscores) / total_w
+    confidence = sum(f.weight * f.evidence_weight for f in fscores) / total_w
     measured_fraction = sum(
         f.weight for f in fscores if f.normalized is not None
     ) / total_w

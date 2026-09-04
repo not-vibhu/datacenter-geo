@@ -2,10 +2,10 @@
 it handles caching, rate limits, retries, and evidence recording."""
 from __future__ import annotations
 
+import dataclasses
 import json
 import re
 from datetime import datetime
-from itertools import pairwise
 from pathlib import Path
 
 import click
@@ -13,6 +13,8 @@ from rich.console import Console
 from rich.table import Table
 
 from . import cache as cachemod
+from . import compare as compare_mod
+from . import diligence
 from . import measure as measure_mod
 from . import report as report_mod
 from .gates import evaluate_gates, validate_gate_coverage
@@ -68,6 +70,18 @@ def _load(run: str) -> Analysis:
     if not path.exists():
         raise click.ClickException(f"no analysis found at {run}")
     d = json.loads(path.read_text())
+
+    def only_known(cls, raw: dict) -> dict:
+        """Drop fields this version of the model no longer has.
+
+        Runs are committed and outlive the code that wrote them, so loading must
+        tolerate a schema that has moved on. Unknown keys are dropped rather than
+        raising — a run from an older release stays readable, and re-scoring it
+        writes it back in the current shape.
+        """
+        allowed = {f.name for f in dataclasses.fields(cls)}
+        return {k: v for k, v in raw.items() if k in allowed}
+
     site = Site(**{**d["site"], "centroid": tuple(d["site"]["centroid"])})
     a = Analysis(
         run_id=d["run_id"], site=site, created=d["created"], parent_run=d.get("parent_run"),
@@ -76,21 +90,21 @@ def _load(run: str) -> Analysis:
         red_team=d.get("red_team", []),
     )
     for m in d["measurements"]:
-        m.pop("id", None)
-        a.measurements.append(Measurement(**m))
+        a.measurements.append(Measurement(**only_known(Measurement, m)))
 
     # Restore derived state so a loaded analysis round-trips losslessly. Without
     # this, anything reading a saved run sees it as unscored.
     for g in d.get("gates", []):
-        a.gates.append(GateResult(**g))
+        a.gates.append(GateResult(**only_known(GateResult, g)))
     for name, ps in d.get("profiles", {}).items():
-        fs = [FactorScore(**f) for f in ps.pop("factor_scores", [])]
-        a.profiles[name] = ProfileScore(**{**ps, "factor_scores": fs})
+        fs = [FactorScore(**only_known(FactorScore, f))
+              for f in ps.pop("factor_scores", [])]
+        a.profiles[name] = ProfileScore(
+            **{**only_known(ProfileScore, ps), "factor_scores": fs})
     for r in d.get("recommendations", []):
-        r.pop("leverage_pts_per_10m", None)
         if isinstance(r.get("timeline_months"), list):
             r["timeline_months"] = tuple(r["timeline_months"])
-        a.recommendations.append(Recommendation(**r))
+        a.recommendations.append(Recommendation(**only_known(Recommendation, r)))
     return a
 
 
@@ -289,6 +303,15 @@ def _finish(analysis: Analysis, profs: list[str]) -> None:
         if g.outcome != "PASS":
             colour = "red" if g.outcome == "FAIL" else "yellow"
             console.print(f"  [{colour}]{g.outcome}[/{colour}] {g.name}: {g.reason[:150]}")
+
+    # The brief is derived, not stored: it reads the gated scores and is recomputed
+    # wherever it is shown, so it can never drift from the code that produces it.
+    lead = diligence.build_brief(analysis, profs[0])
+    console.print(f"\n[bold]{lead.decision}[/bold] — {lead.headline[:220]}")
+    if lead.verification_queue:
+        console.print("  verify next: "
+                      + ", ".join(v.factor_id for v in lead.verification_queue[:3])
+                      + f"   [dim](dcgeo brief {analysis.run_id})[/dim]")
     console.print(f"\nwritten to [bold]{d}[/bold]")
 
 
@@ -354,33 +377,101 @@ def rerun(run, assumes, weights, cooling, profiles) -> None:
 @cli.command()
 @click.argument("runs", nargs=-1, required=True)
 @click.option("--profile", default="hyperscale_training")
-def compare(runs: tuple[str, ...], profile: str) -> None:
-    """Compare runs. Refuses to rank sites whose confidence bands overlap."""
-    loaded = [_load(r) for r in runs]
+@click.option("--json", "as_json", is_flag=True)
+def compare(runs: tuple[str, ...], profile: str, as_json: bool) -> None:
+    """Compare sites by why they win and lose, not by rank alone.
+
+    Refuses to present an ordering when the confidence bands overlap — in that
+    case the win/lose reasons are the only honest output.
+    """
+    c = compare_mod.compare([_load(r) for r in runs], profile)
+    if as_json:
+        click.echo(json.dumps(c.to_dict(), indent=2, default=str))
+        return
+
     t = Table(title=f"Comparison — {profile}")
-    for c in ("run", "site", "verdict", "score", "conf", "top gap"):
-        t.add_column(c)
-    rows = []
-    for a in loaded:
-        ps = a.profiles.get(profile)
-        if not ps:
-            continue
-        worst = min((f for f in ps.factor_scores if f.normalized is not None),
-                    key=lambda f: f.normalized * f.weight, default=None)
-        rows.append((a, ps, worst))
-        t.add_row(a.run_id, a.site.name[:32], ps.verdict,
-                  "—" if ps.score is None else f"{ps.score:.0f} ± {ps.band:.0f}",
-                  f"{ps.confidence:.2f}", worst.factor_id if worst else "—")
+    for col in ("run", "site", "decision", "score", "conf", "measured"):
+        t.add_column(col)
+    for s_ in c.sites:
+        t.add_row(s_.run_id, s_.name[:32], s_.decision,
+                  "—" if s_.score is None else f"{s_.score:.0f} ± {s_.band:.0f}",
+                  f"{s_.confidence:.2f}", f"{s_.measured_fraction:.0%}")
     console.print(t)
 
-    scored = [(a, ps) for a, ps, _ in rows if ps.score is not None]
-    scored.sort(key=lambda x: -x[1].score)
-    for (a1, p1), (a2, p2) in pairwise(scored):
-        if abs(p1.score - p2.score) < (p1.band + p2.band) / 2:
-            console.print(f"[yellow]Not separable:[/yellow] {a1.site.name[:28]} "
-                          f"({p1.score:.0f}±{p1.band:.0f}) and {a2.site.name[:28]} "
-                          f"({p2.score:.0f}±{p2.band:.0f}) overlap within confidence. "
-                          f"Ranking them is not supported by the evidence.")
+    colour = "green" if c.separable else "yellow"
+    console.print(f"[{colour}]{'Separable' if c.separable else 'Not separable'}:[/{colour}] "
+                  f"{c.separability_note}\n")
+
+    for s_ in c.sites:
+        console.print(f"[bold]{s_.name[:60]}[/bold]")
+        for e in s_.wins[:4]:
+            console.print(f"  [green]+[/green] {e.name[:44]:46} "
+                          f"{e.delta:+6.0f} vs field  {e.contribution:+.2f} pts  [dim]{e.site_tier}[/dim]")
+        for e in s_.loses[:4]:
+            console.print(f"  [red]-[/red] {e.name[:44]:46} "
+                          f"{e.delta:+6.0f} vs field  {e.contribution:+.2f} pts  [dim]{e.site_tier}[/dim]")
+        for b in s_.unique_blockers[:2]:
+            console.print(f"    [dim]only here:[/dim] {b['title'][:76]}")
+        console.print("")
+
+    if c.shared_blind_spots:
+        console.print(f"[yellow]Shared blind spots[/yellow] — unmeasured for every site, so the "
+                      f"comparison assumes them away equally "
+                      f"({c.comparable_fraction:.0%} of decision weight is comparable):")
+        for b in c.shared_blind_spots[:8]:
+            console.print(f"  · {b['name']} [dim]({b['factor_id']}, weight {b['weight']:.0f})[/dim]")
+
+
+@cli.command()
+@click.argument("run")
+@click.option("--profile", default="hyperscale_training")
+@click.option("--json", "as_json", is_flag=True)
+def brief(run: str, profile: str, as_json: bool) -> None:
+    """The decision brief: can this site support a profitable data center, and what next?"""
+    a = _load(run)
+    b = diligence.build_brief(a, profile)
+    if as_json:
+        click.echo(json.dumps(b.to_dict(), indent=2, default=str))
+        return
+
+    colour = {"NO-GO": "red", "NOT PROVEN": "yellow",
+              "PROCEED WITH CONDITIONS": "cyan", "PROCEED": "green"}.get(b.decision, "white")
+    console.print(f"\n[bold {colour}]{b.decision}[/bold {colour}] — {a.site.name}  "
+                  f"[dim]{profile}[/dim]")
+    console.print(f"\n{b.headline}\n")
+    console.print(f"score {'—' if b.score is None else f'{b.score:.0f} ± {b.band:.0f}'} · "
+                  f"confidence {b.confidence:.2f} · "
+                  f"{b.measured_fraction:.0%} of decision weight measured")
+
+    dark = [d for d, c_ in b.domain_coverage.items() if not c_["in_score"]]
+    if dark:
+        console.print(f"[yellow]Excluded from the score entirely:[/yellow] {', '.join(dark)}")
+
+    console.print("\n[bold]Decision blockers[/bold]")
+    for bl in b.blockers[:10]:
+        c_ = {"fatal": "red", "major": "yellow", "minor": "dim"}[bl.severity]
+        pts = f"{bl.points_at_risk:.0f} pts" if bl.points_at_risk else "—"
+        console.print(f"  [{c_}]{bl.severity.upper():5}[/{c_}] {bl.title[:78]}")
+        console.print(f"        [dim]{pts} at risk · ask: {bl.owner}[/dim]")
+    if len(b.blockers) > 10:
+        console.print(f"  [dim]… {len(b.blockers) - 10} more[/dim]")
+
+    console.print("\n[bold]Could flip the verdict[/bold]")
+    flip = [s_ for s_ in b.swing_factors if s_.flips_verdict][:8]
+    for s_ in flip:
+        state = "unmeasured" if not s_.known else f"measured, tier {s_.tier}"
+        console.print(f"  {s_.name[:44]:46} ±{s_.swing:5.1f} pts  "
+                      f"[dim]{s_.verdict_if_worst} → {s_.verdict_if_best} · {state}[/dim]")
+    if not flip:
+        console.print("  [dim]No single factor can move the verdict across a threshold.[/dim]")
+
+    console.print("\n[bold]Verify next[/bold]")
+    for v in b.verification_queue:
+        mark = "[red]gate[/red]" if v.gate_critical else "    "
+        wk = f"{v.typical_weeks[0]}-{v.typical_weeks[1]}w" if v.typical_weeks else "—"
+        console.print(f"  {v.rank}. {mark} {v.factor_id:32} {v.points_at_risk:5.1f} pts  {wk:>7}")
+        console.print(f"        [dim]{v.owner} → {v.artifact[:96]}[/dim]")
+    console.print("")
 
 
 # ── scan ─────────────────────────────────────────────────────────────────────

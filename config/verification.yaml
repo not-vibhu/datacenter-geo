@@ -1,0 +1,154 @@
+# Who must answer an open question, and with what artifact.
+#
+# This file is the difference between "unknown" and "actionable unknown". A
+# diligence system that reports a gap without naming the counterparty who can
+# close it has only relabelled the gap.
+#
+# Nothing here is a measurement. These are routing instructions, and they are
+# jurisdiction-shaped: the `by_country` overrides exist because the counterparty
+# for a grid question in India is not the counterparty in the United States.
+version: 1
+
+# Fallback when a factor has no entry of its own.
+domain_defaults:
+  power:
+    owner: Serving utility transmission planning
+    artifact: Written capacity and energization confirmation for the target load
+    typical_weeks: [6, 20]
+  water:
+    owner: Water utility or basin regulator
+    artifact: Will-serve letter or withdrawal permit precedent
+    typical_weeks: [8, 26]
+  land:
+    owner: County or municipal planning department
+    artifact: Zoning determination letter and title/survey
+    typical_weeks: [4, 16]
+  connectivity:
+    owner: Carrier account teams
+    artifact: Written route quote with diverse-path confirmation
+    typical_weeks: [3, 10]
+  climate:
+    owner: Licensed civil / geotechnical engineer
+    artifact: Site-specific study; global rasters are screening-grade only
+    typical_weeks: [4, 12]
+  regulatory:
+    owner: Local land-use counsel
+    artifact: Written opinion on approval pathway and timeline
+    typical_weeks: [4, 14]
+  community:
+    owner: Local government affairs / public record review
+    artifact: Minutes of the last 24 months of relevant hearings
+    typical_weeks: [2, 8]
+  economics:
+    owner: Owner's cost consultant / EPC
+    artifact: Order-of-magnitude estimate against a real scope
+    typical_weeks: [6, 16]
+
+# The factors that decide deals. Worth naming the counterparty precisely.
+factors:
+
+  pwr.substation_headroom:
+    owner: Serving utility transmission planning
+    artifact: >
+      Load-serving study or written statement of available capacity at the named
+      substation, for the named load, in the named year.
+    typical_weeks: [8, 26]
+    note: >
+      The single most common cause of a project dying after twelve months of work.
+      Nothing published substitutes for the utility saying it in writing.
+    by_country:
+      India:
+        owner: State DISCOM plus the State Load Despatch Centre
+        artifact: Feasibility/technical clearance for the sanctioned load
+      China:
+        owner: Provincial grid company (State Grid or China Southern Power Grid)
+        artifact: Provincial grid capacity confirmation tied to the hub designation
+
+  pwr.interconnect_queue_time:
+    owner: ISO/RTO interconnection queue, then the utility
+    artifact: Queue position and cluster study schedule for a comparable request
+    typical_weeks: [4, 12]
+    by_country:
+      India:
+        owner: CEA / state regulator open-access cell
+        artifact: Open-access approval precedent for comparable load in the state
+      China:
+        owner: Provincial energy bureau
+        artifact: Approval precedent inside the designated hub cluster
+
+  pwr.large_load_tariff:
+    owner: Utility rate desk / regulator tariff filings
+    artifact: The applicable large-load tariff sheet and any special-contract precedent
+    typical_weeks: [4, 12]
+    note: Decides operating cost more than the headline energy price does.
+
+  pwr.retail_power_price:
+    owner: Utility rate desk or wholesale market data provider
+    artifact: Delivered all-in $/MWh for the tariff the project would actually take
+    typical_weeks: [2, 8]
+
+  lnd.zoning_status:
+    owner: County/municipal planning department
+    artifact: Zoning verification letter naming data center as permitted or conditional
+    typical_weeks: [3, 10]
+    by_country:
+      India:
+        owner: State industrial development corporation (MIDC, SIPCOT, TSIIC, GIDC)
+        artifact: Allotment terms and permitted-use confirmation for the plot
+
+  lnd.contiguous_area:
+    owner: Licensed surveyor / title company
+    artifact: ALTA survey or local equivalent showing contiguous developable acreage
+    typical_weeks: [4, 12]
+
+  lnd.price:
+    owner: Local commercial broker and recorded transaction data
+    artifact: Comparable sales within 24 months, per hectare, with dates
+    typical_weeks: [2, 6]
+
+  wtr.withdrawal_permitting:
+    owner: State/provincial water regulator
+    artifact: Permit precedent for comparable industrial withdrawal in the same basin
+    typical_weeks: [10, 30]
+
+  com.opposition_risk:
+    owner: Public record — planning commission and board minutes
+    artifact: Outcome of every data center application heard in this jurisdiction since 2023
+    typical_weeks: [2, 6]
+    note: >
+      Now the leading cause of US project cancellation at local approval. It is
+      cheap to research and almost never researched early enough.
+
+  reg.permitting_timeline:
+    owner: Local land-use counsel
+    artifact: Median approval duration for comparable applications, from the record
+    typical_weeks: [4, 12]
+
+  reg.tax_incentives:
+    owner: State/provincial economic development authority
+    artifact: Statute or code section plus the qualification test the project must meet
+    typical_weeks: [3, 10]
+
+  reg.export_controls:
+    owner: Export-control counsel
+    artifact: Written opinion on accelerator eligibility for the destination country
+    typical_weeks: [3, 10]
+
+  eco.total_cost_of_ownership:
+    owner: Owner's cost consultant
+    artifact: 10-year TCO model built on the confirmed tariff, land price and scope
+    typical_weeks: [6, 16]
+    note: >
+      Depends on the tariff, land price and incentive answers above. It cannot be
+      credibly modeled before them, which is why it is usually last in the queue
+      and first in the investment memo.
+
+  eco.equipment_lead_time:
+    owner: OEM / EPC procurement
+    artifact: Quoted delivery windows for transformers, switchgear and generation
+    typical_weeks: [4, 12]
+
+  cnx.longhaul_fiber_proximity:
+    owner: Carrier account teams
+    artifact: Written route quote — carriers do not publish real routes
+    typical_weeks: [3, 10]

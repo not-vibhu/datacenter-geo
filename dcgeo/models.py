@@ -144,6 +144,13 @@ class FactorScore:
     weight: float
     tier: Tier
     tier_weight: float
+    # Derived provenance only. Source, URL, retrieval date and unknown-reason are
+    # NOT copied down here: they live once, on the Measurement, and are joined by
+    # factor_id. Two copies of one fact in one file is a fact that can disagree
+    # with itself.
+    age_days: float | None = None
+    freshness: str = "undated"
+    evidence_weight: float = 0.0           # tier_weight discounted for age
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

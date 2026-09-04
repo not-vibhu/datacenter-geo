@@ -1109,7 +1109,10 @@
           "normalized": null,
           "weight": 10.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.interconnect_queue_time",
@@ -1119,7 +1122,10 @@
           "normalized": null,
           "weight": 10.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.contiguous_area",
@@ -1129,7 +1135,10 @@
           "normalized": 100.0,
           "weight": 9.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "pwr.transmission_proximity",
@@ -1139,7 +1148,10 @@
           "normalized": 88.76666666666667,
           "weight": 9.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "pwr.retail_power_price",
@@ -1149,7 +1161,10 @@
           "normalized": null,
           "weight": 9.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.export_controls",
@@ -1159,7 +1174,10 @@
           "normalized": 100,
           "weight": 9.0,
           "tier": "B",
-          "tier_weight": 0.85
+          "tier_weight": 0.85,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "clm.flood_riverine",
@@ -1169,7 +1187,10 @@
           "normalized": 96.0,
           "weight": 8.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "com.opposition_risk",
@@ -1179,7 +1200,10 @@
           "normalized": 100,
           "weight": 8.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "eco.total_cost_of_ownership",
@@ -1189,7 +1213,10 @@
           "normalized": null,
           "weight": 8.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.zoning_status",
@@ -1199,7 +1226,10 @@
           "normalized": 55,
           "weight": 8.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "pwr.large_load_tariff",
@@ -1209,7 +1239,10 @@
           "normalized": null,
           "weight": 8.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.onsite_generation_potential",
@@ -1219,7 +1252,10 @@
           "normalized": 39.3,
           "weight": 8.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "reg.permitting_timeline",
@@ -1229,7 +1265,10 @@
           "normalized": null,
           "weight": 8.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.basin_stress",
@@ -1239,7 +1278,10 @@
           "normalized": null,
           "weight": 8.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.dry_bulb_profile",
@@ -1249,7 +1291,10 @@
           "normalized": 86.913,
           "weight": 7.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "com.residential_proximity",
@@ -1259,7 +1304,10 @@
           "normalized": 100.0,
           "weight": 7.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "cnx.longhaul_fiber_proximity",
@@ -1269,7 +1317,10 @@
           "normalized": 63.78,
           "weight": 7.0,
           "tier": "D",
-          "tier_weight": 0.35
+          "tier_weight": 0.35,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.35
         },
         {
           "factor_id": "eco.construction_labor",
@@ -1279,7 +1330,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.equipment_lead_time",
@@ -1289,7 +1343,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.grid_carbon_intensity",
@@ -1299,7 +1356,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.environmental_review",
@@ -1309,7 +1369,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.tax_incentives",
@@ -1319,7 +1382,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.supply_availability",
@@ -1329,7 +1395,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.withdrawal_permitting",
@@ -1339,7 +1408,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.wetbulb_profile",
@@ -1349,7 +1421,10 @@
           "normalized": 77.4395,
           "weight": 7.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "clm.flood_coastal",
@@ -1359,7 +1434,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.grid_cost_allocation",
@@ -1369,7 +1447,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.path_diversity",
@@ -1379,7 +1460,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.slope",
@@ -1389,7 +1473,10 @@
           "normalized": 98.48,
           "weight": 6.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "lnd.protected_overlap",
@@ -1399,7 +1486,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.brownfield_opportunity",
@@ -1409,7 +1499,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.wholesale_basis_risk",
@@ -1419,7 +1512,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.grid_reliability",
@@ -1429,7 +1525,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.firm_capacity_nearby",
@@ -1439,7 +1538,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.renewable_procurement_depth",
@@ -1449,7 +1551,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.air_permit",
@@ -1459,7 +1564,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.jurisdiction_stability",
@@ -1469,7 +1577,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.reclaimed_availability",
@@ -1479,7 +1590,10 @@
           "normalized": 80.72,
           "weight": 6.0,
           "tier": "B",
-          "tier_weight": 0.85
+          "tier_weight": 0.85,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "clm.extreme_heat_trend",
@@ -1489,7 +1603,10 @@
           "normalized": 68.56,
           "weight": 5.0,
           "tier": "D",
-          "tier_weight": 0.35
+          "tier_weight": 0.35,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.35
         },
         {
           "factor_id": "clm.seismic",
@@ -1499,7 +1616,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.economic_alignment",
@@ -1509,7 +1629,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.construction_cost_index",
@@ -1519,7 +1642,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.price",
@@ -1529,7 +1655,10 @@
           "normalized": 83.0,
           "weight": 5.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "lnd.heavy_haul_access",
@@ -1539,7 +1668,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.nuclear_smr_adjacency",
@@ -1549,7 +1681,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.data_sovereignty",
@@ -1559,7 +1694,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.discharge_permitting",
@@ -1569,7 +1707,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.wind_hazard",
@@ -1579,7 +1720,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.wildfire",
@@ -1589,7 +1733,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.air_quality",
@@ -1599,7 +1746,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.carrier_count",
@@ -1609,7 +1759,10 @@
           "normalized": 100.0,
           "weight": 4.0,
           "tier": "B",
-          "tier_weight": 0.85
+          "tier_weight": 0.85,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "eco.port_rail_access",
@@ -1619,7 +1772,10 @@
           "normalized": 99.2192,
           "weight": 4.0,
           "tier": "B",
-          "tier_weight": 0.85
+          "tier_weight": 0.85,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "eco.operations_labor",
@@ -1629,7 +1785,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.geotechnical",
@@ -1639,7 +1798,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.flood_of_water_infrastructure",
@@ -1649,7 +1811,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.ixp_proximity",
@@ -1659,7 +1824,10 @@
           "normalized": 96.03,
           "weight": 3.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "clm.lightning",
@@ -1669,7 +1837,10 @@
           "normalized": null,
           "weight": 2.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.latency_to_demand",
@@ -1679,7 +1850,10 @@
           "normalized": null,
           "weight": 2.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.subsea_landing",
@@ -1689,7 +1863,10 @@
           "normalized": null,
           "weight": 2.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         }
       ],
       "capped_by": "gate.power_path_exists",
@@ -1721,7 +1898,10 @@
           "normalized": null,
           "weight": 10.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.longhaul_fiber_proximity",
@@ -1731,7 +1911,10 @@
           "normalized": 63.78,
           "weight": 9.0,
           "tier": "D",
-          "tier_weight": 0.35
+          "tier_weight": 0.35,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.35
         },
         {
           "factor_id": "cnx.path_diversity",
@@ -1741,7 +1924,10 @@
           "normalized": null,
           "weight": 9.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.ixp_proximity",
@@ -1751,7 +1937,10 @@
           "normalized": 96.03,
           "weight": 9.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "cnx.carrier_count",
@@ -1761,7 +1950,10 @@
           "normalized": 100.0,
           "weight": 8.0,
           "tier": "B",
-          "tier_weight": 0.85
+          "tier_weight": 0.85,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "pwr.substation_headroom",
@@ -1771,7 +1963,10 @@
           "normalized": null,
           "weight": 8.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.flood_riverine",
@@ -1781,7 +1976,10 @@
           "normalized": 96.0,
           "weight": 7.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "eco.total_cost_of_ownership",
@@ -1791,7 +1989,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.zoning_status",
@@ -1801,7 +2002,10 @@
           "normalized": 55,
           "weight": 7.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "pwr.transmission_proximity",
@@ -1811,7 +2015,10 @@
           "normalized": 88.76666666666667,
           "weight": 7.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "pwr.interconnect_queue_time",
@@ -1821,7 +2028,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.grid_reliability",
@@ -1831,7 +2041,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.permitting_timeline",
@@ -1841,7 +2054,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.flood_coastal",
@@ -1851,7 +2067,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.opposition_risk",
@@ -1861,7 +2080,10 @@
           "normalized": 100,
           "weight": 6.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "cnx.subsea_landing",
@@ -1871,7 +2093,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.contiguous_area",
@@ -1881,7 +2106,10 @@
           "normalized": 100.0,
           "weight": 6.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "lnd.price",
@@ -1891,7 +2119,10 @@
           "normalized": 83.0,
           "weight": 6.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "pwr.retail_power_price",
@@ -1901,7 +2132,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.data_sovereignty",
@@ -1911,7 +2145,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.export_controls",
@@ -1921,7 +2158,10 @@
           "normalized": 100,
           "weight": 6.0,
           "tier": "B",
-          "tier_weight": 0.85
+          "tier_weight": 0.85,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "clm.dry_bulb_profile",
@@ -1931,7 +2171,10 @@
           "normalized": 86.913,
           "weight": 5.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "clm.seismic",
@@ -1941,7 +2184,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.construction_cost_index",
@@ -1951,7 +2197,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.equipment_lead_time",
@@ -1961,7 +2210,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.operations_labor",
@@ -1971,7 +2223,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.protected_overlap",
@@ -1981,7 +2236,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.large_load_tariff",
@@ -1991,7 +2249,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.grid_carbon_intensity",
@@ -2001,7 +2262,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.environmental_review",
@@ -2011,7 +2275,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.tax_incentives",
@@ -2021,7 +2288,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.jurisdiction_stability",
@@ -2031,7 +2301,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.wetbulb_profile",
@@ -2041,7 +2314,10 @@
           "normalized": 77.4395,
           "weight": 5.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "clm.extreme_heat_trend",
@@ -2051,7 +2327,10 @@
           "normalized": 68.56,
           "weight": 4.0,
           "tier": "D",
-          "tier_weight": 0.35
+          "tier_weight": 0.35,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.35
         },
         {
           "factor_id": "clm.wind_hazard",
@@ -2061,7 +2340,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.wildfire",
@@ -2071,7 +2353,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.residential_proximity",
@@ -2081,7 +2366,10 @@
           "normalized": 100.0,
           "weight": 4.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "com.economic_alignment",
@@ -2091,7 +2379,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.construction_labor",
@@ -2101,7 +2392,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.slope",
@@ -2111,7 +2405,10 @@
           "normalized": 98.48,
           "weight": 4.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "pwr.onsite_generation_potential",
@@ -2121,7 +2418,10 @@
           "normalized": 39.3,
           "weight": 4.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "pwr.firm_capacity_nearby",
@@ -2131,7 +2431,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.air_permit",
@@ -2141,7 +2444,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.basin_stress",
@@ -2151,7 +2457,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.supply_availability",
@@ -2161,7 +2470,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.air_quality",
@@ -2171,7 +2483,10 @@
           "normalized": null,
           "weight": 3.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.grid_cost_allocation",
@@ -2181,7 +2496,10 @@
           "normalized": null,
           "weight": 3.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.brownfield_opportunity",
@@ -2191,7 +2509,10 @@
           "normalized": null,
           "weight": 3.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.geotechnical",
@@ -2201,7 +2522,10 @@
           "normalized": null,
           "weight": 3.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.wholesale_basis_risk",
@@ -2211,7 +2535,10 @@
           "normalized": null,
           "weight": 3.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.renewable_procurement_depth",
@@ -2221,7 +2548,10 @@
           "normalized": null,
           "weight": 3.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.withdrawal_permitting",
@@ -2231,7 +2561,10 @@
           "normalized": null,
           "weight": 3.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.lightning",
@@ -2241,7 +2574,10 @@
           "normalized": null,
           "weight": 2.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.port_rail_access",
@@ -2251,7 +2587,10 @@
           "normalized": 99.2192,
           "weight": 2.0,
           "tier": "B",
-          "tier_weight": 0.85
+          "tier_weight": 0.85,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "lnd.heavy_haul_access",
@@ -2261,7 +2600,10 @@
           "normalized": null,
           "weight": 2.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.nuclear_smr_adjacency",
@@ -2271,7 +2613,10 @@
           "normalized": null,
           "weight": 2.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.reclaimed_availability",
@@ -2281,7 +2626,10 @@
           "normalized": 80.72,
           "weight": 2.0,
           "tier": "B",
-          "tier_weight": 0.85
+          "tier_weight": 0.85,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "wtr.discharge_permitting",
@@ -2291,7 +2639,10 @@
           "normalized": null,
           "weight": 2.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.flood_of_water_infrastructure",
@@ -2301,7 +2652,10 @@
           "normalized": null,
           "weight": 2.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         }
       ],
       "capped_by": "gate.power_path_exists",
@@ -2333,7 +2687,10 @@
           "normalized": null,
           "weight": 9.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.substation_headroom",
@@ -2343,7 +2700,10 @@
           "normalized": null,
           "weight": 9.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.flood_riverine",
@@ -2353,7 +2713,10 @@
           "normalized": 96.0,
           "weight": 8.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "cnx.longhaul_fiber_proximity",
@@ -2363,7 +2726,10 @@
           "normalized": 63.78,
           "weight": 8.0,
           "tier": "D",
-          "tier_weight": 0.35
+          "tier_weight": 0.35,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.35
         },
         {
           "factor_id": "cnx.carrier_count",
@@ -2373,7 +2739,10 @@
           "normalized": 100.0,
           "weight": 8.0,
           "tier": "B",
-          "tier_weight": 0.85
+          "tier_weight": 0.85,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "cnx.latency_to_demand",
@@ -2383,7 +2752,10 @@
           "normalized": null,
           "weight": 8.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.total_cost_of_ownership",
@@ -2393,7 +2765,10 @@
           "normalized": null,
           "weight": 8.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.interconnect_queue_time",
@@ -2403,7 +2778,10 @@
           "normalized": null,
           "weight": 8.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.retail_power_price",
@@ -2413,7 +2791,10 @@
           "normalized": null,
           "weight": 8.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.flood_coastal",
@@ -2423,7 +2804,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "cnx.ixp_proximity",
@@ -2433,7 +2817,10 @@
           "normalized": 96.03,
           "weight": 7.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "pwr.large_load_tariff",
@@ -2443,7 +2830,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.grid_reliability",
@@ -2453,7 +2843,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.permitting_timeline",
@@ -2463,7 +2856,10 @@
           "normalized": null,
           "weight": 7.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.dry_bulb_profile",
@@ -2473,7 +2869,10 @@
           "normalized": 86.913,
           "weight": 6.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "clm.seismic",
@@ -2483,7 +2882,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.opposition_risk",
@@ -2493,7 +2895,10 @@
           "normalized": 100,
           "weight": 6.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "eco.equipment_lead_time",
@@ -2503,7 +2908,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.zoning_status",
@@ -2513,7 +2921,10 @@
           "normalized": 55,
           "weight": 6.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "pwr.transmission_proximity",
@@ -2523,7 +2934,10 @@
           "normalized": 88.76666666666667,
           "weight": 6.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "pwr.grid_carbon_intensity",
@@ -2533,7 +2947,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.environmental_review",
@@ -2543,7 +2960,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.tax_incentives",
@@ -2553,7 +2973,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.data_sovereignty",
@@ -2563,7 +2986,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.export_controls",
@@ -2573,7 +2999,10 @@
           "normalized": 100,
           "weight": 6.0,
           "tier": "B",
-          "tier_weight": 0.85
+          "tier_weight": 0.85,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "reg.jurisdiction_stability",
@@ -2583,7 +3012,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.basin_stress",
@@ -2593,7 +3025,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.supply_availability",
@@ -2603,7 +3038,10 @@
           "normalized": null,
           "weight": 6.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.wetbulb_profile",
@@ -2613,7 +3051,10 @@
           "normalized": 77.4395,
           "weight": 6.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "clm.extreme_heat_trend",
@@ -2623,7 +3064,10 @@
           "normalized": 68.56,
           "weight": 5.0,
           "tier": "D",
-          "tier_weight": 0.35
+          "tier_weight": 0.35,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.35
         },
         {
           "factor_id": "clm.wind_hazard",
@@ -2633,7 +3077,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.residential_proximity",
@@ -2643,7 +3090,10 @@
           "normalized": 100.0,
           "weight": 5.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "cnx.subsea_landing",
@@ -2653,7 +3103,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.construction_labor",
@@ -2663,7 +3116,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.construction_cost_index",
@@ -2673,7 +3129,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.operations_labor",
@@ -2683,7 +3142,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.contiguous_area",
@@ -2693,7 +3155,10 @@
           "normalized": 100.0,
           "weight": 5.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "lnd.brownfield_opportunity",
@@ -2703,7 +3168,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.wholesale_basis_risk",
@@ -2713,7 +3181,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.onsite_generation_potential",
@@ -2723,7 +3194,10 @@
           "normalized": 39.3,
           "weight": 5.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "pwr.firm_capacity_nearby",
@@ -2733,7 +3207,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "reg.air_permit",
@@ -2743,7 +3220,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.withdrawal_permitting",
@@ -2753,7 +3233,10 @@
           "normalized": null,
           "weight": 5.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.wildfire",
@@ -2763,7 +3246,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.air_quality",
@@ -2773,7 +3259,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.economic_alignment",
@@ -2783,7 +3272,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "com.grid_cost_allocation",
@@ -2793,7 +3285,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.price",
@@ -2803,7 +3298,10 @@
           "normalized": 83.0,
           "weight": 4.0,
           "tier": "C",
-          "tier_weight": 0.6
+          "tier_weight": 0.6,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.6
         },
         {
           "factor_id": "lnd.protected_overlap",
@@ -2813,7 +3311,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.renewable_procurement_depth",
@@ -2823,7 +3324,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.reclaimed_availability",
@@ -2833,7 +3337,10 @@
           "normalized": 80.72,
           "weight": 4.0,
           "tier": "B",
-          "tier_weight": 0.85
+          "tier_weight": 0.85,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "wtr.discharge_permitting",
@@ -2843,7 +3350,10 @@
           "normalized": null,
           "weight": 4.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "eco.port_rail_access",
@@ -2853,7 +3363,10 @@
           "normalized": 99.2192,
           "weight": 3.0,
           "tier": "B",
-          "tier_weight": 0.85
+          "tier_weight": 0.85,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 0.85
         },
         {
           "factor_id": "lnd.slope",
@@ -2863,7 +3376,10 @@
           "normalized": 98.48,
           "weight": 3.0,
           "tier": "A",
-          "tier_weight": 1.0
+          "tier_weight": 1.0,
+          "age_days": 1.1,
+          "freshness": "fresh",
+          "evidence_weight": 1.0
         },
         {
           "factor_id": "lnd.geotechnical",
@@ -2873,7 +3389,10 @@
           "normalized": null,
           "weight": 3.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "lnd.heavy_haul_access",
@@ -2883,7 +3402,10 @@
           "normalized": null,
           "weight": 3.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "pwr.nuclear_smr_adjacency",
@@ -2893,7 +3415,10 @@
           "normalized": null,
           "weight": 3.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "wtr.flood_of_water_infrastructure",
@@ -2903,7 +3428,10 @@
           "normalized": null,
           "weight": 3.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         },
         {
           "factor_id": "clm.lightning",
@@ -2913,7 +3441,10 @@
           "normalized": null,
           "weight": 2.0,
           "tier": "unknown",
-          "tier_weight": 0.0
+          "tier_weight": 0.0,
+          "age_days": null,
+          "freshness": "undated",
+          "evidence_weight": 0.0
         }
       ],
       "capped_by": "gate.power_path_exists",
