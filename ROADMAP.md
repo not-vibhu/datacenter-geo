@@ -12,9 +12,18 @@ partial and that is the main gap between this and a production tool.
 | Agent + workflow layer | Complete |
 | Adapters | ~13/59 factors machine-measured; rest is agent research |
 | Validation set | 12 cases including 3 negative controls and 1 paired control |
-| Hosted site | Not started |
+| Web workspace | Bhopal-first map, India facility directory, overlays, heatmaps and exact boundary editing implemented |
 
-## Next, in order of value
+## Product direction: Bhopal → MP → India
+
+The immediate product is a geographic research workspace. The pilot now supports
+facility exploration, infrastructure overlays, satellite basemaps and saved GeoJSON
+boundaries. The national heatmap currently shows facility density, not investment
+suitability. [The implementation and staged expansion plan](docs/india-atlas.md)
+defines the path through parcel-wide analysis, PostGIS and durable jobs to a national
+screening surface with explicit coverage and confidence.
+
+## Data-engine priorities
 
 ### 1. ISO interconnection queue parsers — highest value in the repo
 `pwr.interconnect_queue_time` and `pwr.substation_headroom` are the two most decisive
@@ -55,9 +64,10 @@ Overpass instance. Budget for this before attempting band 2 or 3 of the global s
 screening. Replacing any entry with a sourced, dated figure is the highest-value small
 contribution available.
 
-### 7. Hosted site with visualizations
-Map view over `runs/*/site.geojson`, factor drill-down, scenario comparison, public
-leaderboard. Reads the same JSON the CLI writes — no separate backend needed initially.
+### 7. Expand the map workspace
+The static India atlas and separate diligence reports are implemented. Next: durable
+analysis jobs, shared shortlists, versioned parcel boundaries and viewport-based data
+loading. Keep missing coverage and failed sources visible as the footprint grows.
 
 ## Known limitations, stated plainly
 

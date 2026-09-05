@@ -1,0 +1,16 @@
+{
+  "name": "datacenter-geo-workspace",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "python3 -m http.server 8765 --bind 127.0.0.1 --directory site",
+    "vendor": "node scripts/vendor.mjs",
+    "test": "node --test tests/web/*.test.mjs"
+  },
+  "dependencies": {
+    "@geoman-io/leaflet-geoman-free": "2.20.0",
+    "@turf/turf": "7.4.0",
+    "leaflet": "1.9.4",
+    "leaflet.heat": "0.2.0"
+  }
+}

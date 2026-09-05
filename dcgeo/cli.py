@@ -17,10 +17,12 @@ from . import compare as compare_mod
 from . import diligence
 from . import measure as measure_mod
 from . import report as report_mod
+from .boundary import load_boundary
 from .gates import evaluate_gates, validate_gate_coverage
 from .geo import bbox_around, parse_latlon, tile_region
 from .models import (
     Analysis,
+    Claim,
     FactorScore,
     GateResult,
     Measurement,
@@ -91,6 +93,8 @@ def _load(run: str) -> Analysis:
     )
     for m in d["measurements"]:
         a.measurements.append(Measurement(**only_known(Measurement, m)))
+    for claim in d.get("claims", []):
+        a.claims.append(Claim(**only_known(Claim, claim)))
 
     # Restore derived state so a loaded analysis round-trips losslessly. Without
     # this, anything reading a saved run sees it as unscored.
@@ -227,7 +231,9 @@ def measure(at: str, domains: tuple[str, ...], as_json: bool) -> None:
 # ── analyze ──────────────────────────────────────────────────────────────────
 
 @cli.command()
-@click.option("--at", "at", required=True, help="lat,lon")
+@click.option("--at", "at", help="lat,lon; mutually exclusive with --boundary.")
+@click.option("--boundary", type=click.Path(exists=True, dir_okay=False, path_type=Path),
+              help="One WGS84 GeoJSON Polygon/MultiPolygon. Preserves the exact boundary.")
 @click.option("--name", default=None)
 @click.option("--radius", default=10.0, help="AOI radius km.")
 @click.option("--profile", "profiles", multiple=True, help="Repeatable. Default: all.")
@@ -236,9 +242,22 @@ def measure(at: str, domains: tuple[str, ...], as_json: bool) -> None:
               type=click.Choice(["hybrid_adiabatic", "air_cooled", "evaporative", "closed_loop"]))
 @click.option("--assume", "assumes", multiple=True, help="key=value, repeatable.")
 @click.option("--weight", "weights", multiple=True, help="factor_or_domain=multiplier, repeatable.")
-def analyze(at, name, radius, profiles, domains, cooling, assumes, weights) -> None:
+def analyze(at, boundary, name, radius, profiles, domains, cooling, assumes, weights) -> None:
     """Full run: resolve context, measure, gate, score, report."""
-    lat, lon = parse_latlon(at)
+    if bool(at) == bool(boundary):
+        raise click.UsageError("pass exactly one of --at or --boundary")
+    geometry = None
+    try:
+        if boundary:
+            geometry, (lat, lon), boundary_name = load_boundary(boundary)
+            name = name or boundary_name
+        else:
+            lat, lon = parse_latlon(at)
+    except (ValueError, OSError, TypeError) as error:
+        raise click.ClickException(f"invalid site input: {error}") from error
+    if boundary:
+        console.print("[dim]Exact boundary retained. Current adapters measure around an interior "
+                      "reference point; this is not a polygon-wide hazard or capacity assessment.[/dim]")
     console.print(f"[bold]Resolving[/bold] {lat},{lon}")
     ctx = measure_mod.resolve_context(lat, lon)
     if ctx.get("error"):
@@ -253,8 +272,12 @@ def analyze(at, name, radius, profiles, domains, cooling, assumes, weights) -> N
         site_id=f"site_{abs(hash((round(lat,4), round(lon,4)))) % 100000:05d}",
         name=name or ctx.get("display_name") or f"{lat},{lon}",
         centroid=(lat, lon), radius_km=radius,
+        geometry=geometry,
         country=ctx.get("country"), admin1=ctx.get("admin1"), admin2=ctx.get("admin2"),
         market=ctx.get("market"), origin="manual",
+        notes=("User-supplied GeoJSON boundary; unverified. Centroid field is an interior "
+               "reference point for current point-based adapters. Exact geometry is preserved."
+               if boundary else None),
     )
 
     analysis = Analysis(

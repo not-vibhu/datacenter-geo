@@ -248,3 +248,14 @@ def test_a_factor_only_one_site_measured_is_not_an_edge():
     c = compare(sites, PROFILE)
     for s in c.sites:
         assert "wtr.basin_stress" not in {e.factor_id for e in s.wins + s.loses}
+
+
+def test_comparison_uses_the_full_displayed_plus_minus_intervals():
+    sites = _two_sites()
+    sites[0].profiles[PROFILE].score = 80
+    sites[1].profiles[PROFILE].score = 65
+    for site in sites:
+        site.profiles[PROFILE].band = 10
+    result = compare(sites, PROFILE)
+    assert result.separable is False  # [70,90] overlaps [55,75]
+    assert result.overlapping_pairs == [(sites[0].run_id, sites[1].run_id)]

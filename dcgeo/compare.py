@@ -162,7 +162,7 @@ def compare(analyses: list[Analysis], profile: str, top_n: int = 5) -> Compariso
     )
     overlapping: list[tuple[str, str]] = []
     for x, y in pairwise(ranked):
-        if abs(x.score - y.score) < (x.band + y.band) / 2:
+        if abs(x.score - y.score) <= x.band + y.band:
             overlapping.append((x.run_id, y.run_id))
 
     separable = not overlapping and len(ranked) > 1
@@ -170,7 +170,7 @@ def compare(analyses: list[Analysis], profile: str, top_n: int = 5) -> Compariso
         note = "Fewer than two scored sites — nothing to separate."
     elif separable:
         note = (
-            "Every adjacent pair is separated by more than the mean of their ± bands, "
+            "Every adjacent pair has disjoint score ± band intervals, "
             "so this ordering is supported by the evidence."
         )
     else:

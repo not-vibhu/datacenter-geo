@@ -29,6 +29,29 @@ Or, inside Claude Code:
 /dc-recommend run_0031
 ```
 
+## India map workspace
+
+The web app now starts in **Bhopal**, with drill-down between Bhopal, Madhya Pradesh
+and India. Explore the sourced facility directory, switch infrastructure layers,
+inspect satellite imagery, and draw or edit exact site boundaries. Saved boundaries
+stay in this browser and export as GeoJSON for the analysis engine.
+
+```bash
+python3 -m http.server 8765 --bind 127.0.0.1 --directory site
+# Open http://127.0.0.1:8765
+uv run dcgeo analyze --boundary boundary.geojson --profile hyperscale_training
+```
+
+The India heatmap shows facility density; the Bhopal pilot also shows mapped
+substation proximity. Both are exploration signals. **A national investment
+suitability surface is not yet implemented.** Current adapters still measure around
+an interior reference point even when an exact boundary is supplied.
+
+The app uses committed, attributed source snapshots and keeps its map and boundary
+tools usable if a snapshot fails to load. No paid API keys are required for the pilot.
+Existing scoring reports remain accessible from **Analysis reports**.
+See [the atlas workflow, data contracts and expansion plan](docs/india-atlas.md).
+
 ## Why this exists
 
 Site selection for AI infrastructure is currently done with spreadsheets, broker
@@ -195,7 +218,7 @@ Paid adapters (Earth Engine, Planet, S&P Global, CoStar) have written interfaces
 | `factors/` | 59 factor specs — formula, thresholds, sources, gate, weights |
 | `config/` | Profiles, gates, source registry, verification routing |
 | `dcgeo/` | Python: scoring engine, diligence layer, evidence ledger, adapters |
-| `site/` | The static decision console — no server, no keys, no runtime data calls |
+| `site/` | India map workspace, boundary editor and evidence reports; attributed basemap tiles |
 | `data/reference/` | Validation set: known data centers + negative controls |
 | `docs/` | Methodology, evidence tiers, scoring math, source catalog |
 | `crons/` | Scheduled global sweep specs |

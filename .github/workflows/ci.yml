@@ -28,6 +28,20 @@ jobs:
       - name: Tests
         run: uv run pytest -q
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Map logic and exact boundary tests
+        run: npm ci && npm test
+
+      - name: Atlas and pinned map assets are reproducible
+        run: |
+          npm run vendor
+          uv run python scripts/build_atlas_data.py
+          git diff --exit-code --stat site/vendor site/data/atlas.json
+
       - name: Lint
         run: uv run ruff check .
 

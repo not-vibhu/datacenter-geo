@@ -41,3 +41,17 @@ def test_analysis_roundtrips_with_profiles_and_gates(tmp_path, monkeypatch):
     c = _load("run_9999")
     assert c.profiles["hyperscale_training"].score == a.profiles["hyperscale_training"].score
     assert len(c.gates) == len(a.gates)
+
+
+def test_cited_claims_survive_loading_and_saving(tmp_path, monkeypatch):
+    from dcgeo import cli
+    from dcgeo.models import Claim
+    monkeypatch.setattr(cli, "RUNS", tmp_path)
+    a = Analysis(run_id="run_9998", site=Site(site_id="t", name="Bhopal", centroid=(23.25, 77.4)))
+    a.claims = [Claim("claim-1", "pwr.substation_headroom", "Capacity requires verification", "power", "C",
+                      based_on=["measurement-1"], citations=["https://example.org/source"])]
+    _save(a)
+    b = _load(a.run_id)
+    assert b.claims == a.claims
+    _save(b)
+    assert _load(a.run_id).claims == a.claims

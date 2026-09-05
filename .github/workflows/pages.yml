@@ -26,6 +26,8 @@ jobs:
           enable-cache: true
       - name: Rebuild site payload from committed runs
         run: uv run python scripts/build_site_data.py
+      - name: Rebuild India atlas from committed source snapshots
+        run: uv run python scripts/build_atlas_data.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

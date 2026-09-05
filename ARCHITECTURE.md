@@ -1,5 +1,17 @@
 # Architecture
 
+## Map workspace
+
+The Bhopal-first India atlas lives in `site/`, using native browser modules and
+pinned map libraries. It separates facility-directory context, geographic overlays,
+heatmap display models and user-drawn boundaries from the evidence-scoring engine.
+`data/atlas/` holds attributed input snapshots; `scripts/build_atlas_data.py` builds
+the browser payload offline. `dcgeo/boundary.py` validates exact GeoJSON for the CLI.
+
+See [docs/india-atlas.md](docs/india-atlas.md) for the current data contracts, failure
+behavior, limitations and staged architecture for MP and national expansion. The
+existing diligence views remain at `site/diligence.html`.
+
 ## Design principles
 
 **1. Evidence before score.** The score is a derived artifact. The primary output is

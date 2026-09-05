@@ -5,4 +5,7 @@
 runs/*/analysis.json   linguist-generated=true -diff
 runs/*/report.md       linguist-generated=true
 site/data/sites.json   linguist-generated=true -diff
+site/data/atlas.json   linguist-generated=true -diff
+site/vendor/**        linguist-vendored=true whitespace=cr-at-eol
+package-lock.json     linguist-generated=true -diff
 uv.lock                linguist-generated=true -diff
